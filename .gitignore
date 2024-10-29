@@ -1,0 +1,9 @@
+/.vscode/**
+
+/ProblemStatement/**
+
+/bin/**
+!/bin/.gitkeep
+
+/data/**
+!/data/.gitkeep
