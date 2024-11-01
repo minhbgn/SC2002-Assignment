@@ -3,17 +3,11 @@ package hms.utils;
 import java.util.HashMap;
 
 public class CSVFileHandler {
-    private String filePath;
-
-    public CSVFileHandler(String filePath) {
-        this.filePath = filePath;
-    }
-
-    public HashMap<String,String> read() {
+    public HashMap<String,String> read(String filePath) {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    public void write(HashMap<String,String> data) {
+    public void write(String filePath, HashMap<String,String> data) {
         throw new UnsupportedOperationException("Not implemented");
     }
 }
