@@ -1,28 +1,38 @@
 package hms.common;
 
+import hms.manager.ManagerContext;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import hms.manager.ManagerContext;
+import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends IModel> {
-    private T[] models;
-    private final ManagerContext ctx;
+    private final ArrayList<T> models;
 
     public AbstractRepository(ManagerContext ctx){
-        this.ctx = ctx;
+        this.models = new ArrayList<>();
     }
 
     public void parse(HashMap<String, String> data){
-        throw new UnsupportedOperationException("Not implemented");
+        T model = createEmptyModel();
+        model.hydrate(data);
+        models.add(model);
     }
 
     public HashMap<String, String> serialize(){
-        throw new UnsupportedOperationException("Not implemented");
+        HashMap<String, String> data = new HashMap<>();
+
+        for(T model : models){
+            data.putAll(model.serialize());
+        }
+
+        return data;
     }
 
-    public T[] findWithFilters(List<SearchCriterion<T, ?>> criteria){
-        throw new UnsupportedOperationException("Not implemented");
+    public List<T> findWithFilters(List<SearchCriterion<T, ?>> criteria){
+        return models.stream()
+            .filter(model -> criteria.stream().allMatch(criterion -> criterion.match(model)))
+            .collect(Collectors.toList());
     }
 
     public abstract T get(String id);
