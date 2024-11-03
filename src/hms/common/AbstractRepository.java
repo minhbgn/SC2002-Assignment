@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends IModel> {
-    private final ArrayList<T> models;
+    protected final ArrayList<T> models;
 
     public AbstractRepository(ManagerContext ctx){
         this.models = new ArrayList<>();
