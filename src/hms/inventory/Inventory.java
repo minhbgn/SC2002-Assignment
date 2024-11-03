@@ -18,14 +18,13 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     	return get(medicalName);
     }
 
-    public void updateStock(String medicalName, int stock){
-    	InventoryItem update = get(medicalName);
-    	update.setStock(stock);
-    }
-
-    public void updateRequest(String medicalName, boolean requested){
-        InventoryItem update = get(medicalName);
-        update.setRequested(requested);
+    public void update(String medicalName, String attribute, String newValue) {
+    	InventoryItem current = get(medicalName);
+    	HashMap<String, String> updating = current.serialize();
+    	updating.remove(attribute);
+    	updating.put(attribute, newValue);
+    	models.remove(current);
+    	super.parse(updating);
     }
 
     @Override

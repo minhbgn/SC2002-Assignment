@@ -35,6 +35,14 @@ public class InventoryItem implements IModel {
     public boolean isLowStock() {
         return stock < lowStock;
     }
+    
+    public int getLowStock() {
+    	return lowStock;
+    }
+    
+    public void setLowStock(int lowStock) {
+    	this.lowStock = lowStock;
+    }
 
     public boolean isRequested() {
         return requested;
@@ -43,14 +51,14 @@ public class InventoryItem implements IModel {
     public void setRequested(boolean requested) {
         this.requested = requested;
     }
-
+    
     @Override
     public String toString(){
         // TODO Auto-generated method stub
         return "[InventoryItem]\n"
         		+ "medicine name: \t" + medicalName 
         		+ "\nstock: \t" + stock
-        		+ "\nlow stock warning: \t" + lowStock;
+        		+ "\nlow stock warning: " + lowStock;
     }
 
     @Override
