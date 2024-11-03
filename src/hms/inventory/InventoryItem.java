@@ -1,6 +1,7 @@
 package hms.inventory;
 
 import java.util.HashMap;
+import java.util.*;
 
 import hms.common.IModel;
 
@@ -51,8 +52,11 @@ public class InventoryItem implements IModel {
 
     @Override
     public void hydrate(HashMap<String, String> data) {
+    	medicalName = data.get("medicalName");
+    	stock = Integer.parseInt(data.get("stock"));
+    	lowStock = Integer.parseInt(data.get("lowStock"));
+    	requested = (data.get("requested") == "true");
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hydrate'");
     }
 
     @Override
