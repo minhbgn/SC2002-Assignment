@@ -47,7 +47,10 @@ public class InventoryItem implements IModel {
     @Override
     public String toString(){
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toString'");
+        return "[InventoryItem]\n"
+        		+ "medicine name: \t" + medicalName 
+        		+ "\nstock: \t" + stock
+        		+ "\nlow stock warning: \t" + lowStock;
     }
 
     @Override
@@ -56,12 +59,15 @@ public class InventoryItem implements IModel {
     	stock = Integer.parseInt(data.get("stock"));
     	lowStock = Integer.parseInt(data.get("lowStock"));
     	requested = (data.get("requested") == "true");
-        // TODO Auto-generated method stub
     }
 
     @Override
     public HashMap<String, String> serialize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'serialize'");
+    	HashMap<String, String> data = new HashMap<>();
+    	data.put("medicalName", medicalName);
+    	data.put("stock", String.valueOf(stock));
+    	data.put("lowStock", String.valueOf(lowStock));
+    	data.put("requested", String.valueOf(requested));
+    	return data;
     }    
 }
