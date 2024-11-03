@@ -2,6 +2,7 @@ package hms.inventory;
 
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
+import java.util.*;
 
 public class Inventory extends AbstractRepository<InventoryItem> {
     public Inventory(ManagerContext ctx) {
@@ -9,26 +10,38 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
 
     public InventoryItem create(String medicalName, int stock, int lowStock){
-        throw new UnsupportedOperationException("Not supported yet.");
+    	HashMap<String, String> data = new HashMap<>();
+    	data.put("medicalName", medicalName);
+    	data.put("stock", String.valueOf(stock));
+    	data.put("lowStock", String.valueOf(lowStock));
+    	super.parse(data);
+    	return get(medicalName);
     }
 
     public void updateStock(String medicalName, int stock){
-        throw new UnsupportedOperationException("Not supported yet.");
+    	InventoryItem update = get(medicalName);
+    	update.setStock(stock);
     }
 
     public void updateRequest(String medicalName, boolean requested){
-        throw new UnsupportedOperationException("Not supported yet.");
+        InventoryItem update = get(medicalName);
+        update.setRequested(requested);
     }
 
     @Override
     public InventoryItem get(String id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        for (InventoryItem result : super.models) {
+        	if (result.getMedicalName() == id) {
+        		return result;
+        	}
+        }
+        System.out.println("Error: No medicine in stock with name: " + id);
+        return createEmptyModel();
     }
 
     @Override
     public InventoryItem createEmptyModel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createEmptyModel'");
+    	return new InventoryItem();
     }
 }
