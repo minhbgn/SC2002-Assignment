@@ -9,18 +9,30 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
     }
 
     public Prescription create(String medicalName, int quantity){
-        throw new UnsupportedOperationException("Not supported yet.");
+        Prescription prescription = new Prescription(medicalName, quantity);
+        models.add(prescription);
+        return prescription;
     }
 
+    public void updateStatus(String id, boolean isDispensed){
+        Prescription update = get(id);
+        update.setStatus(isDispensed);
+    }
+    
     @Override
     public Prescription get(String id) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        for(Prescription prescription : models){
+            if(prescription.getId().equals(id)){
+                return prescription;
+            }
+        }
+        return null;
     }
 
     @Override
     public Prescription createEmptyModel() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createEmptyModel'");
+        return new Prescription();
     }
 }
