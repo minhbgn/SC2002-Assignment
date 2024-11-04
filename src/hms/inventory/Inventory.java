@@ -2,7 +2,6 @@ package hms.inventory;
 
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
-import java.util.*;
 
 public class Inventory extends AbstractRepository<InventoryItem> {
 	/**
@@ -22,12 +21,9 @@ public class Inventory extends AbstractRepository<InventoryItem> {
      * @return the item just created
      */
     public InventoryItem create(String medicalName, int stock, int lowStock){
-    	HashMap<String, String> data = new HashMap<>();
-    	data.put("medicalName", medicalName);
-    	data.put("stock", String.valueOf(stock));
-    	data.put("lowStock", String.valueOf(lowStock));
-    	super.parse(data);
-    	return get(medicalName);
+        InventoryItem item = new InventoryItem(medicalName, stock, lowStock);
+        models.add(item);
+        return item;
     }
     
     /**
