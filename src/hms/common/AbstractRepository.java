@@ -13,17 +13,19 @@ public abstract class AbstractRepository<T extends IModel> {
         this.models = new ArrayList<>();
     }
 
-    public void parse(HashMap<String, String> data){
-        T model = createEmptyModel();
-        model.hydrate(data);
-        models.add(model);
+    public void parse(ArrayList<HashMap<String, String>> data){
+        for(HashMap<String, String> row : data){
+            T model = createEmptyModel();
+            model.hydrate(row);
+            models.add(model);
+        }
     }
 
-    public HashMap<String, String> serialize(){
-        HashMap<String, String> data = new HashMap<>();
+    public ArrayList<HashMap<String, String>> serialize(){
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
 
         for(T model : models){
-            data.putAll(model.serialize());
+            data.add(model.serialize());
         }
 
         return data;
