@@ -57,7 +57,7 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
     
     /**
-     * Remove the item entirely from the inventory (Different than empty stock). This is used when
+     * Remove the item entirely from the inventory (Different than emptying the stock). This is used when
      * the hospital no longer wants this kind of item anymore
      * @param medicalName Name of the item to be removed
      */
