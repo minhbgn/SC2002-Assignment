@@ -1,12 +1,11 @@
 package hms.user.model;
 
-import java.util.Date;
-import java.util.HashMap;
+import hms.common.*;
+import hms.manager.*;
 
-import hms.common.IModel;
-import hms.manager.ManagerContext;
-
-public abstract class User implements IModel {
+import java.util.*;
+import java.text.*;
+public class User implements IModel {
     private final Account account;
     protected ManagerContext ctx;
     public String name;
@@ -33,19 +32,46 @@ public abstract class User implements IModel {
     }
 
     @Override
-    public String toString(){
-        throw new UnsupportedOperationException("Unimplemented method 'toString'");
+    public String toString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return "User{" +
+               "Name='" + name + '\'' +
+               ", Gender=" + (isMale ? "Male" : "Female") +
+               ", Contact='" + contact + '\'' +
+               ", DOB=" + (dob != null ? dateFormat.format(dob) : "N/A") +
+               '}';
     }
 
     @Override
     public void hydrate(HashMap<String, String> data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hydrate'");
+        this.name = data.getOrDefault("name", "Unknown");
+        this.isMale = Boolean.parseBoolean(data.getOrDefault("isMale", "true"));
+        this.contact = data.getOrDefault("contact", "N/A");
+
+        String dobString = data.get("dob");
+        if (dobString != null) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                this.dob = dateFormat.parse(dobString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+                this.dob = null;
+            }
+        } else {
+            this.dob = null;
+        }
     }
 
     @Override
     public HashMap<String, String> serialize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'serialize'");
+        HashMap<String, String> data = new HashMap<>();
+        data.put("name", name != null ? name : "Unknown");
+        data.put("isMale", String.valueOf(isMale));
+        data.put("contact", contact != null ? contact : "N/A");
+        
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        data.put("dob", dob != null ? dateFormat.format(dob) : "N/A");
+
+        return data;
     }
 }
