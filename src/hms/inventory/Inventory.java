@@ -73,9 +73,8 @@ public class Inventory extends AbstractRepository<InventoryItem> {
      * @return the object instance of the item inside the inventory
      */
     public InventoryItem get(String id) {
-        // TODO Auto-generated method stub
         for (InventoryItem result : super.models) {
-        	if (result.getMedicalName() == id) {
+        	if (result.getMedicalName().equals(id)) {
         		return result;
         	}
         }
