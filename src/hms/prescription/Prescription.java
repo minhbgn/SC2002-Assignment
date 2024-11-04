@@ -3,6 +3,7 @@ package hms.prescription;
 import java.util.HashMap;
 
 import hms.common.IModel;
+import hms.common.id.IdManager;
 
 public class Prescription implements IModel{
     private String id;
@@ -14,12 +15,19 @@ public class Prescription implements IModel{
     }
 
     Prescription(String medicalName, int quantity) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.medicalName = medicalName;
+        this.quantity = quantity;
+        this.id = IdManager.generateId(Prescription.class);
+        this.isDispensed = false;
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "[Prescription]\n"
+            + "ID: " + id + "\n"
+            + "Medical Name: " + medicalName + "\n"
+            + "Quantity: " + quantity + "\n"
+            + "Status: " + (isDispensed ? "Dispensed" : "Not Dispensed") + "\n";
     }
 
     public String getId() {
@@ -45,12 +53,21 @@ public class Prescription implements IModel{
     @Override
     public void hydrate(HashMap<String, String> data) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hydrate'");
+        this.id = data.get("id");
+        this.isDispensed = Boolean.parseBoolean(data.get("isDispensed"));
+        this.medicalName = data.get("medicalName");
+        this.quantity = Integer.parseInt(data.get("quantity")); 
     }
 
     @Override
     public HashMap<String, String> serialize() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'serialize'");
+        HashMap<String, String> data = new HashMap<String, String>();
+        data.put("id", id); 
+        data.put("isDispensed", String.valueOf(isDispensed));
+        data.put("medicalName", medicalName);
+        data.put("quantity", String.valueOf(quantity));
+
+        return data;
     }
 }
