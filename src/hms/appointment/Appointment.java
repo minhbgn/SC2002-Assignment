@@ -36,24 +36,23 @@ public class Appointment implements IModel{
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public AppointmentStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
     }
 
     public AppointmentRecord getRecord() {
         return record;
     }
 
-    public void setRecord(String service, ArrayList<String> prescriptions, String notes) {
-        // TODO Auto-generated method stub
+    void setStatus(AppointmentStatus status) {
+        this.status = status;
+    }
+
+    void setDate(Date date) {
+        this.date = date;
+    }
+
+    void setRecord(String service, ArrayList<String> prescriptions, String notes) {
         this.record = new AppointmentRecord(service, prescriptions, notes);
         this.status = AppointmentStatus.FINISHED;
     }
