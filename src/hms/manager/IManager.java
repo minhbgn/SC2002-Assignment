@@ -1,8 +1,21 @@
 package hms.manager;
 
-import java.util.HashMap;
-
+/**
+ * Interface for the Manager classes.
+ */
 public interface IManager {
-    public HashMap<String,String> load(String filepath);
-    public void save(String filepath, HashMap<String,String> data);
+    /**
+     * Initializes the manager.
+     */
+    public void initialize();
+    
+    /**
+     * Loads the data from the file.
+     */
+    public void load();
+
+    /**
+     * Saves the data to the file.
+     */
+    public void save();
 }
