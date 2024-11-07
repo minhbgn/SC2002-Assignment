@@ -1,36 +1,38 @@
 package hms.appointment;
 
+import hms.common.IModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import hms.common.IModel;
-import hms.prescription.Prescription;
-
 public class AppointmentRecord implements IModel {
     private String service;
-    private ArrayList<Prescription> prescriptions;
+    private ArrayList<String> prescriptionIds;
     private String notes;
 
     AppointmentRecord() {
     }
 
-    AppointmentRecord(String service, ArrayList<Prescription> prescriptions, String notes) {
+    AppointmentRecord(String service, ArrayList<String> prescriptionIds, String notes) {
         this.service = service;
-        this.prescriptions = prescriptions;
+        this.prescriptionIds = prescriptionIds;
         this.notes = notes;
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return "AppointmentRecord{" +
+            "service='" + service + '\'' +
+            ", prescriptions=" + prescriptionIds +
+            ", notes='" + notes + '\'' +
+            '}';
     }
 
     public String getService() {
         return service;
     }
 
-    public ArrayList<Prescription> getPrescriptions() {
-        return prescriptions;
+    public ArrayList<String> getPrescriptions() {
+        return prescriptionIds;
     }
 
     public String getNotes() {
@@ -40,12 +42,29 @@ public class AppointmentRecord implements IModel {
     @Override
     public void hydrate(HashMap<String, String> data) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'hydrate'");
+        if (data.containsKey("service")) {
+            this.service = data.get("service");
+        }
+        if (data.containsKey("notes")) {
+            this.notes = data.get("notes");
+        }
+        if (data.containsKey("prescriptionIds")) {
+            String[] prescriptionIds = data.get("prescriptionIds").split("/");
+            this.prescriptionIds = new ArrayList<>();
+            for (String id : prescriptionIds) {
+                this.prescriptionIds.add(id);
+            }
+        }
     }
 
     @Override
     public HashMap<String, String> serialize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'serialize'");
+        HashMap<String, String> data = new HashMap<>();
+        data.put("service", service);
+        data.put("notes", notes);
+        if (prescriptionIds != null) {
+            data.put("prescriptionIds", String.join("/", prescriptionIds));
+        }
+        return data;
     }
 }

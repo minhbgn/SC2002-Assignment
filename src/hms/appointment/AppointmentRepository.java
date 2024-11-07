@@ -1,10 +1,9 @@
 package hms.appointment;
 
-import java.util.Date;
-
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
+import java.util.Date;
 
 public class AppointmentRepository extends AbstractRepository<Appointment> {
     public AppointmentRepository(ManagerContext ctx) {
@@ -13,29 +12,33 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
     }
 
     public Appointment create(String patientId, String doctorId, Date date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+
+        // Create a new appointment object
+        Appointment appointment = new Appointment(patientId, doctorId, date, AppointmentStatus.PENDING);
+        return appointment;
     }
 
     public void updateDate(String id, Date date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateDate'");
+        Appointment appointment = get(id);
+            appointment.setDate(date);
     }
 
     public void updateStatus(String id, AppointmentStatus status) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateStatus'");
+        Appointment appointment = get(id);
+            appointment.setStatus(status);
     }
 
     @Override
     public Appointment get(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        return models.stream()
+        .filter(appointment -> appointment.getId().equals(id))
+        .findFirst()
+        .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + id));
     }
 
     @Override
     public Appointment createEmptyModel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createEmptyModel'");
+        return new Appointment();
     }
 }
