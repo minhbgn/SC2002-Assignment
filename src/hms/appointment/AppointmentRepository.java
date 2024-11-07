@@ -3,6 +3,7 @@ package hms.appointment;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AppointmentRepository extends AbstractRepository<Appointment> {
@@ -27,6 +28,10 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
         // TODO Auto-generated method stub
         Appointment appointment = get(id);
             appointment.setStatus(status);
+    }
+
+    public void updateRecord(String id, String service, ArrayList<String> prescriptionIds, String notes) {
+        get(id).setRecord(service, prescriptionIds, notes);
     }
 
     @Override
