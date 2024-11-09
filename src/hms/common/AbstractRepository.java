@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends IModel> {
     protected final ArrayList<T> models;
+    protected final ManagerContext ctx;
 
     public AbstractRepository(ManagerContext ctx){
         this.models = new ArrayList<>();
+        this.ctx = ctx;
     }
 
     public void parse(ArrayList<HashMap<String, String>> data){
