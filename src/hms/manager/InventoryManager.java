@@ -1,6 +1,10 @@
 package hms.manager;
 
+import java.util.List;
+
+import hms.common.SearchCriterion;
 import hms.inventory.*;
+import hms.prescription.Prescription;
 
 /**
  * Manager class for the Inventory.
@@ -48,6 +52,15 @@ public class InventoryManager extends AbstractManager<Inventory> {
 
         repository.create(medicalName, quantity, lowStockThreshold);
         return true;
+    }
+    
+    /**
+     * Gets a list of medical items based on the search criteria.
+     * @param criteria The search criteria.
+     * @return A list of medical items.
+     */
+    public List<InventoryItem> getInventoryItem(List<SearchCriterion<InventoryItem,?>> criteria){
+        return repository.findWithFilters(criteria);
     }
 
     /**
@@ -110,13 +123,14 @@ public class InventoryManager extends AbstractManager<Inventory> {
      * - The item does not exist.
      * @param medicalName The name of the medical item.
      * @param requested The new request status.
+     * @param requested_amount The amount of item requested by Pharmacists.
      * @return True if the request status was updated, false otherwise.
      */
-    public boolean updateInventoryItemRequestStatus(String medicalName, boolean requested){
+    public boolean updateInventoryItemRequestStatus(String medicalName, boolean requested, int requested_amount){
         // Check if the item exists
         if(!hasInventoryItem(medicalName)) return false;
 
-        repository.updateRequest(medicalName, requested);
+        repository.updateRequest(medicalName, requested, requested_amount);
         return true;
     }
 }
