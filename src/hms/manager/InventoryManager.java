@@ -1,6 +1,10 @@
 package hms.manager;
 
-import hms.inventory.Inventory;
+import java.util.List;
+
+import hms.common.SearchCriterion;
+import hms.inventory.*;
+import hms.prescription.Prescription;
 
 /**
  * Manager class for the Inventory.
@@ -25,6 +29,7 @@ public class InventoryManager extends AbstractManager<Inventory> {
         return repository.get(medicalName) != null;
     }
 
+    
     /**
      * Adds an inventory item. The item will not be added if:
      * - The item already exists.
@@ -48,7 +53,31 @@ public class InventoryManager extends AbstractManager<Inventory> {
         repository.create(medicalName, quantity, lowStockThreshold);
         return true;
     }
+    
+    /**
+     * Gets a list of medical items based on the search criteria.
+     * @param criteria The search criteria.
+     * @return A list of medical items.
+     */
+    public List<InventoryItem> getInventoryItem(List<SearchCriterion<InventoryItem,?>> criteria){
+        return repository.findWithFilters(criteria);
+    }
 
+    /**
+     * Access an item by calling its name
+     * @param medicalName The name of the medical item
+     * @return the medical item
+     */
+    public InventoryItem viewInventoryItem(String medicalName) {
+    	if(hasInventoryItem(medicalName)) {
+    		return repository.get(medicalName);
+    	}
+    	else {
+    		System.out.println("Item does not exist");
+    		return null;
+    	}
+    }
+    
     /**
      * Updates the stock of an inventory item. The stock will not be updated if:
      * - The item does not exist.
@@ -94,13 +123,14 @@ public class InventoryManager extends AbstractManager<Inventory> {
      * - The item does not exist.
      * @param medicalName The name of the medical item.
      * @param requested The new request status.
+     * @param requested_amount The amount of item requested by Pharmacists.
      * @return True if the request status was updated, false otherwise.
      */
-    public boolean updateInventoryItemRequestStatus(String medicalName, boolean requested){
+    public boolean updateInventoryItemRequestStatus(String medicalName, boolean requested, int requested_amount){
         // Check if the item exists
         if(!hasInventoryItem(medicalName)) return false;
 
-        repository.updateRequest(medicalName, requested);
+        repository.updateRequest(medicalName, requested, requested_amount);
         return true;
     }
 }

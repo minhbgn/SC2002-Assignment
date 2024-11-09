@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends IModel> {
     protected final ArrayList<T> models;
+    protected final ManagerContext ctx;
 
     public AbstractRepository(ManagerContext ctx){
         this.models = new ArrayList<>();
+        this.ctx = ctx;
     }
 
     public void parse(ArrayList<HashMap<String, String>> data){
@@ -33,7 +35,7 @@ public abstract class AbstractRepository<T extends IModel> {
 
     public List<T> findWithFilters(List<SearchCriterion<T, ?>> criteria){
         return models.stream()
-            .filter(model -> criteria.stream().allMatch(criterion -> criterion.match(model)))
+            .filter(model -> criteria == null || criteria.stream().allMatch(criterion -> criterion.match(model)))
             .collect(Collectors.toList());
     }
 

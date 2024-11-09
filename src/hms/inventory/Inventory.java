@@ -40,10 +40,12 @@ public class Inventory extends AbstractRepository<InventoryItem> {
      * Update the requested status of an item: true/false
      * @param medicalName Name of the item to be modified
      * @param requested New requested status of the item
+     * @param requested_amount The amount of item requested
      */
-    public void updateRequest(String medicalName, boolean requested){
+    public void updateRequest(String medicalName, boolean requested, int requested_amount){
         InventoryItem update = get(medicalName);
         update.setRequested(requested);
+        update.setRequestedAmount(requested_amount);
     }
 
     /**
