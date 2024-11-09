@@ -35,7 +35,7 @@ public abstract class AbstractRepository<T extends IModel> {
 
     public List<T> findWithFilters(List<SearchCriterion<T, ?>> criteria){
         return models.stream()
-            .filter(model -> criteria.stream().allMatch(criterion -> criterion.match(model)))
+            .filter(model -> criteria == null || criteria.stream().allMatch(criterion -> criterion.match(model)))
             .collect(Collectors.toList());
     }
 
