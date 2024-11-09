@@ -1,6 +1,6 @@
 package hms.manager;
 
-import hms.inventory.Inventory;
+import hms.inventory.*;
 
 /**
  * Manager class for the Inventory.
@@ -25,6 +25,7 @@ public class InventoryManager extends AbstractManager<Inventory> {
         return repository.get(medicalName) != null;
     }
 
+    
     /**
      * Adds an inventory item. The item will not be added if:
      * - The item already exists.
@@ -49,6 +50,21 @@ public class InventoryManager extends AbstractManager<Inventory> {
         return true;
     }
 
+    /**
+     * Access an item by calling its name
+     * @param medicalName The name of the medical item
+     * @return the medical item
+     */
+    public InventoryItem viewInventoryItem(String medicalName) {
+    	if(hasInventoryItem(medicalName)) {
+    		return repository.get(medicalName);
+    	}
+    	else {
+    		System.out.println("Item does not exist");
+    		return null;
+    	}
+    }
+    
     /**
      * Updates the stock of an inventory item. The stock will not be updated if:
      * - The item does not exist.
