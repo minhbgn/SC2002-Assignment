@@ -10,6 +10,7 @@ public class InventoryItem implements IModel {
     private int stock;
     private int lowStock;
     private boolean requested = false;
+    private int num_requested;
 
     /**
      * Default constructor for InventoryItem class. 
@@ -45,6 +46,14 @@ public class InventoryItem implements IModel {
     public int getStock() {
         return stock;
     }
+    
+    /**
+     * Get the number of item requested by Pharmacists
+     * @return The number of item requested by Pharmacists
+     */
+    public int getRequestedAmount() {
+    	return num_requested;
+    }
 
     /**
      * Set or modify the number of item left in stock
@@ -52,6 +61,14 @@ public class InventoryItem implements IModel {
      */
     public void setStock(int stock) {
         this.stock = stock;
+    }
+    
+    /**
+     * Set or modify the number of item requested
+     * @param requested_amount The number of items requested
+     */
+    public void setRequestedAmount(int requested_amount) {
+    	this.num_requested = requested_amount;
     }
 
     /**

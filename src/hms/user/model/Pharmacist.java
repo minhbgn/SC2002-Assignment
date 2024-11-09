@@ -82,9 +82,14 @@ public class Pharmacist extends User {
      * Raise restock request for Admin
      * @param medicalName The name of the medical item that needs restock
      */
-    public void requestRestock(String medicalName) {
+    public void requestRestock(String medicalName, int requested_amount) {
         InventoryManager manager = ctx.getManager(InventoryManager.class);
-        manager.updateInventoryItemRequestStatus(medicalName, true);
+        if(manager.updateInventoryItemRequestStatus(medicalName, true, requested_amount)){
+        	System.out.println("Item requested");
+        }
+        else {
+        	System.out.println("Error! This item not existed in inventory yet!");
+        }
     }
 
     @Override
