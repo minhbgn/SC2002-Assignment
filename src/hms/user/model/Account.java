@@ -24,25 +24,56 @@ public class Account implements IModel {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return the id of the account.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Set account's password
+     * @param password The password of the account
+     */
     void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Check if input password matches Account's set password
+     * @param password The input password
+     * @return true if matches with Account's password, false otherwise
+     */
     public boolean authenticate(String password) {
         return this.password.equals(password);
     }
 
     @Override
+    /**
+     * Give the Account object its neccessary information about its attribute from a HashMap. 
+     * This method is used to easily read data from external files like csv and excel into the internal model. 
+     * This method does the opposite function of serialize()
+     * @param data The HashMap that contains the neccessary data of the Account object
+     */
     public void hydrate(HashMap<String, String> data) {
-        throw new UnsupportedOperationException("Unimplemented method 'hydrate'");
+    	this.id = data.get("id");
+    	this.password = data.getOrDefault("password", "no_password");
+    	this.isActive = Boolean.parseBoolean(data.getOrDefault("isActive", "false"));
     }
 
     @Override
+    /**
+     * Generate a HashMap containing an Account's neccessary information
+     * This method is used to easily write the item's data back to the external files like csv and excel
+     * This method does the opposite function of hydrate()
+     * @return The HashMap that contains every important information
+     */
     public HashMap<String, String> serialize() {
-        throw new UnsupportedOperationException("Unimplemented method 'serialize'");
+    	HashMap<String, String> data = new HashMap<>();
+    	data.put("id", this.id);
+    	data.put("password", this.password);
+    	data.put("isActive", String.valueOf(this.isActive));
+    	return data;
     }
 }
