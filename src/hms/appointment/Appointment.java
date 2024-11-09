@@ -17,7 +17,9 @@ public class Appointment implements IModel{
     }
 
     public Appointment(String patientId, String doctorId, Date date, AppointmentStatus status) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.patientId = patientId;
+        this.doctorId = doctorId;
+        this.date = date;
     }
 
     public String getId() {
