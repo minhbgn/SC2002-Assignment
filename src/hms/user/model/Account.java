@@ -31,6 +31,9 @@ public class Account implements IModel {
     void setPassword(String password) {
         this.password = password;
     }
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
 
     public boolean authenticate(String password) {
         return this.password.equals(password);

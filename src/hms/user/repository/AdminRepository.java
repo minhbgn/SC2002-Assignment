@@ -4,14 +4,16 @@ import hms.manager.ManagerContext;
 import hms.user.model.Admin;
 
 public class AdminRepository extends UserRepository<Admin> {
-    public AdminRepository(ManagerContext managerContext) {
-        super(managerContext);
-        throw new UnsupportedOperationException("Not implemented yet");
+    private ManagerContext managerContext;
+    
+        public AdminRepository(ManagerContext managerContext) {
+            super(managerContext);
+            this.managerContext = managerContext;
     }
 
     @Override
     public Admin createEmptyModel() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createEmptyModel'");
+        return new Admin(managerContext);
     }
 }

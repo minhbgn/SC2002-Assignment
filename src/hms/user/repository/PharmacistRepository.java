@@ -4,14 +4,16 @@ import hms.manager.ManagerContext;
 import hms.user.model.Pharmacist;
 
 public class PharmacistRepository extends UserRepository<Pharmacist> {
+    private ManagerContext managerContext;
+
     public PharmacistRepository(ManagerContext managerContext) {
         super(managerContext);
-        throw new UnsupportedOperationException("Not implemented yet");
+        this.managerContext = managerContext;
     }
 
     @Override
     public Pharmacist createEmptyModel() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createEmptyModel'");
+        return new Pharmacist(managerContext);
     }
 }

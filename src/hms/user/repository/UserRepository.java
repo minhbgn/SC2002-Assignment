@@ -12,19 +12,25 @@ import hms.user.model.User;
 public abstract class UserRepository<T extends User> extends AbstractRepository<T> {
     public UserRepository(ManagerContext managerContext) {
         super(managerContext);
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void activateUser(String id) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        models.stream()
+            .filter(user -> user.getAccount().getId().equals(id))
+            .forEach(user -> user.getAccount().setActive(true));
     }
 
     public void deactivateUser(String id) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        models.stream()
+            .filter(user -> user.getAccount().getId().equals(id))
+            .forEach(user -> user.getAccount().setActive(false));
     }
 
     @Override
     public T get(String id) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        return models.stream()
+            .filter(user -> user.getAccount().getId().equals(id))
+            .findFirst()
+            .orElse(null);
     }
 }
