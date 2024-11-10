@@ -1,37 +1,56 @@
 package hms.user.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import hms.App;
 import hms.appointment.Appointment;
 import hms.appointment.AppointmentRecord;
+import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
+import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
 
 public class Doctor extends User {
     public Doctor(ManagerContext ctx) {
         super(ctx);
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public Doctor(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
-        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public Appointment[] viewAppointments(SearchCriterion<Appointment, ?>[] criteria) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        List<Appointment> appointments = manager.getAppointments(Arrays.asList(criteria));
+    	return appointments.toArray(new Appointment[appointments.size()]);
     }
 
     public void resolvePendingAppointment(String appId, boolean accepted) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        List<Appointment> appointments = manager.getAppointments(null);
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equals(appId) && appointment.getStatus() == AppointmentStatus.PENDING) {
+                manager.updateStatus(appId, accepted ? AppointmentStatus.ACCEPTED : AppointmentStatus.REJECTED);
+            }
+        }
     }
 
     public void completeAppointment(String appId, AppointmentRecord record) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        List<Appointment> appointments = manager.getAppointments(null);
+        for (Appointment appointment : appointments) {
+            if (appointment.getId().equals(appId)) {
+                manager.updateStatus(appId, AppointmentStatus.FINISHED);
+                manager.resolveAppoinment(appId, record.getService(), record.getPrescriptions(), record.getNotes());   
+            }
+        }
     }
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not implemented yet");
+        return super.toString()+"\n User type: [Doctor]";
     }
 }
