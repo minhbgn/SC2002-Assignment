@@ -9,6 +9,7 @@ import java.util.List;
 
 import hms.appointment.Appointment;
 import hms.common.SearchCriterion;
+import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
 
 public class Patient extends User {
@@ -25,17 +26,15 @@ public class Patient extends User {
     }
 
     public void scheduleAppointment(String PatientId, String doctorId, Date date, AppointmentStatus status) {
+    	AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+    	manager.makeAppointment(PatientId, doctorId, null);
         Appointment appointment = new Appointment(PatientId, doctorId, date, status);
         appointments.add(appointment);
     }
 
     public void rescheduleAppointment(String appId, Date newDate) {
-        for (Appointment appointment : appointments) {
-            if (appointment.getId().equals(appId)) {
-                appointment.setDate(newDate);
-                break;
-            }
-        }
+    	AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        manager.updateDate(appId, newDate);
     }
 
     public void cancelAppointment(String appId) {

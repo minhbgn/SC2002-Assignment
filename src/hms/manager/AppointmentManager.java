@@ -1,10 +1,10 @@
 package hms.manager;
 
 import hms.appointment.Appointment;
+import java.util.Date;
 import hms.appointment.AppointmentRepository;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 

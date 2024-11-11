@@ -49,11 +49,11 @@ public class Appointment implements IModel{
         return record;
     }
 
-    public void setStatus(AppointmentStatus status) {
+    void setStatus(AppointmentStatus status) {
         this.status = status;
     }
 
-    public void setDate(Date date) {
+    void setDate(Date date) {
         this.date = date;
     }
 
