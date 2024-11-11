@@ -1,9 +1,13 @@
 package hms.manager;
 
 import java.util.HashMap;
+import java.util.stream.Collectors;
+import java.util.*;
 
 import hms.common.IModel;
+import hms.common.SearchCriterion;
 import hms.common.id.IdParser;
+import hms.inventory.InventoryItem;
 import hms.user.model.Admin;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
@@ -129,6 +133,22 @@ public class UserManager implements IManager {
         else{
             throw new IllegalArgumentException("Repository not found");
         }
+    }
+    
+    /**
+     * Get a list of user that satisfies a list of criteria
+     * @param userClass	Type of user we need to find
+     * @param criteria The search criteria
+     * @return the list of user that satisfies all criteria
+     */
+    public <T extends User> List<User> getUser(Class<T> userClass, 
+    		List<SearchCriterion<User,?>> criteria){
+    	UserRepository<T> repository = getRepositoryByUser(userClass);
+    	List<User> returning_list = new ArrayList<>();
+    	returning_list.addAll(repository.findWithFilters(null));
+    	return returning_list.stream()
+                .filter(model -> criteria == null || criteria.stream().allMatch(criterion -> criterion.match(model)))
+                .collect(Collectors.toList());
     }
 
     @Override
