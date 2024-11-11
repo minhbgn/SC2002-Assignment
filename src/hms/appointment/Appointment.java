@@ -1,6 +1,8 @@
 package hms.appointment;
 
 import hms.appointment.enums.AppointmentStatus;
+import java.util.UUID;
+
 import hms.common.IModel;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +19,7 @@ public class Appointment implements IModel{
     }
 
     public Appointment(String patientId, String doctorId, Date date, AppointmentStatus status) {
+    	this.id = UUID.randomUUID().toString();
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.date = date;
