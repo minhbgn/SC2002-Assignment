@@ -62,5 +62,7 @@ public class App {
         while (currentSystem != null) {
             currentSystem = currentSystem.run();            
         }
+
+        System.out.println("Exiting HMS Application");
     }
 }
