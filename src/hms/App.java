@@ -3,6 +3,8 @@
  */
 package hms;
 
+import hms.system.ISystem;
+
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
     private static final String DOCTOR_REPO_FILEPATH = "data/doctors.csv";
@@ -13,7 +15,7 @@ public class App {
     private static final String INVENTORY_REPO_FILEPATH = "data/inventory.csv";
 
     private boolean isInitialized = false;
-    private boolean isRunning = false;
+    private ISystem currentSystem = null;
 
     public void initialize() {
         if (isInitialized) return;
@@ -23,6 +25,9 @@ public class App {
         // 2. Add managers to context
         // 3. ...
 
+        // Add initial system to run
+        // currentSystem = new ISystem()
+
         isInitialized = true;
     }
 
@@ -31,17 +36,8 @@ public class App {
             throw new IllegalStateException("HMS not initialized");
         }
 
-        if (isRunning) return;
-
-        isRunning = true;
-        while (isRunning) {
-            // TODO: Add main loop code here
-            // 1. Display login screen
-            // 2. Parse user input, validate and authenticate user
-            // 3. Redirect to appropriate user interface depending on user role
-            // 4. ...
-
-            break; // Temporary break to avoid infinite loop, remove this line after implementing the exit condition
+        while (currentSystem != null) {
+            currentSystem = currentSystem.run();            
         }
     }
 }
