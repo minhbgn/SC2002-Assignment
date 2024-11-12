@@ -3,6 +3,11 @@
  */
 package hms;
 
+import hms.manager.AppointmentManager;
+import hms.manager.InventoryManager;
+import hms.manager.ManagerContext;
+import hms.manager.PrescriptionManager;
+import hms.manager.UserManager;
 import hms.system.ISystem;
 
 public class App {
@@ -20,10 +25,23 @@ public class App {
     public void initialize() {
         if (isInitialized) return;
 
-        // TODO: Add initialization code here:
-        // 1. Initialize manager context
-        // 2. Add managers to context
-        // 3. ...
+        ManagerContext ctx = new ManagerContext();
+
+        ctx.addManager(UserManager.class,
+            new UserManager(ctx, INVENTORY_REPO_FILEPATH, DOCTOR_REPO_FILEPATH, APPOINTMENT_REPO_FILEPATH, ADMIN_REPO_FILEPATH)
+        );
+
+        ctx.addManager(AppointmentManager.class,
+            new AppointmentManager(ctx, APPOINTMENT_REPO_FILEPATH)
+        );
+
+        ctx.addManager(PrescriptionManager.class, 
+            new PrescriptionManager(ctx, PRESCRIPTION_REPO_FILEPATH)
+        );
+
+        ctx.addManager(InventoryManager.class, 
+            new InventoryManager(ctx, INVENTORY_REPO_FILEPATH)
+        );
 
         // Add initial system to run
         // currentSystem = new ISystem()
