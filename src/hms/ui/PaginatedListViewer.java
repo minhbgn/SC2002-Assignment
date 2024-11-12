@@ -3,7 +3,7 @@ package hms.ui;
 import java.util.HashMap;
 
 public class PaginatedListViewer<T> extends AbstractMenu {
-    private final PaginatedList<T> paginatedList;
+    protected final PaginatedList<T> paginatedList;
 
     public PaginatedListViewer(String title, T[] items) {
         this.title = title;
