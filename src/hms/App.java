@@ -9,6 +9,7 @@ import hms.manager.ManagerContext;
 import hms.manager.PrescriptionManager;
 import hms.manager.UserManager;
 import hms.system.ISystem;
+import hms.system.LoginSystem;
 
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
@@ -43,8 +44,7 @@ public class App {
             new InventoryManager(ctx, INVENTORY_REPO_FILEPATH)
         );
 
-        // Add initial system to run
-        // currentSystem = new ISystem()
+        currentSystem = new LoginSystem(ctx);
 
         isInitialized = true;
     }
