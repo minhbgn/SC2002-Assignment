@@ -2,13 +2,13 @@ package hms.ui;
 
 import java.util.HashMap;
 
-public class PaginatedListViewer extends AbstractMenu {
-    private final PaginatedList paginatedList;
+public class PaginatedListViewer<T> extends AbstractMenu {
+    private final PaginatedList<T> paginatedList;
 
-    public PaginatedListViewer(String title, Object[] items) {
+    public PaginatedListViewer(String title, T[] items) {
         this.title = title;
         this.options = new HashMap<>();
-        this.paginatedList = new PaginatedList(items);
+        this.paginatedList = new PaginatedList<>(items);
 
         options.put("n", new UserOption("Next", () -> paginatedList.nextPage()));
         options.put("p", new UserOption("Previous", () -> paginatedList.previousPage()));
