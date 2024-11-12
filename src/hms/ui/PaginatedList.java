@@ -1,15 +1,27 @@
 package hms.ui;
 
-public class PaginatedList {
+public class PaginatedList <T> {
     private static final int ITEMS_PER_PAGE = 15;
-    private final Object[] items;
+    private final T[] items;
     private final int pageCount;
     private int currentPage;
 
-    public PaginatedList(Object[] items){
+    public PaginatedList(T[] items){
         this.items = items;
         this.currentPage = 0;
         this.pageCount = (int) Math.ceil((double) items.length / ITEMS_PER_PAGE);
+    }
+
+    public T get(int index){
+        if (index < 0 || index >= items.length){
+            throw new IllegalArgumentException("Invalid index");
+        }
+
+        return items[index];
+    }
+
+    public int getLength(){
+        return items.length;
     }
 
     public void nextPage(){
