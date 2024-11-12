@@ -29,7 +29,12 @@ public class App {
         ManagerContext ctx = new ManagerContext();
 
         ctx.addManager(UserManager.class,
-            new UserManager(ctx, INVENTORY_REPO_FILEPATH, DOCTOR_REPO_FILEPATH, APPOINTMENT_REPO_FILEPATH, ADMIN_REPO_FILEPATH)
+            new UserManager(ctx,
+                PATIENT_REPO_FILEPATH, 
+                DOCTOR_REPO_FILEPATH, 
+                PHARMACIST_REPO_FILEPATH, 
+                ADMIN_REPO_FILEPATH
+            )
         );
 
         ctx.addManager(AppointmentManager.class,
