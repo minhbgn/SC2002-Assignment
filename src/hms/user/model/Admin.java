@@ -4,6 +4,7 @@ import java.util.*;
 
 import hms.appointment.Appointment;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.inventory.InventoryItem;
 import hms.manager.*;
 
@@ -26,6 +27,7 @@ public class Admin extends User {
      */
     public Admin(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
+        this.account = new Account(IdManager.generateId(Admin.class));
     }
 
     /**

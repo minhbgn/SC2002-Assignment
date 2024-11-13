@@ -1,15 +1,14 @@
 package hms.user.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import hms.App;
 import hms.appointment.Appointment;
 import hms.appointment.AppointmentRecord;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
 
@@ -32,6 +31,7 @@ public class Doctor extends User {
      */
     public Doctor(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
+        this.account = new Account(IdManager.generateId(Doctor.class));
     }
 
 	/**

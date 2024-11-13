@@ -1,22 +1,21 @@
 package hms.user.model;
-import hms.appointment.enums.AppointmentStatus;
-import hms.appointment.*;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-
 import hms.appointment.Appointment;
+import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Patient extends User {
     private List<Appointment> appointments;
 
     public Patient(ManagerContext ctx) {
         super(ctx);
+        
+        this.account = new Account(IdManager.generateId(Patient.class));
         this.appointments = new ArrayList<>();
     }
 
@@ -54,23 +53,5 @@ public class Patient extends User {
                 ", dob=" + this.dob +
                 ", appointments=" + appointments +
                 '}';
-    }
-
-    @Override
-    public void hydrate(HashMap<String, String> data) {
-        this.name = data.get("name");
-        this.isMale = Boolean.parseBoolean(data.get("isMale"));
-        this.contact = data.get("contact");
-        this.dob = new Date(Long.parseLong(data.get("dob")));
-    }
-
-    @Override
-    public HashMap<String, String> serialize() {
-        HashMap<String, String> data = new HashMap<>();
-        data.put("name", this.name);
-        data.put("isMale", Boolean.toString(this.isMale));
-        data.put("contact", this.contact);
-        data.put("dob", Long.toString(this.dob.getTime()));
-        return data;
     }
 }
