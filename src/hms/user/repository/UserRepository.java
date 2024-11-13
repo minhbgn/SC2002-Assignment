@@ -1,8 +1,10 @@
 package hms.user.repository;
 
 import hms.common.AbstractRepository;
+import hms.common.SearchCriterion;
 import hms.manager.ManagerContext;
 import hms.user.model.User;
+import java.util.List;
 
 /**
  * Abstract base class for a repository that manages a collection of users.
@@ -26,8 +28,8 @@ public abstract class UserRepository<T extends User> extends AbstractRepository<
 
     @Override
     public T get(String id) {
-        return models.stream().filter(user -> user.getAccount().getId().equals(id))
-                              .findFirst()
-                              .orElse(null);
+        return findWithFilters(List.of(
+            new SearchCriterion<>((T u) -> u.getAccount().getId(), id)
+        )).stream().findFirst().orElse(null);
     }
 }
