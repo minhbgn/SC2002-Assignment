@@ -9,13 +9,11 @@ import java.util.Date;
 public class AppointmentRepository extends AbstractRepository<Appointment> {
     public AppointmentRepository(ManagerContext ctx) {
         super(ctx);
-        //TODO Auto-generated constructor stub
     }
 
     public Appointment create(String patientId, String doctorId, Date date) {
-
-        // Create a new appointment object
         Appointment appointment = new Appointment(patientId, doctorId, date, AppointmentStatus.PENDING);
+        models.add(appointment);
         return appointment;
     }
 
@@ -25,7 +23,6 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
     }
 
     public void updateStatus(String id, AppointmentStatus status) {
-        // TODO Auto-generated method stub
         Appointment appointment = get(id);
             appointment.setStatus(status);
     }
