@@ -1,15 +1,17 @@
 package hms.manager;
 
-import java.util.List;
-
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.prescription.Prescription;
 import hms.prescription.PrescriptionRepository;
+import java.util.List;
 
 /**
  * Manager class for the Prescription.
  */
 public class PrescriptionManager extends AbstractManager<PrescriptionRepository> {
+    private static boolean initialized = false;
+    
     /**
      * Constructor for the PrescriptionManager.
      * @param ctx The ManagerContext.
@@ -19,6 +21,15 @@ public class PrescriptionManager extends AbstractManager<PrescriptionRepository>
         super(ctx, filepath);
 
         repository = new PrescriptionRepository(ctx);
+    }
+
+    @Override
+    public void initialize() {
+        if (!initialized) {
+            IdManager.registerClass(Prescription.class, "PR");
+            super.initialize();
+            initialized = true;
+        }
     }
 
     /**
