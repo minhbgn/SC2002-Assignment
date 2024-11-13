@@ -1,9 +1,7 @@
 package hms.inventory;
 
-import java.util.HashMap;
-import java.util.*;
-
 import hms.common.IModel;
+import java.util.HashMap;
 
 public class InventoryItem implements IModel {
     private String medicalName; // Medical name of the item, equivalent to the id of the item
