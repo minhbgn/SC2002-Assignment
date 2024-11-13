@@ -33,7 +33,7 @@ public class PatientSystem implements ISystem {
     public PatientSystem(ManagerContext ctx, Patient patient) {
         this.patient = patient;
         this.ctx = ctx;
-        this.menuNav = new MenuNavigator("Patient Menu");
+        this.menuNav = new MenuNavigator();
     
         // Default search criteria for appointments
         this.defaultCriteria = List.of(
