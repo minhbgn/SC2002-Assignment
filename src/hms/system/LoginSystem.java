@@ -6,22 +6,11 @@ import hms.manager.UserManager;
 import hms.ui.Prompt;
 import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
-import hms.user.model.Admin;
-import hms.user.model.Doctor;
 import hms.user.model.Patient;
-import hms.user.model.Pharmacist;
+import hms.user.repository.PatientRepository;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class LoginSystem implements ISystem {
-    /** Mapping of user model class to system supplier */
-    private static final Map<Class<? extends IModel>, Supplier<ISystem>> USER_SYSTEM_MAPPING = Map.of(
-        Admin.class, AdminSystem::new,
-        Doctor.class, DoctorSystem::new,
-        Patient.class, PatientSystem::new,
-        Pharmacist.class, PharmacistSystem::new
-    );
     /** Manager context */
     private final ManagerContext ctx;
     /**
@@ -29,12 +18,19 @@ public class LoginSystem implements ISystem {
      */
     private ISystem nextSystem = null;
 
+    /** The login menu */
+    private final SimpleMenu menu;
+
     /**
      * Create a new login system
      * @param ctx The manager context
      */
     public LoginSystem(ManagerContext ctx){
         this.ctx = ctx;
+        this.menu = new SimpleMenu("Welcome to the Hospital Management System", List.of(
+            new UserOption("Login", this::login),
+            new UserOption("Exit", () -> nextSystem = null)
+        ));
     }
 
     /**
@@ -46,12 +42,8 @@ public class LoginSystem implements ISystem {
      */
     @Override
     public ISystem run() {
-        SimpleMenu menu = new SimpleMenu("Welcome to the Hospital Management System", List.of(
-            new UserOption("Login", this::login),
-            new UserOption("Exit", () -> nextSystem = null)
-        ));
-
         menu.display();
+        
         Prompt prompt = new Prompt("Enter your choice: ");
         String choice = prompt.getStringInput();
 
@@ -87,7 +79,19 @@ public class LoginSystem implements ISystem {
             nextSystem = this;
         }
         else{
-            nextSystem = USER_SYSTEM_MAPPING.get(userClass).get();
+            switch (userClass.getSimpleName()) {
+                case "Admin" -> nextSystem = new AdminSystem();
+                case "Doctor" -> nextSystem = new DoctorSystem();
+                case "Patient" -> {
+                    Patient patient = (Patient) ctx
+                        .getManager(UserManager.class)
+                        .getRepository(PatientRepository.class)
+                        .get(userId);
+                    nextSystem = new PatientSystem(ctx, patient);
+                }
+                case "Pharmacist" -> nextSystem = new PharmacistSystem();
+                default -> throw new IllegalStateException("Unexpected value: " + userClass.getSimpleName());
+            }
         }
     }
 
