@@ -15,12 +15,14 @@ public class CSVFileHandler {
 
                 // Remove quotes from headers
                 for (int i = 0; i < headers.length; i++) {
+                    headers[i] = headers[i].strip();
                     headers[i] = headers[i].replace("\"", "");
                 }
             }
             while (scanner.hasNextLine()) {
                 String[] values = scanner.nextLine().split(",");
                 for (int i = 0; i < values.length; i++) {
+                    values[i] = values[i].strip();
                     values[i] = values[i].replace("\"", "");
                 }
 
