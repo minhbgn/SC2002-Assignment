@@ -13,8 +13,7 @@ public class PaginatedListViewer<T> extends AbstractMenu {
         options.put("n", new UserOption("Next", () -> paginatedList.nextPage()));
         options.put("p", new UserOption("Previous", () -> paginatedList.previousPage()));
         options.put("g", new UserOption("Go to page", () -> {
-            Prompt prompt = new Prompt("Enter page number: ");
-            int page = prompt.getIntInput();
+            int page = Prompt.getIntInput("Enter page number: ");
             paginatedList.goToPage(page);
         }));
     }

@@ -44,8 +44,7 @@ public class LoginSystem implements ISystem {
     public ISystem run() {
         menu.display();
         
-        Prompt prompt = new Prompt("Enter your choice: ");
-        String choice = prompt.getStringInput();
+        String choice = Prompt.getStringInput("Enter your choice: ");
 
         if(menu.hasOption(choice)){
             menu.executeOption(choice);
@@ -62,13 +61,8 @@ public class LoginSystem implements ISystem {
      * Display the login prompt and authenticate the user, updating the next system accordingly. </p>
      */
     private void login() {
-        Prompt userIdPrompt = new Prompt("Enter your user ID: ");
-        userIdPrompt.display();
-        String userId = userIdPrompt.getStringInput();
-
-        Prompt passwordPrompt = new Prompt("Enter your password: ");
-        passwordPrompt.display();
-        String password = passwordPrompt.getStringInput();
+        String userId = Prompt.getStringInput("Enter your user ID: ");
+        String password = Prompt.getStringInput("Enter your password: ");
 
         Class<? extends IModel> userClass = ctx
             .getManager(UserManager.class)

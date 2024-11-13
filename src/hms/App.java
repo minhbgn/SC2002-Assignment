@@ -63,9 +63,8 @@ public class App {
         while (currentSystem != null) {
             currentSystem = currentSystem.run();
             
-            Prompt waitingPrompt = new Prompt("Press Enter to continue...");
-            waitingPrompt.display();
-            waitingPrompt.getStringInput();
+            // Pause before continuing
+            Prompt.getStringInput("Press Enter to continue...");
         }
 
         System.out.println("Exiting HMS Application");
