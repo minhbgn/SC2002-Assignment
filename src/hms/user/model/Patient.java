@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Patient extends User {
-    private List<Appointment> appointments;
+    private final List<Appointment> appointments;
 
     public Patient(ManagerContext ctx) {
         super(ctx);
@@ -41,7 +41,7 @@ public class Patient extends User {
     }
 
     public Appointment[] viewAppointments(SearchCriterion<Appointment, ?>[] criteria) {
-        return appointments.toArray(new Appointment[0]);
+        return appointments.toArray(Appointment[]::new);
     }
 
     @Override

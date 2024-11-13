@@ -2,6 +2,7 @@ package hms.appointment;
 
 import hms.common.IModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class AppointmentRecord implements IModel {
@@ -41,7 +42,6 @@ public class AppointmentRecord implements IModel {
 
     @Override
     public void hydrate(HashMap<String, String> data) {
-        // TODO Auto-generated method stub
         if (data.containsKey("service")) {
             this.service = data.get("service");
         }
@@ -49,11 +49,9 @@ public class AppointmentRecord implements IModel {
             this.notes = data.get("notes");
         }
         if (data.containsKey("prescriptionIds")) {
-            String[] prescriptionIds = data.get("prescriptionIds").split("/");
+            String[] _prescriptionIds = data.get("prescriptionIds").split("/");
             this.prescriptionIds = new ArrayList<>();
-            for (String id : prescriptionIds) {
-                this.prescriptionIds.add(id);
-            }
+            this.prescriptionIds.addAll(Arrays.asList(_prescriptionIds));
         }
     }
 

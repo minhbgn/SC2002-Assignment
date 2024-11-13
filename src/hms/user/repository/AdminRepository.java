@@ -10,7 +10,6 @@ public class AdminRepository extends UserRepository<Admin> {
 
     @Override
     public Admin createEmptyModel() {
-        // TODO Auto-generated method stub
         return new Admin(super.ctx);
     }
 }

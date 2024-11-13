@@ -3,6 +3,7 @@
  */
 package hms;
 
+@SuppressWarnings("unused")
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
     private static final String DOCTOR_REPO_FILEPATH = "data/doctors.csv";

@@ -114,7 +114,6 @@ public class InventoryItem implements IModel {
      * To help in printing out the content of the object
      */
     public String toString(){
-        // TODO Auto-generated method stub
         return "[InventoryItem]\n"
         		+ "medicine name: \t" + medicalName 
         		+ "\nstock: \t" + stock
@@ -132,7 +131,7 @@ public class InventoryItem implements IModel {
     	medicalName = data.get("medicalName");
     	stock = Integer.parseInt(data.get("stock"));
     	lowStock = Integer.parseInt(data.get("lowStock"));
-    	requested = (data.get("requested") == "true");
+    	requested = Boolean.parseBoolean(data.get("requested"));
     }
 
     @Override

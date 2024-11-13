@@ -1,9 +1,8 @@
 package hms.prescription;
 
-import java.util.HashMap;
-
 import hms.common.IModel;
 import hms.common.id.IdManager;
+import java.util.HashMap;
 
 public class Prescription implements IModel{
     private String id;
@@ -52,7 +51,6 @@ public class Prescription implements IModel{
 
     @Override
     public void hydrate(HashMap<String, String> data) {
-        // TODO Auto-generated method stub
         this.id = data.get("id");
         this.isDispensed = Boolean.parseBoolean(data.get("isDispensed"));
         this.medicalName = data.get("medicalName");
@@ -61,8 +59,7 @@ public class Prescription implements IModel{
 
     @Override
     public HashMap<String, String> serialize() {
-        // TODO Auto-generated method stub
-        HashMap<String, String> data = new HashMap<String, String>();
+        HashMap<String, String> data = new HashMap<>();
         data.put("id", id); 
         data.put("isDispensed", String.valueOf(isDispensed));
         data.put("medicalName", medicalName);
