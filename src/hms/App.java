@@ -10,6 +10,7 @@ import hms.manager.PrescriptionManager;
 import hms.manager.UserManager;
 import hms.system.ISystem;
 import hms.system.LoginSystem;
+import hms.ui.Prompt;
 
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
@@ -60,7 +61,11 @@ public class App {
         }
 
         while (currentSystem != null) {
-            currentSystem = currentSystem.run();            
+            currentSystem = currentSystem.run();
+            
+            Prompt waitingPrompt = new Prompt("Press Enter to continue...");
+            waitingPrompt.display();
+            waitingPrompt.getStringInput();
         }
 
         System.out.println("Exiting HMS Application");
