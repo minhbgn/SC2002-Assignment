@@ -9,6 +9,14 @@ public abstract class AbstractMenu implements IUIElement {
     public boolean hasOption(String key){
         return options.containsKey(key);
     }
+
+    public void addOption(String key, UserOption option){
+        options.put(key, option);
+    }
+
+    public Map<String, UserOption> getOptions(){
+        return options;
+    }
     
     public void executeOption(String key){
         if (!hasOption(key)){
