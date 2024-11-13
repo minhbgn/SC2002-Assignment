@@ -93,7 +93,7 @@ public class PatientSystem implements ISystem {
 
     @Override
     public ISystem run() {
-        menuNav.display();
+        menuNav.display(true);
 
         String choice = Prompt.getStringInput("Enter your choice: ");
 

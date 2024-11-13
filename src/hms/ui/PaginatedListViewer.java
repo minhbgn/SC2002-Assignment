@@ -12,17 +12,23 @@ public class PaginatedListViewer<T> extends AbstractMenu {
 
         options.put("n", new UserOption("Next", () -> paginatedList.nextPage()));
         options.put("p", new UserOption("Previous", () -> paginatedList.previousPage()));
-        options.put("g", new UserOption("Go to page", () -> {
+            options.put("g", new UserOption("Go to page", () -> {
             int page = Prompt.getIntInput("Enter page number: ");
-            paginatedList.goToPage(page);
-        }));
+                paginatedList.goToPage(page);
+            }));
     }
 
     @Override
-    public void display() {
+    public void display(boolean showOptions) {
+        System.out.println(title + '\n');
+
         paginatedList.display();
 
-        System.out.println("Options:");
-        options.forEach((key, value) -> System.out.println(key + " - " + value.getText()));
+        if (showOptions){
+            System.out.println("\nOptions:");
+            options.forEach((key, value) -> {
+                System.out.println(key + " - " + value.getText());
+            });
+        }
     }
 }

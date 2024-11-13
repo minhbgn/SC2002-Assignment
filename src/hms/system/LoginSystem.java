@@ -42,7 +42,7 @@ public class LoginSystem implements ISystem {
      */
     @Override
     public ISystem run() {
-        menu.display();
+        menu.display(true);
         
         String choice = Prompt.getStringInput("Enter your choice: ");
 

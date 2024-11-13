@@ -14,10 +14,11 @@ public class SimpleMenu extends AbstractMenu {
     }
 
     @Override
-    public void display(){
+    public void display(boolean showOptions) {
         System.out.println(title);
-        for (String key : options.keySet()){
-            System.out.println(key + ". " + options.get(key).getText());
+
+        if (showOptions){
+            options.forEach((key, value) -> System.out.println(key + ". " + value.getText()));
         }
     }
 }

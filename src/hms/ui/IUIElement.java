@@ -1,5 +1,5 @@
 package hms.ui;
 
 public interface IUIElement {
-    public void display();
+    public void display(boolean showOptions);
 }
