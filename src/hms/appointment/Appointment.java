@@ -1,12 +1,15 @@
 package hms.appointment;
 
 import hms.appointment.enums.AppointmentStatus;
-import java.util.UUID;
-
 import hms.common.IModel;
+import hms.common.id.IdManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+
 public class Appointment implements IModel{
     private String id;
     private String patientId;
@@ -19,7 +22,7 @@ public class Appointment implements IModel{
     }
 
     public Appointment(String patientId, String doctorId, Date date, AppointmentStatus status) {
-    	this.id = UUID.randomUUID().toString();
+    	this.id = IdManager.generateId(Appointment.class);
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.date = date;
@@ -67,15 +70,20 @@ public class Appointment implements IModel{
         this.id = data.get("id");
         this.patientId = data.get("patientId");
         this.doctorId = data.get("doctorId");
-        this.date = new Date(Long.parseLong(data.get("date")));
+        
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            this.date = sdf.parse(data.get("date"));
+        } catch (ParseException e) {
+            throw new RuntimeException("Error parsing date in Appointment.hydrate");
+        }
+
         this.status = AppointmentStatus.valueOf(data.get("status"));
         if (data.get("service").equals("empty")) {
             this.record = null;
         } else {
             ArrayList<String> prescriptions = new ArrayList<>();
-            for(String prescriptionId : data.get("prescriptions").split("/")) {
-                prescriptions.add(prescriptionId);
-            }
+            prescriptions.addAll(Arrays.asList(data.get("prescriptions").split("/")));
             this.record = new AppointmentRecord(data.get("service"), prescriptions, data.get("notes"));
         }
     }
@@ -86,7 +94,10 @@ public class Appointment implements IModel{
         data.put("id", this.id);
         data.put("patientId", this.patientId);
         data.put("doctorId", this.doctorId);
-        data.put("date", String.valueOf(this.date));
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        data.put("date", sdf.format(this.date));
+        
         data.put("status", this.status.name());
         if(this.record == null) {
             data.put("service", "empty");
