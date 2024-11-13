@@ -4,6 +4,7 @@ import java.util.*;
 
 import hms.appointment.*;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.manager.ManagerContext;
 import hms.prescription.Prescription;
 import hms.manager.AppointmentManager;
@@ -29,6 +30,7 @@ public class Pharmacist extends User {
      */
     public Pharmacist(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
+        this.account = new Account(IdManager.generateId(Pharmacist.class));
     }
 
     /**

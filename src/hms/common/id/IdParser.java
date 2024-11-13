@@ -1,8 +1,7 @@
 package hms.common.id;
 
-import java.util.HashMap;
-
 import hms.common.IModel;
+import java.util.HashMap;
 
 public class IdParser {
     private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
@@ -51,8 +50,8 @@ public class IdParser {
      * @param id The ID to get the prefix for.
      * @return The prefix for the given ID.
      */
-    public static String getIdPrefix(String id) {
-        if(id.length() <= 6) {
+    public static String getIdPrefix(String id) throws IllegalArgumentException {
+        if(id.length() < 6) {
             throw new IllegalArgumentException("Invalid ID: ID too short");
         }
 
@@ -65,8 +64,8 @@ public class IdParser {
      * @param id The ID to get the suffix for.
      * @return The suffix for the given ID in integer form.
      */
-    public static int getIdSuffix(String id) {
-        if(id.length() <= 6) {
+    public static int getIdSuffix(String id) throws IllegalArgumentException {
+        if(id.length() < 6) {
             throw new IllegalArgumentException("Invalid ID: ID too short");
         }
 
@@ -79,7 +78,7 @@ public class IdParser {
      * @param id The ID to get the class for.
      * @return The class for the given ID.
      */
-    public static Class<? extends IModel> getClass(String id) {
+    public static Class<? extends IModel> getClass(String id) throws IllegalArgumentException {
         String prefix = getIdPrefix(id);
         return classToIdPrefix.entrySet().stream()
             .filter(entry -> entry.getValue().equals(prefix))

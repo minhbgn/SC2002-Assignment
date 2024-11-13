@@ -1,13 +1,9 @@
 package hms.manager;
 
-import java.util.HashMap;
-import java.util.stream.Collectors;
-import java.util.*;
-
 import hms.common.IModel;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.common.id.IdParser;
-import hms.inventory.InventoryItem;
 import hms.user.model.Admin;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
@@ -19,6 +15,10 @@ import hms.user.repository.PatientRepository;
 import hms.user.repository.PharmacistRepository;
 import hms.user.repository.UserRepository;
 import hms.utils.CSVFileHandler;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Manager class for all user types.
@@ -74,21 +74,22 @@ public class UserManager implements IManager {
      */
     @SuppressWarnings("unchecked")
     public Class<? extends User> authenticate(String id, String password) {
-        Class<? extends IModel> userClass = IdParser.getClass(id);
+        try {
+            Class<? extends IModel> userClass = IdParser.getClass(id);
 
-        if (!User.class.isAssignableFrom(userClass)) {
+            if (!User.class.isAssignableFrom(userClass)) {
+                return null;
+            }
+
+            UserRepository<? extends User> repository = getRepositoryByUser((Class<? extends User>) userClass);
+            
+            User user = repository.get(id);
+    
+            return (user != null && user.getAccount().authenticate(password)) ?
+                (Class<? extends User>) userClass : null;
+        } catch (IllegalArgumentException e) {
             return null;
         }
-
-        UserRepository<? extends User> repository = getRepositoryByUser((Class<? extends User>) userClass);
-
-        User user = repository.get(id);
-
-        if (user != null && user.getAccount().authenticate(password)) {
-            return (Class<? extends User>) userClass;
-        }
-
-        return null;
     }
 
     /**
@@ -98,11 +99,15 @@ public class UserManager implements IManager {
      */
     @SuppressWarnings("unchecked")
     public boolean hasUser(String id) {
-        Class<? extends IModel> userClass = IdParser.getClass(id);
-
-        if (!User.class.isAssignableFrom(userClass)) return false;
-        
-        return getRepositoryByUser((Class<? extends User>) userClass).get(id) != null;
+        try {
+            Class<? extends IModel> userClass = IdParser.getClass(id);
+    
+            if (!User.class.isAssignableFrom(userClass)) return false;
+            
+            return getRepositoryByUser((Class<? extends User>) userClass).get(id) != null;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     /**
@@ -154,7 +159,13 @@ public class UserManager implements IManager {
     @Override
     public void initialize() {
         if (!initialized) {
+            IdManager.registerClass(Patient.class, "PA");
+            IdManager.registerClass(Doctor.class, "DO");
+            IdManager.registerClass(Pharmacist.class, "PH");
+            IdManager.registerClass(Admin.class, "AD");
+            
             load();
+
             initialized = true;
         }
     }

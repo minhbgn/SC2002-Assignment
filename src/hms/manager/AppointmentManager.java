@@ -1,17 +1,20 @@
 package hms.manager;
 
 import hms.appointment.Appointment;
-import java.util.Date;
 import hms.appointment.AppointmentRepository;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Manages the appointments in the system.
  */
 public class AppointmentManager extends AbstractManager<AppointmentRepository> {
+    private static boolean initialized = false;
+    
     /**
      * Constructor for the AppointmentManager.
      * @param ctx The ManagerContext.
@@ -20,6 +23,17 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
     public AppointmentManager(ManagerContext ctx, String filepath){
         super(ctx, filepath);
         repository = new AppointmentRepository(ctx);
+    }
+
+    @Override
+    public void initialize() {        
+        if (!initialized) {
+            IdManager.registerClass(Appointment.class, "AP");
+            
+            super.initialize();
+            
+            initialized = true;
+        }
     }
 
     /**

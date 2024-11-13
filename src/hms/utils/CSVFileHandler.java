@@ -12,13 +12,23 @@ public class CSVFileHandler {
             String[] headers = {};
             if (scanner.hasNextLine()) {
                 headers = scanner.nextLine().split(",");
+
+                // Remove quotes from headers
+                for (int i = 0; i < headers.length; i++) {
+                    headers[i] = headers[i].replace("\"", "");
+                }
             }
             while (scanner.hasNextLine()) {
                 String[] values = scanner.nextLine().split(",");
+                for (int i = 0; i < values.length; i++) {
+                    values[i] = values[i].replace("\"", "");
+                }
+
                 HashMap<String, String> row = new HashMap<>();
                 for (int i = 0; i < headers.length; i++) {
                     row.put(headers[i], values[i]);
                 }
+                
                 data.add(row);
             }
         } catch (IOException e) {

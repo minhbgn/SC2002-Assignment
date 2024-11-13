@@ -1,15 +1,16 @@
 package hms.manager;
 
-import java.util.List;
-
 import hms.common.SearchCriterion;
+import hms.common.id.IdManager;
 import hms.inventory.*;
-import hms.prescription.Prescription;
+import java.util.List;
 
 /**
  * Manager class for the Inventory.
  */
 public class InventoryManager extends AbstractManager<Inventory> {
+    private static boolean initialized = false;
+
     /**
      * Constructor for the InventoryManager.
      * @param ctx The ManagerContext.
@@ -18,6 +19,15 @@ public class InventoryManager extends AbstractManager<Inventory> {
     public InventoryManager(ManagerContext ctx, String filepath) {
         super(ctx, filepath);
         repository = new Inventory(ctx);
+    }
+
+    @Override
+    public void initialize() {
+        if (!initialized) {
+            IdManager.registerClass(InventoryItem.class, "IT");
+            super.initialize();
+            initialized = true;
+        }
     }
 
     /**
