@@ -83,6 +83,11 @@ public class PatientSystem implements ISystem {
             .getManager(AppointmentManager.class)
             .makeAppointment(patient.getAccount().getId(), doctorId, date);
 
+        if(appointment == null) {
+            System.out.println("Failed to schedule appointment");
+            return;
+        }
+
         System.out.println("Appointment scheduled: " + appointment);
     }
 
