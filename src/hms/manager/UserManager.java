@@ -74,6 +74,7 @@ public class UserManager implements IManager {
      */
     @SuppressWarnings("unchecked")
     public Class<? extends User> authenticate(String id, String password) {
+        try {
             Class<? extends IModel> userClass = IdParser.getClass(id);
 
             if (!User.class.isAssignableFrom(userClass)) {
@@ -84,11 +85,11 @@ public class UserManager implements IManager {
             
             User user = repository.get(id);
     
-        if (user != null && user.getAccount().authenticate(password)) {
-            return (Class<? extends User>) userClass;
-        }
-
+            return (user != null && user.getAccount().authenticate(password)) ?
+                (Class<? extends User>) userClass : null;
+        } catch (IllegalArgumentException e) {
             return null;
+        }
     }
 
     /**
@@ -98,11 +99,15 @@ public class UserManager implements IManager {
      */
     @SuppressWarnings("unchecked")
     public boolean hasUser(String id) {
+        try {
             Class<? extends IModel> userClass = IdParser.getClass(id);
     
             if (!User.class.isAssignableFrom(userClass)) return false;
             
             return getRepositoryByUser((Class<? extends User>) userClass).get(id) != null;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     /**
