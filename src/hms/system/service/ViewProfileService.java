@@ -75,12 +75,12 @@ public class ViewProfileService implements IService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         String profileInfo = String.format("""
-            Patient Profile\n\n
-            Name: %s\n
-            Gender: %s\n
-            Contact: %s\n
-            Date of Birth: %s\n
-            Account Type: %s\n
+            Patient Profile\n\n\
+            Name: %s\n\
+            Gender: %s\n\
+            Contact: %s\n\
+            Date of Birth: %s\n\
+            Account Type: %s\n\
             Account Status: %s""",
             user.name, (user.isMale ? "Male" : "Female"), user.contact, sdf.format(user.dob),
             getAccountTypeText(), (user.getAccount().isActive() ? "Active" : "Inactive")
