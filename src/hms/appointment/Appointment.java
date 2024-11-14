@@ -26,6 +26,7 @@ public class Appointment implements IModel{
         this.patientId = patientId;
         this.doctorId = doctorId;
         this.date = date;
+        this.status = status;
     }
 
     public String getId() {
