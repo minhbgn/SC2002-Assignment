@@ -19,6 +19,12 @@ public class MenuNavigator extends AbstractMenu {
         history.push(menu);
     }
 
+    public void popMenu() {
+        if (history.size() > 1) {
+            history.pop();
+        }
+    }
+
     private void goBack() {
         if (history.size() > 1) {
             history.pop();
@@ -31,6 +37,20 @@ public class MenuNavigator extends AbstractMenu {
 
         if (history.size() > 1) {
             options.putAll(navigatorOptions);
+        }
+    }
+
+    @Override
+    public boolean hasOption(String key) {
+        return options.containsKey(key) || history.peek().hasOption(key);
+    }
+
+    @Override
+    public void executeOption(String key) {
+        if (options.containsKey(key)) {
+            options.get(key).execute();
+        } else {
+            history.peek().executeOption(key);
         }
     }
 
