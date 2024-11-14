@@ -16,6 +16,7 @@ import hms.ui.UserOption;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
 import hms.user.repository.DoctorRepository;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,7 +60,48 @@ public class PatientSystem implements ISystem {
     }
     
     private void handleViewProfile() {
-        System.out.println(patient);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        String profileInfo = String.format(
+            "Patient Profile\n\nName: %s\nGender: %s\nContact: %s\nDate of Birth: %s\nAccount Status: %s",
+            patient.name, patient.isMale ? "Male" : "Female", patient.contact, sdf.format(patient.dob),
+            patient.getAccount().isActive() ? "Active" : "Inactive"
+        );
+
+        UserOption updateContactOption = new UserOption("Update Contact", () -> {
+            String newContact = Prompt.getStringInput("Enter your new contact info: ");
+            patient.contact = newContact;
+        });
+
+        UserOption updateDobOption = new UserOption("Update Date of Birth", () -> {
+            Date newDob = Prompt.getDateInput("Enter your new date of birth: ");
+            patient.dob = newDob;
+        });
+
+        UserOption changePasswordOption = new UserOption("Change password", () -> {
+            String oldPassword = Prompt.getStringInput("Enter your old password: ");
+            if(!patient.getAccount().authenticate(oldPassword)){
+                System.out.println("Wrong password");
+                return;
+            }
+
+            String newPassword = Prompt.getStringInput("Enter your new password: ");
+            String newPasswordConfirm = Prompt.getStringInput("Confirm your new password: ");
+        
+            if(!newPassword.equals(newPasswordConfirm)){
+                System.out.println("Passwords do not match");
+                return;
+            }
+            
+            patient.getAccount().setPassword(newPassword);
+            System.out.println("Password changed successfully");
+        });
+
+        SimpleMenu profileMenu = new SimpleMenu(profileInfo, List.of(
+            updateContactOption, updateDobOption, changePasswordOption
+        ));
+
+        menuNav.addMenu(profileMenu);
     }
 
     private void handleViewAppointments() {
