@@ -1,8 +1,7 @@
 package hms.user.model;
 
-import java.util.HashMap;
-
 import hms.common.IModel;
+import java.util.HashMap;
 
 public class Account implements IModel {
     String id = "";
@@ -24,21 +23,18 @@ public class Account implements IModel {
         this.id = id;
     }
 
-    /**
-     * 
-     * @return the id of the account.
-     */
     public String getId() {
         return id;
     }
 
-    /**
-     * Set account's password
-     * @param password The password of the account
-     */
-    void setPassword(String password) {
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
+
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }   

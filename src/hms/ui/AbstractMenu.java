@@ -6,6 +6,10 @@ public abstract class AbstractMenu implements IUIElement {
     protected String title;
     protected Map<String, UserOption> options;
 
+    public void setTitle(String title){
+        this.title = title;
+    }
+
     public boolean hasOption(String key){
         return options.containsKey(key);
     }
