@@ -28,7 +28,7 @@ public class ScheduleAppointmentService implements IService {
 
     private void onDoctorSelected(Doctor doctor){
         // Clear the screen
-        System.out.println("\033[H\033[2J");
+        System.out.print("\033[H\033[2J");
 
         System.out.println("Selected doctor: " + doctor);
 
