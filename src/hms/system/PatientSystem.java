@@ -1,15 +1,22 @@
 package hms.system;
 
 import hms.appointment.Appointment;
+import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
 import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
+import hms.manager.PrescriptionManager;
+import hms.manager.UserManager;
+import hms.prescription.Prescription;
 import hms.ui.MenuNavigator;
-import hms.ui.PaginatedListViewer;
+import hms.ui.PaginatedListSelector;
 import hms.ui.Prompt;
 import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
+import hms.user.model.Doctor;
 import hms.user.model.Patient;
+import hms.user.repository.DoctorRepository;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -65,9 +72,73 @@ public class PatientSystem implements ISystem {
             return;
         }
         
-        PaginatedListViewer<Appointment> viewer = new PaginatedListViewer<>(
-            "Appointments",
-            appointments.toArray(Appointment[]::new)
+        PaginatedListSelector<Appointment> viewer = new PaginatedListSelector<>(
+            "Appointments", appointments.toArray(Appointment[]::new),
+            (Appointment appointment) -> {
+                String appointmentInfo = String.format(
+                    "Appointment with %s on %s\nStatus: %s",
+                    appointment.getDoctorId(), appointment.getDate(),
+                    appointment.getStatus().toString()
+                );
+                
+                SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
+
+                if(appointment.getStatus() == AppointmentStatus.PENDING
+                    || appointment.getStatus() == AppointmentStatus.ACCEPTED) {
+                    UserOption cancelOption = new UserOption(
+                        "Cancel Appointment",
+                        () -> patient.cancelAppointment(appointment.getId())
+                    );
+    
+                    UserOption rescheduleOption = new UserOption(
+                        "Reschedule Appointment", () -> {
+                            Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
+                            patient.rescheduleAppointment(appointment.getId(), newDate);
+                        }
+                    );
+        
+                    appointmentMenu.addOption(cancelOption);
+                    appointmentMenu.addOption(rescheduleOption);
+                }
+
+                if(appointment.getStatus() == AppointmentStatus.FINISHED) {
+                    UserOption viewRecords = new UserOption(
+                        "View Records",
+                        () -> {
+                            String recordInfo = String.format(
+                                "Notes: %s\nServices: %s",
+                                appointment.getRecord().getNotes(),
+                                appointment.getRecord().getService()
+                            );
+
+                            ArrayList<String> prescriptions = appointment.getRecord().getPrescriptions();
+
+                            if(!prescriptions.isEmpty()) {
+                                recordInfo += "\nPrescriptions: ";
+                                PrescriptionManager prescriptionManager = ctx.getManager(PrescriptionManager.class);
+
+                                for(String prescription : prescriptions) {
+                                    Prescription p = prescriptionManager.getPrescriptions(List.of(
+                                        new SearchCriterion<>(Prescription::getId, prescription)
+                                    )).get(0);
+
+                                    if(p != null) {
+                                        recordInfo += "\n" + p;
+                                    }
+                                }
+                            }
+
+                            SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+
+                            menuNav.addMenu(recordMenu);
+                        }
+                    );
+
+                    appointmentMenu.addOption(viewRecords);
+                }
+            
+                menuNav.addMenu(appointmentMenu);
+            }
         );
         
         menuNav.addMenu(viewer);
@@ -76,19 +147,38 @@ public class PatientSystem implements ISystem {
     private void handleScheduleAppointment() {
         System.out.println("Scheduling an appointment");
 
-        String doctorId = Prompt.getStringInput("Enter the doctor's ID: ");
-        Date date = Prompt.getDateInput("Enter the date: ");
+        Doctor[] doctors = ctx.getManager(UserManager.class)
+            .getRepository(DoctorRepository.class)
+            .findWithFilters(null)
+            .toArray(Doctor[]::new);
 
-        Appointment appointment = ctx
-            .getManager(AppointmentManager.class)
-            .makeAppointment(patient.getAccount().getId(), doctorId, date);
+        PaginatedListSelector<Doctor> doctorSelector = new PaginatedListSelector<>(
+            "Select a doctor for your appointment", doctors,
+            (Doctor doctor) -> {
+                // Clear the screen
+                System.out.println("\033[H\033[2J");
 
-        if(appointment == null) {
-            System.out.println("Failed to schedule appointment");
-            return;
-        }
+                System.out.println("Selected doctor: " + doctor);
 
-        System.out.println("Appointment scheduled: " + appointment);
+                String doctorId = doctor.getAccount().getId();
+                Date date = Prompt.getDateInput("Enter the date for your appointment: ");
+    
+                Appointment appointment = ctx
+                    .getManager(AppointmentManager.class)
+                    .makeAppointment(patient.getAccount().getId(), doctorId, date);
+    
+                if(appointment == null) {
+                    System.out.println("Failed to schedule appointment");
+                    return;
+                }
+    
+                System.out.println("Appointment scheduled: " + appointment);
+
+                menuNav.popMenu();
+            }
+        );
+
+        menuNav.addMenu(doctorSelector);
     }
 
     @Override
