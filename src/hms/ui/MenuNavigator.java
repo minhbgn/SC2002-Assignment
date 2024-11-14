@@ -1,6 +1,7 @@
 package hms.ui;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Stack;
 
 public class MenuNavigator extends AbstractMenu {
@@ -8,7 +9,7 @@ public class MenuNavigator extends AbstractMenu {
     private final HashMap<String, UserOption> navigatorOptions = new HashMap<>();
 
     public MenuNavigator() {
-        this.options = new HashMap<>();
+        this.options = new LinkedHashMap<String, UserOption>();
 
         navigatorOptions.put("b", new UserOption("Back", () -> goBack()));
 
