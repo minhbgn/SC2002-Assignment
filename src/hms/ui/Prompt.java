@@ -36,7 +36,7 @@ public class Prompt {
         return InputHandler.getInstance().getInput();
     }
 
-    public boolean getBooleanInput(String message){
+    public static boolean getBooleanInput(String message){
         System.out.print(message);
 
         String input = InputHandler.getInstance().getInput();
