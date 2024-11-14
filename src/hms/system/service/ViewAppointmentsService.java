@@ -13,6 +13,8 @@ import hms.ui.PaginatedListSelector;
 import hms.ui.Prompt;
 import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
+import hms.user.model.Admin;
+import hms.user.model.Doctor;
 import hms.user.model.Patient;
 import hms.user.model.User;
 import java.util.ArrayList;
@@ -88,12 +90,31 @@ public class ViewAppointmentsService implements IService {
     private void onAppointmentSelect(Appointment appointment){
         this.selected = appointment;
 
+        if(user instanceof Patient) {
+            menuNav.addMenu(getAppointmentSelectPatientMenu(appointment));
+            return;
+        }
+
+        if(user instanceof Doctor) {
+            menuNav.addMenu(getAppointmentSelectDoctorMenu(appointment));
+            return;
+        }
+
+        if(user instanceof Admin) {
+            menuNav.addMenu(getAppointmentSelectAdminMenu(appointment));
+            return;
+        }
+
+        throw new UnsupportedOperationException("User type not supported: " + user.getClass().getName());
+    }
+
+    private AbstractMenu getAppointmentSelectPatientMenu(Appointment appointment){
         String appointmentInfo = String.format(
             "Appointment with %s on %s\nStatus: %s",
             appointment.getDoctorId(), appointment.getDate(),
             appointment.getStatus().toString()
         );
-        
+
         SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
 
         if(appointment.getStatus() == AppointmentStatus.PENDING
@@ -105,8 +126,16 @@ public class ViewAppointmentsService implements IService {
         if(appointment.getStatus() == AppointmentStatus.FINISHED) {
             appointmentMenu.addOption(viewRecordsOption);
         }
-    
-        menuNav.addMenu(appointmentMenu);
+
+        return appointmentMenu;
+    }
+
+    private AbstractMenu getAppointmentSelectDoctorMenu(Appointment appointment) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private AbstractMenu getAppointmentSelectAdminMenu(Appointment appointment) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public AbstractMenu getMenu() {
