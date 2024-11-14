@@ -1,12 +1,11 @@
 package hms.user.model;
 
-import java.util.*;
-
 import hms.appointment.Appointment;
 import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
 import hms.inventory.InventoryItem;
 import hms.manager.*;
+import java.util.*;
 
 public class Admin extends User {
 	/**
@@ -51,7 +50,7 @@ public class Admin extends User {
      */
     public ArrayList<Appointment> viewAppointments(List<SearchCriterion<Appointment, ?>> criteria) {
     	AppointmentManager manager = ctx.getManager(AppointmentManager.class);
-        return new ArrayList<Appointment>(manager.getAppointments(criteria));
+        return new ArrayList<>(manager.getAppointments(criteria));
     }
 
     /**
@@ -61,7 +60,7 @@ public class Admin extends User {
      */
     public ArrayList<InventoryItem> viewInventory(List<SearchCriterion<InventoryItem, ?>> criteria) {
         InventoryManager manager = ctx.getManager(InventoryManager.class);
-        return new ArrayList<InventoryItem>(manager.getInventoryItem(criteria));
+        return new ArrayList<>(manager.getInventoryItem(criteria));
     }
 
     /**
@@ -74,7 +73,7 @@ public class Admin extends User {
         SearchCriterion<InventoryItem, Boolean> lowStockCriterion =
         	    new SearchCriterion<>(InventoryItem::isLowStock, true);
         criteria.add(lowStockCriterion);
-        return new ArrayList<InventoryItem>(manager.getInventoryItem(criteria));
+        return new ArrayList<>(manager.getInventoryItem(criteria));
     }
 
     /**
@@ -87,7 +86,7 @@ public class Admin extends User {
         SearchCriterion<InventoryItem, Boolean> restockRequested = 
         		new SearchCriterion<>(InventoryItem::isRequested,true);
         criteria.add(restockRequested);
-        return new ArrayList<InventoryItem>(manager.getInventoryItem(criteria));
+        return new ArrayList<>(manager.getInventoryItem(criteria));
     }
  
     /**

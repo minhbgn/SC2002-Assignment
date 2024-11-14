@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Patient extends User {
-    private List<Appointment> appointments;
+    private final List<Appointment> appointments;
 
     public Patient(ManagerContext ctx) {
         super(ctx);
@@ -37,11 +37,13 @@ public class Patient extends User {
     }
 
     public void cancelAppointment(String appId) {
+        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        manager.updateStatus(appId, AppointmentStatus.CANCELLED);
         appointments.removeIf(appointment -> appointment.getId().equals(appId));
     }
 
     public Appointment[] viewAppointments(SearchCriterion<Appointment, ?>[] criteria) {
-        return appointments.toArray(new Appointment[0]);
+        return appointments.toArray(Appointment[]::new);
     }
 
     @Override

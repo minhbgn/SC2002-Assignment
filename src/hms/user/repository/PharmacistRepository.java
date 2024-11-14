@@ -10,7 +10,6 @@ public class PharmacistRepository extends UserRepository<Pharmacist> {
 
     @Override
     public Pharmacist createEmptyModel() {
-        // TODO Auto-generated method stub
         return new Pharmacist(super.ctx);
     }
 }

@@ -34,17 +34,18 @@ public class CSVFileHandler {
                 data.add(row);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return data;
     }
+
     public void write(String filePath, List<HashMap<String,String>> data) {
         if (data.isEmpty()) {
             return;
         }
         try (PrintWriter writer = new PrintWriter(new File(filePath))) {
             // Write headers
-            String[] headers = data.get(0).keySet().toArray(new String[0]);
+            String[] headers = data.get(0).keySet().toArray(String[]::new);
             writer.println(String.join(",", headers));
 
             // Write rows
@@ -56,7 +57,7 @@ public class CSVFileHandler {
                 writer.println(String.join(",", values));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }

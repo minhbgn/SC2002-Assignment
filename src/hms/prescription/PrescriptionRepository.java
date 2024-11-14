@@ -21,7 +21,6 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
     
     @Override
     public Prescription get(String id) {
-        // TODO Auto-generated method stub
         for(Prescription prescription : models){
             if(prescription.getId().equals(id)){
                 return prescription;
@@ -32,7 +31,6 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
 
     @Override
     public Prescription createEmptyModel() {
-        // TODO Auto-generated method stub
         return new Prescription();
     }
 }

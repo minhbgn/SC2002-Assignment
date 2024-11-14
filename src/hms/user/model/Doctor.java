@@ -1,9 +1,5 @@
 package hms.user.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import hms.appointment.Appointment;
 import hms.appointment.AppointmentRecord;
 import hms.appointment.enums.AppointmentStatus;
@@ -11,6 +7,9 @@ import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
 import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class Doctor extends User {
 	/**
@@ -41,7 +40,7 @@ public class Doctor extends User {
 	 */
     public ArrayList<Appointment> viewAppointments(ArrayList<SearchCriterion<Appointment, ?>> criteria) {
         AppointmentManager manager = ctx.getManager(AppointmentManager.class);
-        return new ArrayList<Appointment>(manager.getAppointments(criteria));
+        return new ArrayList<>(manager.getAppointments(criteria));
     }
 
     /**
