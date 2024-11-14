@@ -37,6 +37,8 @@ public class Patient extends User {
     }
 
     public void cancelAppointment(String appId) {
+        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
+        manager.updateStatus(appId, AppointmentStatus.CANCELLED);
         appointments.removeIf(appointment -> appointment.getId().equals(appId));
     }
 
