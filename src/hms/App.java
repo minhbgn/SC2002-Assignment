@@ -65,6 +65,9 @@ public class App {
             
             // Pause before continuing
             Prompt.getStringInput("Press Enter to continue...");
+
+            // Clear the console
+            System.out.println("\033[H\033[2J");
         }
 
         System.out.println("Exiting HMS Application");
