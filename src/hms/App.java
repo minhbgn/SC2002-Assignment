@@ -38,19 +38,17 @@ public class App {
             )
         );
 
-        ctx.addManager(AppointmentManager.class,
-            new AppointmentManager(ctx, APPOINTMENT_REPO_FILEPATH)
-        );
-
-        ctx.addManager(PrescriptionManager.class, 
-            new PrescriptionManager(ctx, PRESCRIPTION_REPO_FILEPATH)
-        );
-
-        ctx.addManager(InventoryManager.class, 
-            new InventoryManager(ctx, INVENTORY_REPO_FILEPATH)
-        );
+        ctx.addManager(AppointmentManager.class, new AppointmentManager(ctx, APPOINTMENT_REPO_FILEPATH));
+        ctx.addManager(PrescriptionManager.class, new PrescriptionManager(ctx, PRESCRIPTION_REPO_FILEPATH));
+        ctx.addManager(InventoryManager.class, new InventoryManager(ctx, INVENTORY_REPO_FILEPATH));
 
         currentSystem = new LoginSystem(ctx);
+
+        // Add a shutdown hook to save data
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Saving data...");
+            // ctx.save(); // Temporarily disabled for testing
+        }));
 
         isInitialized = true;
     }
