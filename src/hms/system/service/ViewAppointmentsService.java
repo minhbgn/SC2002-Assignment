@@ -142,7 +142,7 @@ public class ViewAppointmentsService implements IService {
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class)
             .getAppointments(defaultCriteria);
 
-        if (appointments.isEmpty()) return null;
+        if (appointments.isEmpty()) return new SimpleMenu("No appointments found.", null);
         
         PaginatedListSelector<Appointment> viewer = new PaginatedListSelector<>(
             "Appointments", appointments.toArray(Appointment[]::new),
