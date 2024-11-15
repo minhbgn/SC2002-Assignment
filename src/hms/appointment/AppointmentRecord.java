@@ -49,6 +49,12 @@ public class AppointmentRecord implements IModel {
             this.notes = data.get("notes");
         }
         if (data.containsKey("prescriptionIds")) {
+            // If prescriptions is empty, set it to an empty list
+            if (data.get("prescriptionIds").equals("")){
+                this.prescriptionIds = new ArrayList<>();
+                return;
+            }
+
             String[] _prescriptionIds = data.get("prescriptionIds").split("/");
             this.prescriptionIds = new ArrayList<>();
             this.prescriptionIds.addAll(Arrays.asList(_prescriptionIds));
