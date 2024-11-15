@@ -48,7 +48,7 @@ public class ViewInventoryService implements IService {
     }
 
     private void handleUpdateStockOption() {
-        int newStock = Prompt.getIntInput("Enter the new stock amount: ");
+        int newStock = Prompt.getIntInput("Enter the change in stock amount: ");
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemStock(selected.getMedicalName(), newStock);
 
