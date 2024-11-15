@@ -28,11 +28,37 @@ public class ViewAppointmentRecordsServices implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
+    private boolean hasPrescriptionUpdateOption = false;
+
+    private Appointment selected;
+
     public ViewAppointmentRecordsServices(ManagerContext ctx){
         this.ctx = ctx;
     }
 
-    private void onAppointmentRecordSelect(Appointment appointment){
+    public void enablePrescriptionUpdate(boolean enable){
+        hasPrescriptionUpdateOption = enable;
+    }
+
+    private void handleRecordPrescriptionUpdate() {
+        ArrayList<String> prescriptionIds = selected.getRecord().getPrescriptions();
+
+        int select = Prompt.getIntInput("Select a prescription to update: ");
+
+        if(select < 0 || select >= prescriptionIds.size()){
+            System.out.println("Invalid selection");
+            return;
+        }
+
+        boolean isFulfilled = Prompt.getBooleanInput("Is the prescription fulfilled? (y/n): ");
+
+        String prescriptionId = prescriptionIds.get(select);
+
+        ctx.getManager(PrescriptionManager.class)
+            .updatePrescription(prescriptionId, isFulfilled);
+    }
+
+    private String getRecordInfoDisplay(Appointment appointment){
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
             .get(appointment.getPatientId());
@@ -50,48 +76,41 @@ public class ViewAppointmentRecordsServices implements IService {
         recordInfo += "Appointment was on: " + appointment.getDate() + "\n\n";
         recordInfo += "Notes: " + appointment.getRecord().getNotes() + "\n";
         recordInfo += "Service provided: " + appointment.getRecord().getService() + "\n";
-        
+
         ArrayList<String> prescriptions = appointment.getRecord().getPrescriptions();
-        if(prescriptions.isEmpty()) recordInfo += "No prescriptions given";
-        else {
-            recordInfo += "Prescriptions given:";
-            for(int i = 0; i < prescriptions.size(); i++){
-                String prescriptionId = prescriptions.get(i);
 
-                Prescription prescription = ctx.getManager(PrescriptionManager.class)
-                    .getPrescriptions(List.of(new SearchCriterion<>(Prescription::getId, prescriptionId)))
-                    .get(0);
-
-                recordInfo += "\n\t" + i + ". " + prescription.getMedicalName() +
-                    " - " + prescription.getQuantity() +
-                    " - " + (prescription.getStatus() ? "Fulfilled" : "Not fulfilled");
-            }
+        if(prescriptions.isEmpty()) {
+            recordInfo += "No prescriptions given";
+            return recordInfo;
         }
 
-        SimpleMenu recordInfoMenu = new SimpleMenu(recordInfo, null);
+        recordInfo += "Prescriptions given:";
+        for(int i = 0; i < prescriptions.size(); i++){
+            String prescriptionId = prescriptions.get(i);
 
-        if(prescriptions.isEmpty()){
-            menuNav.addMenu(recordInfoMenu);
-            return;
+            Prescription prescription = ctx.getManager(PrescriptionManager.class)
+                .getPrescriptions(List.of(new SearchCriterion<>(Prescription::getId, prescriptionId)))
+                .get(0);
+
+            recordInfo += "\n\t" + i + ". " + prescription.getMedicalName() +
+                " - " + prescription.getQuantity() +
+                " - " + (prescription.getStatus() ? "Fulfilled" : "Not fulfilled");
         }
 
-        recordInfoMenu.addOption(new UserOption("Update prescription", () -> {
-            int select = Prompt.getIntInput("Select a prescription to update: ");
+        return recordInfo;
+    }
 
-            if(select < 0 || select >= prescriptions.size()){
-                System.out.println("Invalid selection");
-                return;
-            }
+    private void onAppointmentRecordSelect(Appointment appointment){
+        selected = appointment;
 
-            boolean isFulfilled = Prompt.getBooleanInput("Is the prescription fulfilled? (y/n): ");
-
-            String prescriptionId = prescriptions.get(select);
-
-            ctx.getManager(PrescriptionManager.class)
-                .updatePrescription(prescriptionId, isFulfilled);
-        }));
-
+        SimpleMenu recordInfoMenu = new SimpleMenu(getRecordInfoDisplay(appointment), null);
         menuNav.addMenu(recordInfoMenu);
+
+        if(appointment.getRecord().getPrescriptions().isEmpty()) return;
+
+        if (hasPrescriptionUpdateOption){
+            recordInfoMenu.addOption(new UserOption("Update prescription", this::handleRecordPrescriptionUpdate));
+        }
     }
 
     private AbstractMenu getMenu() {
