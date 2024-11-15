@@ -135,7 +135,19 @@ public class ViewAppointmentsService implements IService {
     }
 
     private AbstractMenu getAppointmentSelectAdminMenu(Appointment appointment) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        String appointmentInfo = String.format(
+            "Appointment by %s with %s on %s\nStatus: %s",
+            appointment.getPatientId(), appointment.getDoctorId(),
+            appointment.getDate(), appointment.getStatus().toString()
+        );
+
+        SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
+
+        if(appointment.getStatus() == AppointmentStatus.FINISHED) {
+            appointmentMenu.addOption(viewRecordsOption);
+        }
+
+        return appointmentMenu;
     }
 
     public AbstractMenu getMenu() {
