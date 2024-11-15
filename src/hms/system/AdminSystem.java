@@ -40,11 +40,16 @@ public class AdminSystem implements ISystem {
         this.menuNav = new MenuNavigator();
     
         // Initialize services supported by this system
+        ViewInventoryService viewInventoryService = new ViewInventoryService(ctx);
+        viewInventoryService.hasChangeLowStockAlertOption = true;
+        viewInventoryService.hasResolveRequestOption = true;
+        viewInventoryService.hasUpdateStockOption = true;
+
         this.services = new IService[] {
             new ViewProfileService(admin),
             new ViewAppointmentsService(ctx, admin, null),
             new ViewAppointmentRecordsServices(ctx),
-            new ViewInventoryService(ctx),
+            viewInventoryService,
         };
 
         // Set the next system to this system by default
