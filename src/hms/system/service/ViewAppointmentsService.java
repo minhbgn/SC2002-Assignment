@@ -16,7 +16,6 @@ import hms.ui.UserOption;
 import hms.user.model.Admin;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
-import hms.user.model.Pharmacist;
 import hms.user.model.User;
 import java.util.ArrayList;
 import java.util.Date;
@@ -101,11 +100,6 @@ public class ViewAppointmentsService implements IService {
             return;
         }
 
-        if(user instanceof Pharmacist) {
-            menuNav.addMenu(getAppointmentSelectPharmacistMenu(appointment));
-            return;
-        }
-
         if(user instanceof Admin) {
             menuNav.addMenu(getAppointmentSelectAdminMenu(appointment));
             return;
@@ -137,10 +131,6 @@ public class ViewAppointmentsService implements IService {
     }
 
     private AbstractMenu getAppointmentSelectDoctorMenu(Appointment appointment) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private AbstractMenu getAppointmentSelectPharmacistMenu(Appointment appointment) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
