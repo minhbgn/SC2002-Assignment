@@ -6,7 +6,6 @@ import hms.common.id.IdManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -80,12 +79,11 @@ public class Appointment implements IModel{
         }
 
         this.status = AppointmentStatus.valueOf(data.get("status"));
-        if (data.get("service").equals("empty")) {
+        if (data.get("status").equals("empty")) {
             this.record = null;
         } else {
-            ArrayList<String> prescriptions = new ArrayList<>();
-            prescriptions.addAll(Arrays.asList(data.get("prescriptions").split("/")));
-            this.record = new AppointmentRecord(data.get("service"), prescriptions, data.get("notes"));
+            this.record = new AppointmentRecord();
+            this.record.hydrate(data);
         }
     }
 
@@ -101,9 +99,9 @@ public class Appointment implements IModel{
         
         data.put("status", this.status.name());
         if(this.record == null) {
-            data.put("service", "empty");
-            data.put("notes", "empty");
-            data.put("prescriptions", "empty");
+            data.put("service", "n/a");
+            data.put("notes", "n/a");
+            data.put("prescriptions", "n/a");
         }
         else {
             data.putAll(record.serialize());
