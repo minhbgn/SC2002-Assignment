@@ -1,11 +1,13 @@
 package hms.system;
 
 import hms.manager.ManagerContext;
+import hms.system.service.AddUserService;
 import hms.system.service.IService;
 import hms.system.service.ViewAppointmentRecordsServices;
 import hms.system.service.ViewAppointmentsService;
 import hms.system.service.ViewInventoryService;
 import hms.system.service.ViewProfileService;
+import hms.system.service.ViewUsersService;
 import hms.ui.AbstractMenu;
 import hms.ui.MenuNavigator;
 import hms.ui.Prompt;
@@ -50,6 +52,8 @@ public class AdminSystem implements ISystem {
             new ViewAppointmentsService(ctx, admin, null),
             new ViewAppointmentRecordsServices(ctx),
             viewInventoryService,
+            new ViewUsersService(ctx, admin),
+            new AddUserService(ctx)
         };
 
         // Set the next system to this system by default
@@ -65,6 +69,8 @@ public class AdminSystem implements ISystem {
             new UserOption("View Appointments", () -> services[1].execute(menuNav)),
             new UserOption("View Appointment Records", () -> services[2].execute(menuNav)),
             new UserOption("View Inventory", () -> services[3].execute(menuNav)),
+            new UserOption("View Users", () -> services[4].execute(menuNav)),
+            new UserOption("Add User", () -> services[5].execute(menuNav)),
             new UserOption("Log Out", () -> nextSystem = new LoginSystem(ctx)),
             new UserOption("Exit", () -> nextSystem = null)
         ));
