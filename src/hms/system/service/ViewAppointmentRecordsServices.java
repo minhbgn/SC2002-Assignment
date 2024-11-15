@@ -28,16 +28,12 @@ public class ViewAppointmentRecordsServices implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
-    private boolean hasPrescriptionUpdateOption = false;
+    public boolean hasPrescriptionUpdateOption = false;
 
     private Appointment selected;
 
     public ViewAppointmentRecordsServices(ManagerContext ctx){
         this.ctx = ctx;
-    }
-
-    public void enablePrescriptionUpdate(boolean enable){
-        hasPrescriptionUpdateOption = enable;
     }
 
     private void handleRecordPrescriptionUpdate() {
