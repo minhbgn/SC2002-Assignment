@@ -6,7 +6,9 @@ import hms.manager.UserManager;
 import hms.ui.Prompt;
 import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
+import hms.user.model.Admin;
 import hms.user.model.Patient;
+import hms.user.repository.AdminRepository;
 import hms.user.repository.PatientRepository;
 import java.util.List;
 
@@ -74,7 +76,13 @@ public class LoginSystem implements ISystem {
         }
         else{
             switch (userClass.getSimpleName()) {
-                case "Admin" -> nextSystem = new AdminSystem();
+                case "Admin" -> {
+                    Admin admin = ctx
+                        .getManager(UserManager.class)
+                        .getRepository(AdminRepository.class)
+                        .get(userId);
+                    nextSystem = new AdminSystem(ctx, admin);
+                }
                 case "Doctor" -> nextSystem = new DoctorSystem();
                 case "Patient" -> {
                     Patient patient = (Patient) ctx
