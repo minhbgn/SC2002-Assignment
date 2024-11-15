@@ -45,17 +45,50 @@ public class ViewInventoryService implements IService {
 
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemRequestStatus(selected.getMedicalName(), request, requested_amount);
+    }
 
-        menuNav.popMenu();
+    private void handleUpdateStockOption() {
+        int newStock = Prompt.getIntInput("Enter the new stock amount: ");
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemStock(selected.getMedicalName(), newStock);
+
+        int remainingStock = Math.max(0, newStock - selected.getRequestedAmount());
+
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), remainingStock == 0, remainingStock);
+    }
+
+    private void handleResolveRequestOption() {
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), false, 0);
+    }
+
+    private void handleChangeLowStockAlertOption() {
+        boolean alert = Prompt.getBooleanInput("Do you want to change the low stock alert for this item? (y/n)");
+        if (!alert) return;
+
+        int alert_amount = Prompt.getIntInput("Enter the new low stock alert amount: ");
+
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemLowStockThreshold(selected.getMedicalName(), alert_amount);
     }
 
     private void onItemSelect(InventoryItem item){
         selected = item;
-        
+
         SimpleMenu menu = new SimpleMenu(getItemInfoDisplay(item), null);
 
         if (hasRequestItemOption)
             menu.addOption(new UserOption("Request item", this::handleRequestItemOption));
+
+        if (hasUpdateStockOption)
+            menu.addOption(new UserOption("Update stock", this::handleUpdateStockOption));
+
+        if (hasResolveRequestOption)
+            menu.addOption(new UserOption("Resolve request", this::handleResolveRequestOption));
+
+        if (hasChangeLowStockAlertOption)
+            menu.addOption(new UserOption("Change low stock alert", this::handleChangeLowStockAlertOption));
 
         menuNav.addMenu(menu);
     }
