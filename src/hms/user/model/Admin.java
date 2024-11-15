@@ -34,14 +34,14 @@ public class Admin extends User {
      * @param criteria The criteria under which the user is searched for
      * @return The list of users who satisfy all criteria
      */
-    public ArrayList<User> viewAllStaff(List<SearchCriterion<User, ?>> criteria) {
-    	UserManager manager = ctx.getManager(UserManager.class);
-    	ArrayList<User> staff_list = new ArrayList<>();
-    	staff_list.addAll(manager.getUser(Admin.class, criteria));
-    	staff_list.addAll(manager.getUser(Doctor.class, criteria));
-    	staff_list.addAll(manager.getUser(Pharmacist.class,criteria));
-    	return staff_list;
-    }
+    // public ArrayList<User> viewAllStaff(List<SearchCriterion<User, ?>> criteria) {
+    // 	UserManager manager = ctx.getManager(UserManager.class);
+    // 	ArrayList<User> staff_list = new ArrayList<>();
+    // 	staff_list.addAll(manager.getUser(Admin.class, criteria));
+    // 	staff_list.addAll(manager.getUser(Doctor.class, criteria));
+    // 	staff_list.addAll(manager.getUser(Pharmacist.class,criteria));
+    // 	return staff_list;
+    // }
 
     /**
      * Used to see all current appointments under certain criteria

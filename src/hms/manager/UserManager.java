@@ -15,10 +15,8 @@ import hms.user.repository.PatientRepository;
 import hms.user.repository.PharmacistRepository;
 import hms.user.repository.UserRepository;
 import hms.utils.CSVFileHandler;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Manager class for all user types.
@@ -146,14 +144,11 @@ public class UserManager implements IManager {
      * @param criteria The search criteria
      * @return the list of user that satisfies all criteria
      */
-    public <T extends User> List<User> getUser(Class<T> userClass, 
-    		List<SearchCriterion<User,?>> criteria){
+    public <T extends User> List<T> getUser(Class<T> userClass, 
+    		List<SearchCriterion<T,?>> criteria){
     	UserRepository<T> repository = getRepositoryByUser(userClass);
-    	List<User> returning_list = new ArrayList<>();
-    	returning_list.addAll(repository.findWithFilters(null));
-    	return returning_list.stream()
-                .filter(model -> criteria == null || criteria.stream().allMatch(criterion -> criterion.match(model)))
-                .collect(Collectors.toList());
+        
+        return repository.findWithFilters(criteria);
     }
 
     @Override
