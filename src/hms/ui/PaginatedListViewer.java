@@ -1,6 +1,8 @@
 package hms.ui;
 
+import hms.common.SearchCriterion;
 import java.util.HashMap;
+import java.util.function.Function;
 
 public class PaginatedListViewer<T> extends AbstractMenu {
     protected final PaginatedList<T> paginatedList;
@@ -11,6 +13,22 @@ public class PaginatedListViewer<T> extends AbstractMenu {
         this.paginatedList = new PaginatedList<>(items);
 
         updateOptions();
+    }
+
+    public void addFilter(SearchCriterion<T, ?> filter) {
+        paginatedList.addCriteria(filter);
+    }
+
+    public void clearFilters() {
+        paginatedList.setCriteria(null);
+    }
+
+    public void sortBy(Function<T, Comparable<?>> keyExtractor) {
+        paginatedList.setSorter(keyExtractor);
+    }
+
+    public void clearSorter() {
+        paginatedList.setSorter(null);
     }
 
     private void updateOptions() {
