@@ -64,7 +64,7 @@ public class PrescriptionManager extends AbstractManager<PrescriptionRepository>
         // even if the medicalName does not exist in the inventory. This reflects the situation
         // in real life where a doctor can prescribe a medicine that is not available
         // in the hospital's inventory but can be procured from an external source.
-        if(ctx.getManager(InventoryManager.class).hasInventoryItem(medicalName)) return null;
+        if(!ctx.getManager(InventoryManager.class).hasInventoryItem(medicalName)) return null;
 
         if(quantity <= 0) return null;
 
