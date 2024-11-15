@@ -15,11 +15,18 @@ public class ViewInventoryService implements IService {
 
     private MenuNavigator menuNav;
 
+    public boolean hasRequestItemOption = false;
+    public boolean hasUpdateStockOption = false;
+    public boolean hasResolveRequestOption = false;
+    public boolean hasChangeLowStockAlertOption = false;
+
+    private InventoryItem selected;
+
     public ViewInventoryService(ManagerContext ctx){
         this.ctx = ctx;
     }
 
-    private void onItemSelect(InventoryItem item){
+    private String getItemInfoDisplay(InventoryItem item){
         String itemInfo = "Item details:\n\n";
         itemInfo += "Name: " + item.getMedicalName() + "\n";
         itemInfo += "In stock: " + item.getStock();
@@ -29,17 +36,59 @@ public class ViewInventoryService implements IService {
             itemInfo += "Requested: Yes (" + item.getRequestedAmount() + " requested)";
         else itemInfo += "Requested: No";
 
-        SimpleMenu menu = new SimpleMenu(itemInfo, null);
+        return itemInfo;
+    }
 
-        menu.addOption(new UserOption("Request item", () -> {
-            boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
-            int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
+    private void handleRequestItemOption() {
+        boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
+        int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
 
-            ctx.getManager(InventoryManager.class)
-                .updateInventoryItemRequestStatus(item.getMedicalName(), request, requested_amount);
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), request, requested_amount);
+    }
 
-            menuNav.popMenu();
-        }));
+    private void handleUpdateStockOption() {
+        int newStock = Prompt.getIntInput("Enter the change in stock amount: ");
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemStock(selected.getMedicalName(), newStock);
+
+        int remainingStock = Math.max(0, newStock - selected.getRequestedAmount());
+
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), remainingStock == 0, remainingStock);
+    }
+
+    private void handleResolveRequestOption() {
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), false, 0);
+    }
+
+    private void handleChangeLowStockAlertOption() {
+        boolean alert = Prompt.getBooleanInput("Do you want to change the low stock alert for this item? (y/n)");
+        if (!alert) return;
+
+        int alert_amount = Prompt.getIntInput("Enter the new low stock alert amount: ");
+
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemLowStockThreshold(selected.getMedicalName(), alert_amount);
+    }
+
+    private void onItemSelect(InventoryItem item){
+        selected = item;
+
+        SimpleMenu menu = new SimpleMenu(getItemInfoDisplay(item), null);
+
+        if (hasRequestItemOption)
+            menu.addOption(new UserOption("Request item", this::handleRequestItemOption));
+
+        if (hasUpdateStockOption)
+            menu.addOption(new UserOption("Update stock", this::handleUpdateStockOption));
+
+        if (hasResolveRequestOption)
+            menu.addOption(new UserOption("Resolve request", this::handleResolveRequestOption));
+
+        if (hasChangeLowStockAlertOption)
+            menu.addOption(new UserOption("Change low stock alert", this::handleChangeLowStockAlertOption));
 
         menuNav.addMenu(menu);
     }
