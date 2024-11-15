@@ -15,11 +15,18 @@ public class ViewInventoryService implements IService {
 
     private MenuNavigator menuNav;
 
+    public boolean hasRequestItemOption = false;
+    public boolean hasUpdateStockOption = false;
+    public boolean hasResolveRequestOption = false;
+    public boolean hasChangeLowStockAlertOption = false;
+
+    private InventoryItem selected;
+
     public ViewInventoryService(ManagerContext ctx){
         this.ctx = ctx;
     }
 
-    private void onItemSelect(InventoryItem item){
+    private String getItemInfoDisplay(InventoryItem item){
         String itemInfo = "Item details:\n\n";
         itemInfo += "Name: " + item.getMedicalName() + "\n";
         itemInfo += "In stock: " + item.getStock();
@@ -29,17 +36,26 @@ public class ViewInventoryService implements IService {
             itemInfo += "Requested: Yes (" + item.getRequestedAmount() + " requested)";
         else itemInfo += "Requested: No";
 
-        SimpleMenu menu = new SimpleMenu(itemInfo, null);
+        return itemInfo;
+    }
 
-        menu.addOption(new UserOption("Request item", () -> {
-            boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
-            int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
+    private void handleRequestItemOption() {
+        boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
+        int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
 
-            ctx.getManager(InventoryManager.class)
-                .updateInventoryItemRequestStatus(item.getMedicalName(), request, requested_amount);
+        ctx.getManager(InventoryManager.class)
+            .updateInventoryItemRequestStatus(selected.getMedicalName(), request, requested_amount);
 
-            menuNav.popMenu();
-        }));
+        menuNav.popMenu();
+    }
+
+    private void onItemSelect(InventoryItem item){
+        selected = item;
+        
+        SimpleMenu menu = new SimpleMenu(getItemInfoDisplay(item), null);
+
+        if (hasRequestItemOption)
+            menu.addOption(new UserOption("Request item", this::handleRequestItemOption));
 
         menuNav.addMenu(menu);
     }
