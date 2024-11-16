@@ -29,7 +29,7 @@ public class ViewAppointmentsService implements IService {
     private final User user;
     private final ManagerContext ctx;
     private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
-    private List<SearchCriterion<Appointment, ?>> activeCriteria = new ArrayList<>();
+    private final List<SearchCriterion<Appointment, ?>> activeCriteria = new ArrayList<>();
 
     private final UserOption cancelAppointmentOption = new UserOption("Cancel Appointment", this::handleCancelAppointment);
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
@@ -60,19 +60,17 @@ public class ViewAppointmentsService implements IService {
     }
 
     private void handleRescheduleAppointment() {
-        Patient p = (Patient) user;
-
         Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
-        p.rescheduleAppointment(selected.getId(), newDate);
+        ctx.getManager(AppointmentManager.class)
+            .updateDate(selected.getId(), newDate);
 
         // Update the appointment info display
         menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
     }
 
     private void handleCancelAppointment() {
-        Patient p = (Patient) user;
-
-        p.cancelAppointment(selected.getId());
+        ctx.getManager(AppointmentManager.class)
+            .updateStatus(selected.getId(), AppointmentStatus.CANCELLED);
 
         // Update the entire menu
         menuNav.popMenu();
@@ -109,11 +107,12 @@ public class ViewAppointmentsService implements IService {
     }
 
     private void handleResolveAppointment() {
-        Doctor d = (Doctor) user;
-
         boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
 
-        d.resolvePendingAppointment(selected.getId(), accepted);
+        if(!accepted) return;
+
+        ctx.getManager(AppointmentManager.class)
+            .updateStatus(selected.getId(), AppointmentStatus.ACCEPTED);
 
         // Update the entire menu
         menuNav.popMenu();
