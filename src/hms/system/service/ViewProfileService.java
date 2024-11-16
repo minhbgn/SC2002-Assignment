@@ -86,7 +86,7 @@ public class ViewProfileService implements IService {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
         return String.format("""
-            Patient Profile\n\n\
+            User Profile\n\n\
             Name: %s\n\
             Gender: %s\n\
             Contact: %s\n\
