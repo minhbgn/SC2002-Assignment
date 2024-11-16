@@ -18,6 +18,7 @@ import hms.user.model.Admin;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
 import hms.user.model.User;
+import hms.user.repository.DoctorRepository;
 import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
 import java.util.Date;
@@ -169,9 +170,13 @@ public class ViewAppointmentsService implements IService {
     }
 
     private AbstractMenu getAppointmentSelectPatientMenu(Appointment appointment){
+        Doctor d = ctx.getManager(UserManager.class)
+            .getRepository(DoctorRepository.class)
+            .get(appointment.getDoctorId());
+
         String appointmentInfo = String.format(
             "Appointment with %s on %s\nStatus: %s",
-            appointment.getDoctorId(), appointment.getDate(),
+            d.name, appointment.getDate(),
             appointment.getStatus().toString()
         );
 
