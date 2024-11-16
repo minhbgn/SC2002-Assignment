@@ -40,6 +40,7 @@ public class DoctorSystem implements ISystem {
         viewAppointmentsService.hasCompleteAppointmentOption = true;
         viewAppointmentsService.hasResolveAppointmentOption = true;
         viewAppointmentsService.hasViewPatientInfoOption = true;
+        viewAppointmentsService.hasViewPatientMedicalRecordOption = true;
         viewAppointmentsService.hasViewRecordsOption = true;
 
         // Initialize services supported by this system
