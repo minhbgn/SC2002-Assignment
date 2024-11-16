@@ -31,14 +31,18 @@ public class ViewAppointmentsService implements IService {
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
     private final UserOption rescheduleAppointmentOption = new UserOption("Reschedule Appointment", this::handleRescheduleAppointment);
     private final UserOption resolveAppointmentOption = new UserOption("Accept Appointment", this::handleResolveAppointment);
+    private final UserOption updatePatientMedicalRecordOption = new UserOption("Update Patient Medical Record", this::handleUpdatePatientMedicalRecord);
     private final UserOption viewPatientInfoOption = new UserOption("View Patient Info", this::handleViewPatientInfo);
+    private final UserOption viewPatientMedicalRecordsOption = new UserOption("View Patient Medical Records", this::handleViewPatientMedicalRecords);
     private final UserOption viewRecordsOption = new UserOption("View Records", this::handleViewRecords);
 
     public boolean hasCancelAppointmentOption = false;
     public boolean hasCompleteAppointmentOption = false;
     public boolean hasRescheduleAppointmentOption = false;
     public boolean hasResolveAppointmentOption = false;
+    public boolean hasUpdatePatientMedicalRecordOption = false;
     public boolean hasViewPatientInfoOption = false;
+    public boolean hasViewPatientMedicalRecordOption = false;
     public boolean hasViewRecordsOption = false;
 
     /** Variable for keeping track of the selected appointment */
@@ -53,60 +57,9 @@ public class ViewAppointmentsService implements IService {
         this.defaultCriteria = defaultCriteria;
     }
 
-    private void handleRescheduleAppointment() {
-        Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
-        ctx.getManager(AppointmentManager.class)
-            .updateDate(selected.getId(), newDate);
-
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
-    }
-
     private void handleCancelAppointment() {
         ctx.getManager(AppointmentManager.class)
             .updateStatus(selected.getId(), AppointmentStatus.CANCELLED);
-
-        // Update the entire menu
-        menuNav.popMenu();
-        onAppointmentSelect(selected);
-    }
-
-    private void handleViewRecords() {
-        String recordInfo = String.format(
-            "Notes: %s\nServices: %s",
-            selected.getRecord().getNotes(),
-            selected.getRecord().getService()
-        );
-
-        ArrayList<String> prescriptions = selected.getRecord().getPrescriptions();
-
-        if(!prescriptions.isEmpty()) {
-            recordInfo += "\nPrescriptions: ";
-            PrescriptionManager prescriptionManager = ctx.getManager(PrescriptionManager.class);
-
-            for(String prescription : prescriptions) {
-                Prescription p = prescriptionManager.getPrescriptions(List.of(
-                    new SearchCriterion<>(Prescription::getId, prescription)
-                )).get(0);
-
-                if(p != null) {
-                    recordInfo += "\n\t" + p;
-                }
-            }
-        }
-
-        SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
-
-        menuNav.addMenu(recordMenu);
-    }
-
-    private void handleResolveAppointment() {
-        boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
-
-        if(!accepted) return;
-
-        ctx.getManager(AppointmentManager.class)
-            .updateStatus(selected.getId(), AppointmentStatus.ACCEPTED);
 
         // Update the entire menu
         menuNav.popMenu();
@@ -149,6 +102,75 @@ public class ViewAppointmentsService implements IService {
         onAppointmentSelect(selected);
     }
 
+    private void handleFilter(){
+        SimpleMenu filterChoicesMenu = new SimpleMenu("Filter by:", List.of(
+            new UserOption("Pending", () -> setFilter(AppointmentStatus.PENDING)),
+            new UserOption("Cancelled", () -> setFilter(AppointmentStatus.CANCELLED)),
+            new UserOption("Accepted", () -> setFilter(AppointmentStatus.ACCEPTED)),
+            new UserOption("Rejected", () -> setFilter(AppointmentStatus.REJECTED)),
+            new UserOption("Finished", () -> setFilter(AppointmentStatus.FINISHED)),
+            new UserOption("All", () -> setFilter(null))
+        ));
+
+        menuNav.addMenu(filterChoicesMenu);
+    }
+
+    private void handleRescheduleAppointment() {
+        Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
+        ctx.getManager(AppointmentManager.class)
+            .updateDate(selected.getId(), newDate);
+
+        // Update the appointment info display
+        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
+    }
+
+    private void handleResolveAppointment() {
+        boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
+
+        if(!accepted) return;
+
+        ctx.getManager(AppointmentManager.class)
+            .updateStatus(selected.getId(), AppointmentStatus.ACCEPTED);
+
+        // Update the entire menu
+        menuNav.popMenu();
+        onAppointmentSelect(selected);
+    }
+
+    private void handleUpdatePatientMedicalRecord() {
+        Patient p = ctx.getManager(UserManager.class)
+            .getRepository(PatientRepository.class)
+            .get(selected.getPatientId());
+
+        System.out.print("\033[H\033[2J");
+        if(Prompt.getBooleanInput("Update blood type? (y/n): ")){
+            System.out.println("Current data: " + p.bloodType);
+            p.bloodType = Prompt.getStringInput("Enter the updated blood type: ");
+        }
+
+        System.out.print("\033[H\033[2J");
+        if(Prompt.getBooleanInput("Update allergies? (y/n): ")){
+            System.out.println("Current data: " + p.allergies);
+            p.allergies = Prompt.getStringInput("Enter the updated allergies: ");
+        }
+
+        System.out.print("\033[H\033[2J");
+        if(Prompt.getBooleanInput("Update medical history? (y/n): ")){
+            System.out.println("Current data: " + p.medicalHistory);
+            p.medicalHistory = Prompt.getStringInput("Enter the updated medical history: ");
+        }
+
+        System.out.print("\033[H\033[2J");
+        if(Prompt.getBooleanInput("Update current medication? (y/n): ")){
+            System.out.println("Current data: " + p.currentMedication);
+            p.currentMedication = Prompt.getStringInput("Enter the updated current medication: ");
+        }
+
+        // Update the entire menu
+        menuNav.popMenu();
+        onAppointmentSelect(selected);
+    }
+
     private void handleViewPatientInfo() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -161,23 +183,57 @@ public class ViewAppointmentsService implements IService {
 
         SimpleMenu patientInfoMenu = new SimpleMenu(patientInfo, null);
 
+        if (hasUpdatePatientMedicalRecordOption) patientInfoMenu.addOption(updatePatientMedicalRecordOption);
+
         menuNav.addMenu(patientInfoMenu);
     }
 
-    private void handleFilterOption(){
-        SimpleMenu filterChoicesMenu = new SimpleMenu("Filter by:", List.of(
-            new UserOption("Pending", () -> handleFilter(AppointmentStatus.PENDING)),
-            new UserOption("Cancelled", () -> handleFilter(AppointmentStatus.CANCELLED)),
-            new UserOption("Accepted", () -> handleFilter(AppointmentStatus.ACCEPTED)),
-            new UserOption("Rejected", () -> handleFilter(AppointmentStatus.REJECTED)),
-            new UserOption("Finished", () -> handleFilter(AppointmentStatus.FINISHED)),
-            new UserOption("All", () -> handleFilter(null))
-        ));
+    private void handleViewPatientMedicalRecords() {
+        Patient p = ctx.getManager(UserManager.class)
+            .getRepository(PatientRepository.class)
+            .get(selected.getPatientId());
 
-        menuNav.addMenu(filterChoicesMenu);
+        String recordInfo = "Medical Records of " + p.name + ":\n\n" +
+            "Blood Type: " + p.bloodType + "\n" +
+            "Allergies: " + p.allergies + "\n" +
+            "Medications: " + p.medicalHistory + "\n" +
+            "Conditions: " + p.currentMedication;
+
+        SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+
+        menuNav.addMenu(recordMenu);
     }
 
-    private void handleFilter(AppointmentStatus status){
+    private void handleViewRecords() {
+        String recordInfo = String.format(
+            "Notes: %s\nServices: %s",
+            selected.getRecord().getNotes(),
+            selected.getRecord().getService()
+        );
+
+        ArrayList<String> prescriptions = selected.getRecord().getPrescriptions();
+
+        if(!prescriptions.isEmpty()) {
+            recordInfo += "\nPrescriptions: ";
+            PrescriptionManager prescriptionManager = ctx.getManager(PrescriptionManager.class);
+
+            for(String prescription : prescriptions) {
+                Prescription p = prescriptionManager.getPrescriptions(List.of(
+                    new SearchCriterion<>(Prescription::getId, prescription)
+                )).get(0);
+
+                if(p != null) {
+                    recordInfo += "\n\t" + p;
+                }
+            }
+        }
+
+        SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+
+        menuNav.addMenu(recordMenu);
+    }
+
+    private void setFilter(AppointmentStatus status){
         activeCriteria.clear();
 
         if(status != null){
@@ -215,6 +271,7 @@ public class ViewAppointmentsService implements IService {
             if (hasCompleteAppointmentOption) appointmentMenu.addOption(completeAppointmentOption);
             if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
             if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
+            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
         }
 
         if(appointment.getStatus() == AppointmentStatus.PENDING) {
@@ -222,10 +279,12 @@ public class ViewAppointmentsService implements IService {
             if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
             if (hasResolveAppointmentOption) appointmentMenu.addOption(resolveAppointmentOption);
             if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
+            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
         }
         
         if(appointment.getStatus() == AppointmentStatus.FINISHED) {
-            appointmentMenu.addOption(viewRecordsOption);
+            if (hasViewRecordsOption) appointmentMenu.addOption(viewRecordsOption);
+            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
         }
 
         menuNav.addMenu(appointmentMenu);
@@ -247,7 +306,7 @@ public class ViewAppointmentsService implements IService {
             this::onAppointmentSelect
         );
 
-        returnMenu.addOption("f", new UserOption("Filter", this::handleFilterOption));
+        returnMenu.addOption("f", new UserOption("Filter", this::handleFilter));
 
         return returnMenu;
     }
