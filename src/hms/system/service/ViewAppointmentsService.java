@@ -19,7 +19,6 @@ import hms.user.model.Patient;
 import hms.user.repository.DoctorRepository;
 import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ViewAppointmentsService implements IService {
@@ -52,7 +51,7 @@ public class ViewAppointmentsService implements IService {
 
     public ViewAppointmentsService(ManagerContext ctx,
         List<SearchCriterion<Appointment, ?>> defaultCriteria) {
-        
+
         this.ctx = ctx;
         this.defaultCriteria = defaultCriteria;
     }
@@ -116,12 +115,23 @@ public class ViewAppointmentsService implements IService {
     }
 
     private void handleRescheduleAppointment() {
-        Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
-        ctx.getManager(AppointmentManager.class)
-            .updateDate(selected.getId(), newDate);
+        QueryFreeTimeslotService freeTimeslotService = new QueryFreeTimeslotService(ctx, (timeslot) -> {
+            // Update the timeslot of the appointment
+            boolean success = ctx.getManager(AppointmentManager.class)
+                .updateTimeslot(selected.getId(), timeslot);
+        
+            if(!success) // This should never happen
+                throw new RuntimeException("Failed to update appointment timeslot");
+                
+            // Update the entire menu
+            menuNav.popMenu(); // Pop the appointment menu
+            onAppointmentSelect(selected); // Re-add the appointment menu
+        });
 
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
+        freeTimeslotService.bindDoctor(selected.getDoctorId());
+        freeTimeslotService.bindUser(selected.getPatientId());
+
+        freeTimeslotService.execute(menuNav);
     }
 
     private void handleResolveAppointment() {
@@ -255,8 +265,10 @@ public class ViewAppointmentsService implements IService {
             .getRepository(DoctorRepository.class)
             .get(appointment.getDoctorId());
 
-        return String.format("Appointment by %s with %s on %s\nStatus: %s",
-            p.name, d.name, appointment.getDate(),
+        return String.format("Appointment by %s with %s from %s to %s\nStatus: %s",
+            p.name, d.name,
+            appointment.getTimeslot().getStartTimeString(),
+            appointment.getTimeslot().getEndTimeString(),
             appointment.getStatus().toString()
         );
     }
