@@ -36,7 +36,7 @@ public class DoctorSystem implements ISystem {
             new SearchCriterion<>(Appointment::getDoctorId, doctor.getAccount().getId())
         );
 
-        ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, doctor, defaultCriteria);
+        ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, defaultCriteria);
         viewAppointmentsService.hasCompleteAppointmentOption = true;
         viewAppointmentsService.hasResolveAppointmentOption = true;
         viewAppointmentsService.hasViewPatientInfoOption = true;

@@ -47,7 +47,7 @@ public class AdminSystem implements ISystem {
         viewInventoryService.hasResolveRequestOption = true;
         viewInventoryService.hasUpdateStockOption = true;
 
-        ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, admin, null);
+        ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, null);
         viewAppointmentsService.hasViewRecordsOption = true;
 
         this.services = new IService[] {
