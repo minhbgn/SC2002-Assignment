@@ -265,8 +265,9 @@ public class ViewAppointmentsService implements IService {
     }
 
     public AbstractMenu getMenu() {
-        List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>(defaultCriteria);
-        criteria.addAll(activeCriteria);
+        List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>();
+        if(defaultCriteria != null) criteria.addAll(defaultCriteria);
+        if(activeCriteria != null) criteria.addAll(activeCriteria);
 
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class)
             .getAppointments(criteria);
