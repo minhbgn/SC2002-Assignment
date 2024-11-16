@@ -7,6 +7,7 @@ import hms.system.service.IService;
 import hms.system.service.ScheduleAppointmentService;
 import hms.system.service.ViewAppointmentsService;
 import hms.system.service.ViewProfileService;
+import hms.system.service.ViewRecordsService;
 import hms.ui.AbstractMenu;
 import hms.ui.MenuNavigator;
 import hms.ui.Prompt;
@@ -19,8 +20,9 @@ public class PatientSystem implements ISystem {
     /**
      * The services available in this system. Contents:
      * 1. View Profile
-     * 2. View Appointments
-     * 3. Schedule Appointment
+     * 2. View Medical Records
+     * 3. View Appointments
+     * 4. Schedule Appointment
      */
     private final IService[] services;
     private final ManagerContext ctx;
@@ -51,8 +53,9 @@ public class PatientSystem implements ISystem {
         // Initialize services supported by this system
         this.services = new IService[] {
             new ViewProfileService(patient),
+            new ViewRecordsService(patient),
             viewAppointmentsService,
-            new ScheduleAppointmentService(ctx, patient)
+            new ScheduleAppointmentService(ctx, patient),
         };
 
         // Set the next system to this system by default
@@ -65,8 +68,9 @@ public class PatientSystem implements ISystem {
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
-            new UserOption("View Appointments", () -> services[1].execute(menuNav)),
-            new UserOption("Schedule Appointment", () -> services[2].execute(menuNav)),
+            new UserOption("View Medical Records", () -> services[1].execute(menuNav)),
+            new UserOption("View Appointments", () -> services[2].execute(menuNav)),
+            new UserOption("Schedule Appointment", () -> services[3].execute(menuNav)),
             new UserOption("Log Out", () -> nextSystem = new LoginSystem(ctx)),
             new UserOption("Exit", () -> nextSystem = null)
         ));
