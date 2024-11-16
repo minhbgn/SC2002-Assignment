@@ -66,6 +66,16 @@ public class Appointment implements IModel{
     }
 
     @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        return String.format(
+            "Appointment %s on %s (Status: %s)",
+            this.id, sdf.format(this.date), this.status.toString()
+        );
+    }
+
+    @Override
     public void hydrate(HashMap<String, String> data) {
         this.id = data.get("id");
         this.patientId = data.get("patientId");
