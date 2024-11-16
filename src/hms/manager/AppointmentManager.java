@@ -5,8 +5,8 @@ import hms.appointment.AppointmentRepository;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
+import hms.utils.Timeslot;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,7 +61,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @param date The date of the appointment.
      * @return The created appointment, or null if the patient or doctor does not exist.
      */
-    public Appointment makeAppointment(String patientId, String doctorId, Date date){
+    public Appointment makeAppointment(String patientId, String doctorId, Timeslot timeslot){
         UserManager userManager = ctx.getManager(UserManager.class);
 
         if(!userManager.hasUser(patientId)) return null;
@@ -70,7 +70,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         // TODO: Check if the doctor is available on the given date
         // TODO: Check if the patient has already made an appointment on the given date
 
-        return repository.create(patientId, doctorId, date);
+        return repository.create(patientId, doctorId, timeslot);
     }
 
     /**
@@ -103,7 +103,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @param date The new date of the appointment.
      * @return True if the appointment was successfully updated, false otherwise.
      */
-    public boolean updateDate(String id, Date date){
+    public boolean updateDate(String id, Timeslot timeslot){
         if(!hasAppointment(id)) return false;
 
         Appointment appointment = repository.get(id);
@@ -118,7 +118,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         // TODO: Check if both the doctor and the patient are available on the given date
 
         repository.updateStatus(id, AppointmentStatus.PENDING);
-        repository.updateDate(id, date);
+        repository.updateTimeslot(id, timeslot);
         return true;
     }
 
