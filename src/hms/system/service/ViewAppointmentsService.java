@@ -63,12 +63,18 @@ public class ViewAppointmentsService implements IService {
 
         Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
         p.rescheduleAppointment(selected.getId(), newDate);
+
+        // Update the appointment info display
+        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
     }
 
     private void handleCancelAppointment() {
         Patient p = (Patient) user;
 
         p.cancelAppointment(selected.getId());
+
+        // Update the appointment info display
+        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
     }
 
     private void handleViewRecords() {
@@ -106,6 +112,9 @@ public class ViewAppointmentsService implements IService {
         boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
 
         d.resolvePendingAppointment(selected.getId(), accepted);
+
+        // Update the appointment info display
+        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
     }
 
     private void handleCompleteAppointment() {
@@ -138,6 +147,9 @@ public class ViewAppointmentsService implements IService {
 
         ctx.getManager(AppointmentManager.class)
             .resolveAppoinment(selected.getId(), service, prescriptionIds, notes);
+
+        // Update the appointment info display
+        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
     }
 
     private void handleViewPatientInfo() {
