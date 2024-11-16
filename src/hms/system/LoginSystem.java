@@ -8,8 +8,10 @@ import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
+import hms.user.model.Pharmacist;
 import hms.user.repository.DoctorRepository;
 import hms.user.repository.PatientRepository;
+import hms.user.repository.PharmacistRepository;
 import java.util.List;
 
 public class LoginSystem implements ISystem {
@@ -91,7 +93,12 @@ public class LoginSystem implements ISystem {
                         .get(userId);
                     nextSystem = new PatientSystem(ctx, patient);
                 }
-                case "Pharmacist" -> nextSystem = new PharmacistSystem();
+                case "Pharmacist" -> {
+                    Pharmacist pharmacist = ctx.getManager(UserManager.class)
+                        .getRepository(PharmacistRepository.class)
+                        .get(userId);
+                    nextSystem = new PharmacistSystem(ctx, pharmacist);
+                }
                 default -> throw new IllegalStateException("Unexpected value: " + userClass.getSimpleName());
             }
         }
