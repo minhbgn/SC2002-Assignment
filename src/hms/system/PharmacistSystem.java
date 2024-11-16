@@ -31,10 +31,18 @@ public class PharmacistSystem implements ISystem {
         this.menuNav = new MenuNavigator();
     
         // Initialize services supported by this system
+        ViewAppointmentRecordsServices viewAppointmentRecordsServices =
+            new ViewAppointmentRecordsServices(ctx);
+        viewAppointmentRecordsServices.hasPrescriptionUpdateOption = true;
+
+        ViewInventoryService viewInventoryService =
+            new ViewInventoryService(ctx);
+        viewInventoryService.hasRequestItemOption = true;
+
         this.services = new IService[] {
             new ViewProfileService(pharmacist),
-            new ViewAppointmentRecordsServices(ctx),
-            new ViewInventoryService(ctx)
+            viewAppointmentRecordsServices,
+            viewInventoryService
         };
 
         // Set the next system to this system by default
