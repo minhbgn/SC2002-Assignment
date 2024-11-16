@@ -15,15 +15,16 @@ import java.util.Date;
 import java.util.List;
 
 public class ViewProfileService implements IService {
-    /**
-     * The user to view the profile of
-     */
+    /** The user to view the profile of */
     private final User user;
 
     // Options
     private final UserOption updateDobOption = new UserOption("Update Date of Birth", this::handleUpdateDob);
     private final UserOption updateContactOption = new UserOption("Update Contact", this::handleUpdateContact);
     private final UserOption changePasswordOption = new UserOption("Change password", this::handleChangePassword);
+
+    /** Profile menu, saved to allow for easy updating */
+    private SimpleMenu profileMenu;
 
     public ViewProfileService(User user) {
         this.user = user;
@@ -32,11 +33,17 @@ public class ViewProfileService implements IService {
     private void handleUpdateDob() {
         Date newDob = Prompt.getDateInput("Enter your new date of birth: ");
         user.dob = newDob;
+
+        // Update the profile menu title with the new information
+        profileMenu.title = getProfileInfo();
     }
 
     private void handleUpdateContact() {
         String newContact = Prompt.getStringInput("Enter your new contact info: ");
         user.contact = newContact;
+
+        // Update the profile menu title with the new information
+        profileMenu.title = getProfileInfo();
     }
 
     private void handleChangePassword() {
@@ -71,10 +78,14 @@ public class ViewProfileService implements IService {
         return "Unknown Account Type";
     }
 
-    public AbstractMenu getMenu() {
+    /**
+     * Utility method to get the profile information
+     * @return The profile information
+     */
+    private String getProfileInfo() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        String profileInfo = String.format("""
+        return String.format("""
             Patient Profile\n\n\
             Name: %s\n\
             Gender: %s\n\
@@ -85,8 +96,10 @@ public class ViewProfileService implements IService {
             user.name, (user.isMale ? "Male" : "Female"), user.contact, sdf.format(user.dob),
             getAccountTypeText(), (user.getAccount().isActive() ? "Active" : "Inactive")
         );
+    }
 
-        SimpleMenu profileMenu = new SimpleMenu(profileInfo, List.of(
+    private AbstractMenu getMenu() {
+        profileMenu = new SimpleMenu(getProfileInfo(), List.of(
             updateContactOption, updateDobOption, changePasswordOption
         ));
 
