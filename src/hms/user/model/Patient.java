@@ -4,6 +4,12 @@ import hms.manager.ManagerContext;
 import java.util.Date;
 
 public class Patient extends User {
+    // Extra info about patient's medical records
+    public String bloodType = "None Specified";
+    public String allergies = "None Specified";
+    public String medicalHistory = "None Specified";
+    public String currentMedication = "None Specified";
+
     public Patient(ManagerContext ctx) {
         super(ctx);
         
