@@ -117,7 +117,8 @@ public class InventoryItem implements IModel {
         return "[InventoryItem]\n"
         		+ "medicine name: \t" + medicalName 
         		+ "\nstock: \t" + stock
-        		+ "\nlow stock warning: " + lowStock;
+        		+ "\nlow stock warning: " + lowStock
+        		+ "\nrequested: " + (requested ? "yes":"no");
     }
 
     @Override
