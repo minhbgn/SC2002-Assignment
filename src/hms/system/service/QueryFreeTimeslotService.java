@@ -68,7 +68,7 @@ public class QueryFreeTimeslotService implements IService {
      * @param onTimeslotSelect The callback for when the user successfully finds a free timeslot
      */
     QueryFreeTimeslotService(ManagerContext ctx, Consumer<Timeslot> onTimeslotSelect) {
-        this.ctx = null;
+        this.ctx = ctx;
         this.onTimeslotSelect = onTimeslotSelect;
     }
 
