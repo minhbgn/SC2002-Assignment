@@ -1,11 +1,23 @@
 package hms.utils;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Utility class for handling CSV file operations.
+ */
 public class CSVFileHandler {
+
+    /**
+     * Reads a CSV file and returns the data as a list of hash maps.
+     * Each hash map represents a row, with the keys being the column headers.
+     *
+     * @param filePath the path to the CSV file
+     * @return a list of hash maps containing the CSV data
+     */
     public ArrayList<HashMap<String, String>> read(String filePath) {
         ArrayList<HashMap<String, String>> data = new ArrayList<>();
         try (Scanner scanner = new Scanner(new File(filePath))) {
@@ -39,6 +51,12 @@ public class CSVFileHandler {
         return data;
     }
 
+    /**
+     * Writes data to a CSV file.
+     *
+     * @param filePath the path to the CSV file
+     * @param data the data to be written to the CSV file
+     */
     public void write(String filePath, List<HashMap<String,String>> data) {
         if (data.isEmpty()) {
             return;
