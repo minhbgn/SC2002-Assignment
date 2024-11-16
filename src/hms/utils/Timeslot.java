@@ -23,6 +23,10 @@ public class Timeslot {
      * as the toString() method of this class.
      */
     public Timeslot(String timeslotString) {
+        if (timeslotString == null) {
+            throw new IllegalArgumentException("Timeslot string cannot be null");
+        }
+
         String[] parts = timeslotString.split(" - ");
         
         try {
