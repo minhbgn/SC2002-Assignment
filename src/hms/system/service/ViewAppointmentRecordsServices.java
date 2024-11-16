@@ -80,7 +80,7 @@ public class ViewAppointmentRecordsServices implements IService {
         recordInfo += "\tDate of Birth: " + p.dob + "\n";
         recordInfo += "\tGender: " + (p.isMale ? "Male\n\n" : "Female\n\n");
         recordInfo += "Doctor " + appointment.getDoctorId() + ": " + d.name + "\n";
-        recordInfo += "Appointment was on: " + appointment.getDate() + "\n\n";
+        recordInfo += "Appointment was on: " + appointment.getTimeslot() + "\n\n";
         recordInfo += "Notes: " + appointment.getRecord().getNotes() + "\n";
         recordInfo += "Service provided: " + appointment.getRecord().getService() + "\n";
 
@@ -134,7 +134,7 @@ public class ViewAppointmentRecordsServices implements IService {
             this::onAppointmentRecordSelect
         );
 
-        viewer.sortBy((a) -> a.getDate());
+        viewer.sortBy((a) -> a.getTimeslot().getStartTime());
 
         return viewer;
     }
