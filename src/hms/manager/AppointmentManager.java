@@ -103,7 +103,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @param date The new date of the appointment.
      * @return True if the appointment was successfully updated, false otherwise.
      */
-    public boolean updateDate(String id, Timeslot timeslot){
+    public boolean updateTimeslot(String id, Timeslot timeslot){
         if(!hasAppointment(id)) return false;
 
         Appointment appointment = repository.get(id);
