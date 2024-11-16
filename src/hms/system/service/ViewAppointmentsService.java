@@ -73,8 +73,9 @@ public class ViewAppointmentsService implements IService {
 
         p.cancelAppointment(selected.getId());
 
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
+        // Update the entire menu
+        menuNav.popMenu();
+        onAppointmentSelect(selected);
     }
 
     private void handleViewRecords() {
@@ -113,8 +114,9 @@ public class ViewAppointmentsService implements IService {
 
         d.resolvePendingAppointment(selected.getId(), accepted);
 
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
+        // Update the entire menu
+        menuNav.popMenu();
+        onAppointmentSelect(selected);
     }
 
     private void handleCompleteAppointment() {
@@ -148,8 +150,9 @@ public class ViewAppointmentsService implements IService {
         ctx.getManager(AppointmentManager.class)
             .resolveAppoinment(selected.getId(), service, prescriptionIds, notes);
 
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay(selected);
+        // Update the entire menu
+        menuNav.popMenu();
+        onAppointmentSelect(selected);
     }
 
     private void handleViewPatientInfo() {
