@@ -29,6 +29,7 @@ public class ViewAppointmentsService implements IService {
     private final User user;
     private final ManagerContext ctx;
     private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
+    private List<SearchCriterion<Appointment, ?>> activeCriteria = new ArrayList<>();
 
     private final UserOption cancelAppointmentOption = new UserOption("Cancel Appointment", this::handleCancelAppointment);
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
@@ -170,6 +171,32 @@ public class ViewAppointmentsService implements IService {
         menuNav.addMenu(patientInfoMenu);
     }
 
+    private void handleFilterOption(){
+        SimpleMenu filterChoicesMenu = new SimpleMenu("Filter by:", List.of(
+            new UserOption("Pending", () -> handleFilter(AppointmentStatus.PENDING)),
+            new UserOption("Cancelled", () -> handleFilter(AppointmentStatus.CANCELLED)),
+            new UserOption("Accepted", () -> handleFilter(AppointmentStatus.ACCEPTED)),
+            new UserOption("Rejected", () -> handleFilter(AppointmentStatus.REJECTED)),
+            new UserOption("Finished", () -> handleFilter(AppointmentStatus.FINISHED)),
+            new UserOption("All", () -> handleFilter(null))
+        ));
+
+        menuNav.addMenu(filterChoicesMenu);
+    }
+
+    private void handleFilter(AppointmentStatus status){
+        activeCriteria.clear();
+
+        if(status != null){
+            activeCriteria.add(new SearchCriterion<>(Appointment::getStatus, status));
+        }
+
+        // Update the entire menu display
+        menuNav.popMenu(); // Pop the filter menu
+        menuNav.popMenu(); // Pop the appointment list menu
+        menuNav.addMenu(getMenu()); // Re-add the appointment list menu with the new filter
+    }
+
     private String getAppointmentInfoDisplay(Appointment appointment){
         if(user instanceof Patient){
             Doctor d = ctx.getManager(UserManager.class)
@@ -238,8 +265,11 @@ public class ViewAppointmentsService implements IService {
     }
 
     public AbstractMenu getMenu() {
+        List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>(defaultCriteria);
+        criteria.addAll(activeCriteria);
+
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class)
-            .getAppointments(defaultCriteria);
+            .getAppointments(criteria);
 
         if (appointments.isEmpty()) return new SimpleMenu("No appointments found.", null);
         
@@ -247,6 +277,8 @@ public class ViewAppointmentsService implements IService {
             "Appointments", appointments.toArray(Appointment[]::new),
             this::onAppointmentSelect
         );
+
+        viewer.addOption("f", new UserOption("Filter", this::handleFilterOption));
 
         return viewer;
     }
