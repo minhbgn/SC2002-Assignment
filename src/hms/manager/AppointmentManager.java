@@ -7,6 +7,7 @@ import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,6 +56,73 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
     }
 
     /**
+     * Check if a patient is free on the given timeslot.
+     * @param patientId The ID of the patient.
+     * @param timeslot The timeslot to check.
+     * @return True if the patient is free, false otherwise.
+     */
+    public boolean isDoctorFree(String doctorId, Timeslot timeslot) {
+        List<Appointment> appointments = getAppointments(List.of(
+            new SearchCriterion<>(Appointment::getDoctorId, doctorId)
+        ));
+
+        for(Appointment appointment : appointments){
+            if(appointment.getTimeslot().isOverlapping(timeslot)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if a patient is free on the given timeslot.
+     * @param patientId The ID of the patient.
+     * @param timeslot The timeslot to check.
+     * @return True if the patient is free, false otherwise.
+     */
+    public boolean isPatientFree(String patientId, Timeslot timeslot) {
+        List<Appointment> appointments = getAppointments(List.of(
+            new SearchCriterion<>(Appointment::getPatientId, patientId)
+        ));
+
+        for(Appointment appointment : appointments){
+            if(appointment.getTimeslot().isOverlapping(timeslot)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public Timeslot[] getAllFreeTimeslots(String patientId, String doctorId, Timeslot timeslot) {
+        List<Appointment> appointments = new ArrayList<>();
+        appointments.addAll(getAppointments(List.of(
+            new SearchCriterion<>(Appointment::getDoctorId, doctorId)
+        )));
+
+        appointments.addAll(getAppointments(List.of(
+            new SearchCriterion<>(Appointment::getPatientId, patientId)
+        )));
+
+        appointments.sort((a1, a2) -> a1.getTimeslot().getStartTime().compareTo(a2.getTimeslot().getStartTime()));
+        
+        List<Timeslot> freeTimeslots = new ArrayList<>();
+        Date start = timeslot.getStartTime();
+        for(Appointment appointment : appointments){
+            if(appointment.getTimeslot().getStartTime().after(start)){
+                freeTimeslots.add(new Timeslot(start, appointment.getTimeslot().getStartTime()));
+            }
+
+            start = appointment.getTimeslot().getEndTime();
+
+            if(start.after(timeslot.getEndTime())) break;
+        }
+
+        return freeTimeslots.toArray(Timeslot[]::new);
+    }
+
+    /**
      * Create a new appointment. The appointment is created with the status PENDING.
      * @param patientId The ID of the patient.
      * @param doctorId The ID of the doctor.
@@ -67,8 +135,8 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         if(!userManager.hasUser(patientId)) return null;
         if(!userManager.hasUser(doctorId)) return null;
 
-        // TODO: Check if the doctor is available on the given date
-        // TODO: Check if the patient has already made an appointment on the given date
+        if(!isPatientFree(patientId, timeslot)) return null;
+        if(!isDoctorFree(doctorId, timeslot)) return null;
 
         return repository.create(patientId, doctorId, timeslot);
     }
@@ -115,7 +183,8 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
             return false;
         }
 
-        // TODO: Check if both the doctor and the patient are available on the given date
+        if(!isPatientFree(appointment.getPatientId(), timeslot)) return false;
+        if(!isDoctorFree(appointment.getDoctorId(), timeslot)) return false;
 
         repository.updateStatus(id, AppointmentStatus.PENDING);
         repository.updateTimeslot(id, timeslot);
