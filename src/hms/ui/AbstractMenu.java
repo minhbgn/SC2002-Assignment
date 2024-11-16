@@ -3,7 +3,7 @@ package hms.ui;
 import java.util.Map;
 
 public abstract class AbstractMenu implements IUIElement {
-    protected String title;
+    public String title;
     protected Map<String, UserOption> options;
 
     public void setTitle(String title){
