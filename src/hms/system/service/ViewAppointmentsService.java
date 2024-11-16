@@ -30,12 +30,19 @@ public class ViewAppointmentsService implements IService {
     private final ManagerContext ctx;
     private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
 
-    private final UserOption rescheduleAppointmentOption = new UserOption("Reschedule Appointment", this::handleRescheduleAppointment);
     private final UserOption cancelAppointmentOption = new UserOption("Cancel Appointment", this::handleCancelAppointment);
-    private final UserOption viewRecordsOption = new UserOption("View Records", this::handleViewRecords);
-    private final UserOption resolveAppointmentOption = new UserOption("Accept Appointment", this::handleResolveAppointment);
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
+    private final UserOption rescheduleAppointmentOption = new UserOption("Reschedule Appointment", this::handleRescheduleAppointment);
+    private final UserOption resolveAppointmentOption = new UserOption("Accept Appointment", this::handleResolveAppointment);
     private final UserOption viewPatientInfoOption = new UserOption("View Patient Info", this::handleViewPatientInfo);
+    private final UserOption viewRecordsOption = new UserOption("View Records", this::handleViewRecords);
+
+    public boolean hasCancelAppointmentOption = false;
+    public boolean hasCompleteAppointmentOption = false;
+    public boolean hasRescheduleAppointmentOption = false;
+    public boolean hasResolveAppointmentOption = false;
+    public boolean hasViewPatientInfoOption = false;
+    public boolean hasViewRecordsOption = false;
 
     /** Variable for keeping track of the selected appointment */
     private Appointment selected;
@@ -148,93 +155,71 @@ public class ViewAppointmentsService implements IService {
         menuNav.addMenu(patientInfoMenu);
     }
 
+    private String getAppointmentInfoDisplay(Appointment appointment){
+        if(user instanceof Patient){
+            Doctor d = ctx.getManager(UserManager.class)
+                .getRepository(DoctorRepository.class)
+                .get(appointment.getDoctorId());
+    
+            return String.format("Appointment with %s on %s\nStatus: %s",
+                d.name, appointment.getDate(),
+                appointment.getStatus().toString()
+            );
+        }
+        
+        if(user instanceof Doctor){
+            Patient p = ctx.getManager(UserManager.class)
+                .getRepository(PatientRepository.class)
+                .get(appointment.getPatientId());
+
+            return String.format("Appointment with %s on %s\nStatus: %s",
+                p.name, appointment.getDate(),
+                appointment.getStatus().toString()
+            );
+        }
+        
+        if(user instanceof Admin){
+            Patient p = ctx.getManager(UserManager.class)
+                .getRepository(PatientRepository.class)
+                .get(appointment.getPatientId());
+
+            Doctor d = ctx.getManager(UserManager.class)
+                .getRepository(DoctorRepository.class)
+                .get(appointment.getDoctorId());
+
+            return String.format("Appointment by %s with %s on %s\nStatus: %s",
+                p.name, d.name, appointment.getDate(),
+                appointment.getStatus().toString()
+            );
+        }
+
+        throw new IllegalStateException("Invalid user type");
+    }
+
     private void onAppointmentSelect(Appointment appointment){
         this.selected = appointment;
 
-        if(user instanceof Patient) {
-            menuNav.addMenu(getAppointmentSelectPatientMenu(appointment));
-            return;
+        SimpleMenu appointmentMenu = new SimpleMenu(getAppointmentInfoDisplay(appointment), null);
+        
+        if(appointment.getStatus() == AppointmentStatus.ACCEPTED) {
+            if (hasCancelAppointmentOption) appointmentMenu.addOption(cancelAppointmentOption);
+            if (hasCompleteAppointmentOption) appointmentMenu.addOption(completeAppointmentOption);
+            if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
+            if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
         }
-
-        if(user instanceof Doctor) {
-            menuNav.addMenu(getAppointmentSelectDoctorMenu(appointment));
-            return;
-        }
-
-        if(user instanceof Admin) {
-            menuNav.addMenu(getAppointmentSelectAdminMenu(appointment));
-            return;
-        }
-
-        throw new UnsupportedOperationException("User type not supported: " + user.getClass().getName());
-    }
-
-    private AbstractMenu getAppointmentSelectPatientMenu(Appointment appointment){
-        Doctor d = ctx.getManager(UserManager.class)
-            .getRepository(DoctorRepository.class)
-            .get(appointment.getDoctorId());
-
-        String appointmentInfo = String.format(
-            "Appointment with %s on %s\nStatus: %s",
-            d.name, appointment.getDate(),
-            appointment.getStatus().toString()
-        );
-
-        SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
-
-        if(appointment.getStatus() == AppointmentStatus.PENDING
-            || appointment.getStatus() == AppointmentStatus.ACCEPTED) {
-            appointmentMenu.addOption(cancelAppointmentOption);
-            appointmentMenu.addOption(rescheduleAppointmentOption);
-        }
-
-        if(appointment.getStatus() == AppointmentStatus.FINISHED) {
-            appointmentMenu.addOption(viewRecordsOption);
-        }
-
-        return appointmentMenu;
-    }
-
-    private AbstractMenu getAppointmentSelectDoctorMenu(Appointment appointment) {
-        Patient p = ctx.getManager(UserManager.class)
-            .getRepository(PatientRepository.class)
-            .get(appointment.getPatientId());
-
-        String appointmentInfo = String.format(
-            "Appointment with %s on %s\nStatus: %s",
-            p.name, appointment.getDate(),
-            appointment.getStatus().toString()
-        );
-
-        SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
 
         if(appointment.getStatus() == AppointmentStatus.PENDING) {
-            appointmentMenu.addOption(viewPatientInfoOption);
-            appointmentMenu.addOption(resolveAppointmentOption);
+            if (hasCancelAppointmentOption) appointmentMenu.addOption(cancelAppointmentOption);
+            if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
+            if (hasResolveAppointmentOption) appointmentMenu.addOption(resolveAppointmentOption);
+            if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
         }
-
-        if(appointment.getStatus() == AppointmentStatus.ACCEPTED) {
-            appointmentMenu.addOption(viewPatientInfoOption);
-            appointmentMenu.addOption(completeAppointmentOption);
-        }
-
-        return appointmentMenu;
-    }
-
-    private AbstractMenu getAppointmentSelectAdminMenu(Appointment appointment) {
-        String appointmentInfo = String.format(
-            "Appointment by %s with %s on %s\nStatus: %s",
-            appointment.getPatientId(), appointment.getDoctorId(),
-            appointment.getDate(), appointment.getStatus().toString()
-        );
-
-        SimpleMenu appointmentMenu = new SimpleMenu(appointmentInfo, null);
-
+        
         if(appointment.getStatus() == AppointmentStatus.FINISHED) {
             appointmentMenu.addOption(viewRecordsOption);
         }
 
-        return appointmentMenu;
+        menuNav.addMenu(appointmentMenu);
     }
 
     public AbstractMenu getMenu() {
