@@ -43,10 +43,15 @@ public class PatientSystem implements ISystem {
             new SearchCriterion<>(Appointment::getPatientId, patient.getAccount().getId())
         );
 
+        ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, patient, defaultCriteria);
+        viewAppointmentsService.hasRescheduleAppointmentOption = true;
+        viewAppointmentsService.hasCancelAppointmentOption = true;
+        viewAppointmentsService.hasViewRecordsOption = true;
+
         // Initialize services supported by this system
         this.services = new IService[] {
             new ViewProfileService(patient),
-            new ViewAppointmentsService(ctx, patient, defaultCriteria),
+            viewAppointmentsService,
             new ScheduleAppointmentService(ctx, patient)
         };
 
