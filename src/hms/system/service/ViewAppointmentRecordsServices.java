@@ -46,12 +46,20 @@ public class ViewAppointmentRecordsServices implements IService {
             return;
         }
 
-        boolean isFulfilled = Prompt.getBooleanInput("Is the prescription fulfilled? (y/n): ");
+        boolean confirm = Prompt.getBooleanInput("Are you sure you want to mark this prescription as fulfilled? (y/n)");
+
+        if(!confirm) return;
 
         String prescriptionId = prescriptionIds.get(select);
 
-        ctx.getManager(PrescriptionManager.class)
-            .updatePrescription(prescriptionId, isFulfilled);
+        boolean result = ctx.getManager(PrescriptionManager.class)
+            .updatePrescription(prescriptionId, true);
+
+        if(!result){
+            System.out.println("Failed to update prescription");
+            System.out.println("There might not be enough stock to fulfill the prescription");
+            return;
+        }
 
         // Update display
         menuNav.getCurrentMenu().title = getRecordInfoDisplay(selected);
