@@ -11,7 +11,7 @@ import hms.ui.Prompt;
 import hms.user.model.Doctor;
 import hms.user.model.User;
 import hms.user.repository.DoctorRepository;
-import java.util.Date;
+import hms.utils.Timeslot;
 
 public class ScheduleAppointmentService implements IService {
     /** The user using this service */
@@ -21,12 +21,19 @@ public class ScheduleAppointmentService implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
+    /** The doctor selected for the appointment */
+    private String selectedDoctorId;
+
     public ScheduleAppointmentService(ManagerContext ctx, User user) {
         this.ctx = ctx;
         this.user = user;
     }
 
     private void onDoctorSelected(Doctor doctor){
+        menuNav.popMenu(); // Pop the doctor selector
+
+        selectedDoctorId = doctor.getAccount().getId();
+
         // Clear the screen
         System.out.print("\033[H\033[2J");
 
@@ -35,24 +42,25 @@ public class ScheduleAppointmentService implements IService {
         boolean confirm = Prompt.getBooleanInput("Would you like to " + 
             "schedule an appointment with this doctor? (y/n): ");
         if(!confirm) return;
+        
+        QueryFreeTimeslotService queryFreeTimeslotService = new QueryFreeTimeslotService(ctx, this::onTimeslotSelected);
 
-        String doctorId = doctor.getAccount().getId();
-        Date date = Prompt.getDateInput("Enter the date for your appointment: ");
+        queryFreeTimeslotService.bindDoctor(selectedDoctorId);
+        queryFreeTimeslotService.bindUser(user.getAccount().getId());
 
-        Appointment appointment = ctx
-            .getManager(AppointmentManager.class)
-            .makeAppointment(user.getAccount().getId(), doctorId, date);
-
-        if(appointment == null) {
-            System.out.println("Failed to schedule appointment");
-            return;
-        }
-
-        System.out.println("Appointment scheduled: " + appointment);
-
-        menuNav.popMenu();
+        queryFreeTimeslotService.execute(menuNav);
     }
 
+    private void onTimeslotSelected(Timeslot timeslot){
+        Appointment appointment = ctx
+            .getManager(AppointmentManager.class)
+            .makeAppointment(user.getAccount().getId(), selectedDoctorId, timeslot);
+
+        if(appointment == null) // This should never happen
+            throw new RuntimeException("Failed to schedule appointment");
+
+        System.out.println("Appointment scheduled: " + appointment);
+    }
 
     public AbstractMenu getMenu(){
         Doctor[] doctors = ctx.getManager(UserManager.class)
