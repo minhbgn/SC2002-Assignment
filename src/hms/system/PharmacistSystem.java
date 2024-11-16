@@ -14,10 +14,6 @@ import hms.user.model.Pharmacist;
 import java.util.List;
 
 public class PharmacistSystem implements ISystem {
-    /** The menu navigator for this system. */
-    private final MenuNavigator menuNav;
-    /** The next system to run. */
-    private ISystem nextSystem = null;
     /**
      * The services available in this system. Contents:
      * 1. View Profile
@@ -25,8 +21,13 @@ public class PharmacistSystem implements ISystem {
      * 3. View Inventory
      */
     private final IService[] services;
+    private final MenuNavigator menuNav;
+    private final ManagerContext ctx;
+
+    private ISystem nextSystem = null;
 
     public PharmacistSystem(ManagerContext ctx, Pharmacist pharmacist) {
+        this.ctx = ctx;
         this.menuNav = new MenuNavigator();
     
         // Initialize services supported by this system
@@ -48,6 +49,7 @@ public class PharmacistSystem implements ISystem {
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
             new UserOption("View Appointment Records", () -> services[1].execute(menuNav)),
             new UserOption("View Inventory", () -> services[2].execute(menuNav)),
+            new UserOption("Log Out", () -> nextSystem = new LoginSystem(ctx)),
             new UserOption("Exit", () -> nextSystem = null)
         ));
     }
