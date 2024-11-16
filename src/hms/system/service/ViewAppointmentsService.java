@@ -271,20 +271,25 @@ public class ViewAppointmentsService implements IService {
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class)
             .getAppointments(criteria);
 
-        if (appointments.isEmpty()) return new SimpleMenu("No appointments found.", null);
-        
-        PaginatedListSelector<Appointment> viewer = new PaginatedListSelector<>(
+        AbstractMenu returnMenu;
+
+        if (appointments.isEmpty()) returnMenu = new SimpleMenu("No appointments found", null);
+        else returnMenu = new PaginatedListSelector<>(
             "Appointments", appointments.toArray(Appointment[]::new),
             this::onAppointmentSelect
         );
 
-        viewer.addOption("f", new UserOption("Filter", this::handleFilterOption));
+        returnMenu.addOption("f", new UserOption("Filter", this::handleFilterOption));
 
-        return viewer;
+        return returnMenu;
     }
     
     @Override
     public void execute(MenuNavigator menuNav) {
+        // This method is called when the service is executed
+        // Hence, we need to reset the active criteria
+        activeCriteria.clear();
+
         this.menuNav = menuNav;
         
         menuNav.addMenu(getMenu());
