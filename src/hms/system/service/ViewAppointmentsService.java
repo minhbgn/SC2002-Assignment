@@ -14,10 +14,8 @@ import hms.ui.PaginatedListSelector;
 import hms.ui.Prompt;
 import hms.ui.SimpleMenu;
 import hms.ui.UserOption;
-import hms.user.model.Admin;
 import hms.user.model.Doctor;
 import hms.user.model.Patient;
-import hms.user.model.User;
 import hms.user.repository.DoctorRepository;
 import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
@@ -25,8 +23,6 @@ import java.util.Date;
 import java.util.List;
 
 public class ViewAppointmentsService implements IService {
-    /** The user using this service */
-    private final User user;
     private final ManagerContext ctx;
     private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
     private final List<SearchCriterion<Appointment, ?>> activeCriteria = new ArrayList<>();
@@ -50,12 +46,10 @@ public class ViewAppointmentsService implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
-    public ViewAppointmentsService(
-        ManagerContext ctx, User user,
+    public ViewAppointmentsService(ManagerContext ctx,
         List<SearchCriterion<Appointment, ?>> defaultCriteria) {
         
         this.ctx = ctx;
-        this.user = user;
         this.defaultCriteria = defaultCriteria;
     }
 
@@ -197,44 +191,18 @@ public class ViewAppointmentsService implements IService {
     }
 
     private String getAppointmentInfoDisplay(Appointment appointment){
-        if(user instanceof Patient){
-            Doctor d = ctx.getManager(UserManager.class)
-                .getRepository(DoctorRepository.class)
-                .get(appointment.getDoctorId());
-    
-            return String.format("Appointment with %s on %s\nStatus: %s",
-                d.name, appointment.getDate(),
-                appointment.getStatus().toString()
-            );
-        }
-        
-        if(user instanceof Doctor){
-            Patient p = ctx.getManager(UserManager.class)
-                .getRepository(PatientRepository.class)
-                .get(appointment.getPatientId());
+        Patient p = ctx.getManager(UserManager.class)
+            .getRepository(PatientRepository.class)
+            .get(appointment.getPatientId());
 
-            return String.format("Appointment with %s on %s\nStatus: %s",
-                p.name, appointment.getDate(),
-                appointment.getStatus().toString()
-            );
-        }
-        
-        if(user instanceof Admin){
-            Patient p = ctx.getManager(UserManager.class)
-                .getRepository(PatientRepository.class)
-                .get(appointment.getPatientId());
+        Doctor d = ctx.getManager(UserManager.class)
+            .getRepository(DoctorRepository.class)
+            .get(appointment.getDoctorId());
 
-            Doctor d = ctx.getManager(UserManager.class)
-                .getRepository(DoctorRepository.class)
-                .get(appointment.getDoctorId());
-
-            return String.format("Appointment by %s with %s on %s\nStatus: %s",
-                p.name, d.name, appointment.getDate(),
-                appointment.getStatus().toString()
-            );
-        }
-
-        throw new IllegalStateException("Invalid user type");
+        return String.format("Appointment by %s with %s on %s\nStatus: %s",
+            p.name, d.name, appointment.getDate(),
+            appointment.getStatus().toString()
+        );
     }
 
     private void onAppointmentSelect(Appointment appointment){
@@ -263,7 +231,7 @@ public class ViewAppointmentsService implements IService {
         menuNav.addMenu(appointmentMenu);
     }
 
-    public AbstractMenu getMenu() {
+    private AbstractMenu getMenu() {
         List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>();
         if(defaultCriteria != null) criteria.addAll(defaultCriteria);
         if(activeCriteria != null) criteria.addAll(activeCriteria);
