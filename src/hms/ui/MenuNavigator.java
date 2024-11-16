@@ -9,11 +9,15 @@ public class MenuNavigator extends AbstractMenu {
     private final HashMap<String, UserOption> navigatorOptions = new HashMap<>();
 
     public MenuNavigator() {
-        this.options = new LinkedHashMap<String, UserOption>();
+        this.options = new LinkedHashMap<>();
 
         navigatorOptions.put("b", new UserOption("Back", () -> goBack()));
 
         options.putAll(navigatorOptions);
+    }
+
+    public AbstractMenu getCurrentMenu() {
+        return history.peek();
     }
 
     public void addMenu(AbstractMenu menu) {
