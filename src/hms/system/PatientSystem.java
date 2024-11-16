@@ -16,17 +16,6 @@ import hms.user.model.Patient;
 import java.util.List;
 
 public class PatientSystem implements ISystem {
-    /** The patient bound to this system */
-    private final Patient patient;
-    /** The active search criteria for appointments */
-    private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
-    private final ManagerContext ctx;
-    
-    private final MenuNavigator menuNav;
-
-    /** The next system to run. */
-    private ISystem nextSystem = null;
-
     /**
      * The services available in this system. Contents:
      * 1. View Profile
@@ -34,6 +23,11 @@ public class PatientSystem implements ISystem {
      * 3. Schedule Appointment
      */
     private final IService[] services;
+    private final ManagerContext ctx;
+    private final MenuNavigator menuNav;
+
+    /** The next system to run. */
+    private ISystem nextSystem = null;
 
     /**
      * Create a new patient system
@@ -41,12 +35,11 @@ public class PatientSystem implements ISystem {
      * @param patient The patient
      */
     public PatientSystem(ManagerContext ctx, Patient patient) {
-        this.patient = patient;
         this.ctx = ctx;
         this.menuNav = new MenuNavigator();
     
         // Default search criteria for appointments
-        this.defaultCriteria = List.of(
+        List<SearchCriterion<Appointment, ?>> defaultCriteria = List.of(
             new SearchCriterion<>(Appointment::getPatientId, patient.getAccount().getId())
         );
 

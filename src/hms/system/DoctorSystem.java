@@ -15,24 +15,19 @@ import hms.user.model.Doctor;
 import java.util.List;
 
 public class DoctorSystem implements ISystem {
-    /** The patient bound to this system */
-    private final Doctor doctor;
-    private final ManagerContext ctx;
-    
-    private final MenuNavigator menuNav;
-
-    /** The next system to run. */
-    private ISystem nextSystem = null;
-
     /**
      * The services available in this system. Contents:
      * 1. View Profile
      * 2. View Appointments
      */
     private final IService[] services;
+    private final ManagerContext ctx;
+    private final MenuNavigator menuNav;
+
+    /** The next system to run. */
+    private ISystem nextSystem = null;
 
     public DoctorSystem(ManagerContext ctx, Doctor doctor) {
-        this.doctor = doctor;
         this.ctx = ctx;
         this.menuNav = new MenuNavigator();
     
