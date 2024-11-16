@@ -52,6 +52,9 @@ public class ViewAppointmentRecordsServices implements IService {
 
         ctx.getManager(PrescriptionManager.class)
             .updatePrescription(prescriptionId, isFulfilled);
+
+        // Update display
+        menuNav.getCurrentMenu().title = getRecordInfoDisplay(selected);
     }
 
     private String getRecordInfoDisplay(Appointment appointment){

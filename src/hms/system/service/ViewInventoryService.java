@@ -26,25 +26,15 @@ public class ViewInventoryService implements IService {
         this.ctx = ctx;
     }
 
-    private String getItemInfoDisplay(InventoryItem item){
-        String itemInfo = "Item details:\n\n";
-        itemInfo += "Name: " + item.getMedicalName() + "\n";
-        itemInfo += "In stock: " + item.getStock();
-        itemInfo += item.isLowStock() ? " (Low stock!)\n" : "\n";
-        
-        if (item.isRequested())
-            itemInfo += "Requested: Yes (" + item.getRequestedAmount() + " requested)";
-        else itemInfo += "Requested: No";
-
-        return itemInfo;
-    }
-
     private void handleRequestItemOption() {
         boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
         int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
 
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemRequestStatus(selected.getMedicalName(), request, requested_amount);
+
+        // Update display
+        menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
     private void handleUpdateStockOption() {
@@ -56,11 +46,17 @@ public class ViewInventoryService implements IService {
 
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemRequestStatus(selected.getMedicalName(), remainingStock == 0, remainingStock);
+
+        // Update display
+        menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
     private void handleResolveRequestOption() {
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemRequestStatus(selected.getMedicalName(), false, 0);
+
+        // Update display
+        menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
     private void handleChangeLowStockAlertOption() {
@@ -71,6 +67,22 @@ public class ViewInventoryService implements IService {
 
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemLowStockThreshold(selected.getMedicalName(), alert_amount);
+
+        // Update display
+        menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
+    }
+
+    private String getItemInfoDisplay(InventoryItem item){
+        String itemInfo = "Item details:\n\n";
+        itemInfo += "Name: " + item.getMedicalName() + "\n";
+        itemInfo += "In stock: " + item.getStock();
+        itemInfo += item.isLowStock() ? " (Low stock!)\n" : "\n";
+        
+        if (item.isRequested())
+            itemInfo += "Requested: Yes (" + item.getRequestedAmount() + " requested)";
+        else itemInfo += "Requested: No";
+
+        return itemInfo;
     }
 
     private void onItemSelect(InventoryItem item){
