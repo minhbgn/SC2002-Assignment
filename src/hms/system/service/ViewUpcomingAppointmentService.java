@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ViewUpcomingAppointmentService implements IService{
     private final UserOption addBusyTimeslotOption = new UserOption("Add Busy Timeslot", this::handleAddBusyTimeslot);
+    private final UserOption removeBusyTimeslotOption = new UserOption("Remove Busy Timeslot", this::handleRemoveBusyTimeslot);
     private final UserOption viewAvailableTimeslotsOption = new UserOption("View Available Timeslots", this::handleViewAvailableTimeslots);
 
     private final ManagerContext ctx;
@@ -46,6 +47,22 @@ public class ViewUpcomingAppointmentService implements IService{
         Timeslot busyTimeslot = new Timeslot(startTime, endTime);
 
         doctor.addBusyTimeslot(busyTimeslot);
+    }
+
+    private void handleRemoveBusyTimeslot(){
+        List<Timeslot> busyTimeslots = doctor.getBusyTimeslots();
+
+        PaginatedListSelector<Timeslot> selector = new PaginatedListSelector<>(
+            "Select a busy timeslot to remove", busyTimeslots.toArray(Timeslot[]::new),
+            timeslot -> {
+                doctor.getBusyTimeslots().remove(timeslot);
+
+                menuNav.popMenu(); // Pop the selector
+                handleRemoveBusyTimeslot(); // Show the updated selector
+            }
+        );
+
+        menuNav.addMenu(selector);
     }
 
     private void handleViewAvailableTimeslots(){
@@ -93,6 +110,7 @@ public class ViewUpcomingAppointmentService implements IService{
         );
 
         selector.addOption("a", addBusyTimeslotOption);
+        selector.addOption("r", removeBusyTimeslotOption);
         selector.addOption("v", viewAvailableTimeslotsOption);
 
         return selector;
