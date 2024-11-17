@@ -76,6 +76,30 @@ public class Timeslot {
         return new Timeslot(startTime, endTime);
     }
 
+    public static Timeslot[] subtract(Timeslot t1, Timeslot t2) {
+        if (!t1.isOverlapping(t2)) {
+            return new Timeslot[] { t1 };
+        }
+
+        if (t1.startTime.before(t2.startTime) && t1.endTime.after(t2.endTime)) {
+            return new Timeslot[] {
+                new Timeslot(t1.startTime, t2.startTime),
+                new Timeslot(t2.endTime, t1.endTime)
+            };
+        }
+
+        if (t1.startTime.before(t2.startTime)) { // t1.endTime <= t2.endTime
+            return new Timeslot[] { new Timeslot(t1.startTime, t2.startTime) };
+        }
+
+        if (t1.endTime.after(t2.endTime)) { // t1.startTime >= t2.startTime
+            return new Timeslot[] { new Timeslot(t2.endTime, t1.endTime) };
+        }
+
+        // t1.startTime >= t2.startTime && t1.endTime <= t2.endTime
+        return new Timeslot[0];
+    }
+
     @Override
     public String toString() {
         return sdf.format(startTime.getTime()) + " - " + sdf.format(endTime.getTime());
