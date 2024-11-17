@@ -25,6 +25,10 @@ public class Doctor extends User {
         return busyTimeslots;
     }
 
+    public void addBusyTimeslot(Timeslot timeslot){
+        this.busyTimeslots.add(timeslot);
+    }
+
     /**
      * Filled constructor for Doctor
      * @param ctx The manager context to let this User access other classes
