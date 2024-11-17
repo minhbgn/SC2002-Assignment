@@ -7,7 +7,10 @@ import hms.utils.Timeslot;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Appointment implements IModel{
+/**
+ * Represents an appointment in the hospital management system.
+ */
+public class Appointment implements IModel {
     private String id;
     private String patientId;
     private String doctorId;
@@ -50,6 +53,11 @@ public class Appointment implements IModel{
         return record;
     }
 
+    /**
+     * Sets the status of the Appointment.
+     *
+     * @param status the new status of the Appointment
+     */
     void setStatus(AppointmentStatus status) {
         this.status = status;
     }
@@ -58,11 +66,23 @@ public class Appointment implements IModel{
         this.timeslot = timeslot;
     }
 
+    /**
+     * Sets the medical record of the Appointment.
+     *
+     * @param service the service provided during the appointment
+     * @param prescriptions the list of prescriptions given during the appointment
+     * @param notes additional notes about the appointment
+     */
     void setRecord(String service, ArrayList<String> prescriptions, String notes) {
         this.record = new AppointmentRecord(service, prescriptions, notes);
         this.status = AppointmentStatus.FINISHED;
     }
 
+    /**
+     * Populates the Appointment's fields with data from the provided HashMap.
+     *
+     * @param data a HashMap containing the data to populate the Appointment's fields
+     */
     @Override
     public String toString() {
         return String.format(
@@ -87,6 +107,11 @@ public class Appointment implements IModel{
         }
     }
 
+    /**
+     * Serializes the Appointment's fields into a HashMap.
+     *
+     * @return a HashMap containing the serialized data of the Appointment
+     */
     @Override
     public HashMap<String, String> serialize() {
         HashMap<String, String> data = new HashMap<>();

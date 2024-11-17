@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * Represents a user in the hospital management system.
+ */
 public class User implements IModel {
     protected Account account;
     protected ManagerContext ctx;
@@ -15,11 +18,25 @@ public class User implements IModel {
     public String contact;
     public Date dob;
 
+    /**
+     * Constructs a new User with the specified ManagerContext.
+     *
+     * @param ctx the ManagerContext to be used by the User
+     */
     public User(ManagerContext ctx) {
         this.ctx = ctx;
         this.account = new Account();
     }
 
+    /**
+     * Constructs a new User with the specified details.
+     *
+     * @param ctx the ManagerContext to be used by the User
+     * @param name the name of the User
+     * @param isMale the gender of the User
+     * @param contact the contact information of the User
+     * @param dob the date of birth of the User
+     */
     public User(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         this.ctx = ctx;
         this.account = new Account();
@@ -29,10 +46,20 @@ public class User implements IModel {
         this.dob = dob;
     }
 
+    /**
+     * Gets the account associated with the User.
+     *
+     * @return the account of the User
+     */
     public Account getAccount() {
         return account;
     }
 
+    /**
+     * Returns a string representation of the User.
+     *
+     * @return a string representation of the User
+     */
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,6 +71,11 @@ public class User implements IModel {
                '}';
     }
 
+    /**
+     * Populates the User's fields with data from the provided HashMap.
+     *
+     * @param data a HashMap containing the data to populate the User's fields
+     */
     @Override
     public void hydrate(HashMap<String, String> data) {
         this.account.hydrate(data);
@@ -60,6 +92,11 @@ public class User implements IModel {
         }
     }
 
+    /**
+     * Serializes the User's fields into a HashMap.
+     *
+     * @return a HashMap containing the serialized data of the User
+     */
     @Override
     public HashMap<String, String> serialize() {
         HashMap<String, String> data = new HashMap<>();
