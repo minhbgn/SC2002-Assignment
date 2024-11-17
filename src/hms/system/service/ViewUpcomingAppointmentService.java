@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ViewUpcomingAppointmentService implements IService{
+    private final UserOption addBusyTimeslotOption = new UserOption("Add Busy Timeslot", this::handleAddBusyTimeslot);
     private final UserOption viewAvailableTimeslotsOption = new UserOption("View Available Timeslots", this::handleViewAvailableTimeslots);
 
     private final ManagerContext ctx;
@@ -36,6 +37,15 @@ public class ViewUpcomingAppointmentService implements IService{
             new SearchCriterion<>(Appointment::getDoctorId, doctor.getAccount().getId()),
             new SearchCriterion<>(Appointment::getStatus, AppointmentStatus.ACCEPTED)
         );
+    }
+
+    private void handleAddBusyTimeslot(){
+        Date startTime = Prompt.getDateInput("When are you not available? (Start Time): ");
+        Date endTime = Prompt.getDateInput("When will you be available again? (End Time): ");
+
+        Timeslot busyTimeslot = new Timeslot(startTime, endTime);
+
+        doctor.addBusyTimeslot(busyTimeslot);
     }
 
     private void handleViewAvailableTimeslots(){
@@ -82,7 +92,8 @@ public class ViewUpcomingAppointmentService implements IService{
             this::onAppointmentSelected
         );
 
-        selector.addOption("a", viewAvailableTimeslotsOption);
+        selector.addOption("a", addBusyTimeslotOption);
+        selector.addOption("v", viewAvailableTimeslotsOption);
 
         return selector;
     }
