@@ -192,6 +192,7 @@ public class QueryFreeTimeslotService implements IService {
         calendar.add(Calendar.DATE, daysFromNow);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         
         calendar.set(Calendar.HOUR_OF_DAY, WORKING_HOURS_START);
         Date dayStart = calendar.getTime();
@@ -220,6 +221,7 @@ public class QueryFreeTimeslotService implements IService {
         calendar.set(Calendar.HOUR_OF_DAY, WORKING_HOURS_END);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date endOfWorkingHours = calendar.getTime();
 
         // Set the calendar to the start of the working hours
