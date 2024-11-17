@@ -7,7 +7,7 @@ import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -95,6 +95,13 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         return true;
     }
 
+    /**
+     * Get all free timeslots for a patient and a doctor within a given timeslot.
+     * @param patientId The ID of the patient.
+     * @param doctorId The ID of the doctor.
+     * @param timeslot The timeslot to check. It is assumed that the timeslot is within the working hours of the doctor.
+     * @return An array of Timeslot objects representing the free timeslots. It is guaranteed that the timeslots intersect with the given timeslot.
+     */
     public Timeslot[] getAllFreeTimeslots(String patientId, String doctorId, Timeslot timeslot) {
         List<Appointment> appointments = new ArrayList<>();
         appointments.addAll(getAppointments(List.of(
@@ -105,18 +112,29 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
             new SearchCriterion<>(Appointment::getPatientId, patientId)
         )));
 
-        appointments.sort((a1, a2) -> a1.getTimeslot().getStartTime().compareTo(a2.getTimeslot().getStartTime()));
-        
+        // Get only relevant timeslots
+        appointments.removeIf(a -> !a.getTimeslot().isOverlapping(timeslot));
+
+        // Initial free timeslot is the given timeslot
         List<Timeslot> freeTimeslots = new ArrayList<>();
-        Date start = timeslot.getStartTime();
+        freeTimeslots.add(timeslot);
+
+        // Note: This is a stupidly inefficient way to calculate free timeslots
+        // but it is the simplest for now. It can be optimized later.
+        // Every appointment will subtract its timeslot from the free timeslots
         for(Appointment appointment : appointments){
-            if(appointment.getTimeslot().getStartTime().after(start)){
-                freeTimeslots.add(new Timeslot(start, appointment.getTimeslot().getStartTime()));
+            // Skip appointments that are not accepted or pending
+            if(appointment.getStatus() != AppointmentStatus.ACCEPTED &&
+                appointment.getStatus() != AppointmentStatus.PENDING) continue;
+                
+            List<Timeslot> newFreeTimeslots = new ArrayList<>();
+            for(Timeslot freeTimeslot : freeTimeslots){
+                Timeslot[] subtractedTimeslots = Timeslot.subtract(freeTimeslot, appointment.getTimeslot());
+                
+                newFreeTimeslots.addAll(Arrays.asList(subtractedTimeslots));
             }
 
-            start = appointment.getTimeslot().getEndTime();
-
-            if(start.after(timeslot.getEndTime())) break;
+            freeTimeslots = newFreeTimeslots;
         }
 
         return freeTimeslots.toArray(Timeslot[]::new);
