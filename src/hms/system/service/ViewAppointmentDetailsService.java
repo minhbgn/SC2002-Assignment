@@ -18,7 +18,6 @@ import hms.user.model.Patient;
 import hms.user.repository.DoctorRepository;
 import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ViewAppointmentDetailsService implements IService{
