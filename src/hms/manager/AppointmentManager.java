@@ -94,6 +94,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
 
         return true;
     }
+    
 
     /**
      * Get all free timeslots for a patient and a doctor within a given timeslot.
@@ -104,13 +105,13 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      */
     public Timeslot[] getAllFreeTimeslots(String patientId, String doctorId, Timeslot timeslot) {
         List<Appointment> appointments = new ArrayList<>();
-        appointments.addAll(getAppointments(List.of(
-            new SearchCriterion<>(Appointment::getDoctorId, doctorId)
-        )));
+        if(doctorId != null)
+            appointments.addAll(getAppointments(List.of(
+                new SearchCriterion<>(Appointment::getDoctorId, doctorId))));
 
-        appointments.addAll(getAppointments(List.of(
-            new SearchCriterion<>(Appointment::getPatientId, patientId)
-        )));
+        if(patientId != null)
+            appointments.addAll(getAppointments(List.of(
+                new SearchCriterion<>(Appointment::getPatientId, patientId))));
 
         // Get only relevant timeslots
         appointments.removeIf(a -> !a.getTimeslot().isOverlapping(timeslot));
