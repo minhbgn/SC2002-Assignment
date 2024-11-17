@@ -96,12 +96,22 @@ public class ViewAppointmentDetailsService implements IService{
     }
     
     private void handleRescheduleAppointment() {
-        Date newDate = Prompt.getDateInput("Enter the new date for your appointment: ");
-        ctx.getManager(AppointmentManager.class)
-            .updateDate(appointment.getId(), newDate);
+        QueryFreeTimeslotService freeTimeslotService = new QueryFreeTimeslotService(ctx, (timeslot) -> {
+            // Update the timeslot of the appointment
+            boolean success = ctx.getManager(AppointmentManager.class)
+                .updateTimeslot(appointment.getId(), timeslot);
+        
+            if(!success) // This should never happen
+                throw new RuntimeException("Failed to update appointment timeslot");
+                
+            // Update the appointment info display
+            menuNav.getCurrentMenu().title = getAppointmentInfoDisplay();
+        });
 
-        // Update the appointment info display
-        menuNav.getCurrentMenu().title = getAppointmentInfoDisplay();
+        freeTimeslotService.bindDoctor(appointment.getDoctorId());
+        freeTimeslotService.bindUser(appointment.getPatientId());
+
+        freeTimeslotService.execute(menuNav);
     }
 
     private void handleResolveAppointment() {
@@ -257,8 +267,10 @@ public class ViewAppointmentDetailsService implements IService{
             .getRepository(DoctorRepository.class)
             .get(appointment.getDoctorId());
 
-        return String.format("Appointment by %s with %s on %s\nStatus: %s",
-            p.name, d.name, appointment.getDate(),
+        return String.format("Appointment by %s with %s from %s to %s\nStatus: %s",
+            p.name, d.name,
+            appointment.getTimeslot().getStartTimeString(),
+            appointment.getTimeslot().getEndTimeString(),
             appointment.getStatus().toString()
         );
     }
