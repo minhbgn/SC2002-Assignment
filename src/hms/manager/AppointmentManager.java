@@ -5,6 +5,7 @@ import hms.appointment.AppointmentRepository;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
+import hms.user.repository.DoctorRepository;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,12 +63,25 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @return True if the patient is free, false otherwise.
      */
     public boolean isDoctorFree(String doctorId, Timeslot timeslot) {
+        // Check if the doctor is free based on the appointments
         List<Appointment> appointments = getAppointments(List.of(
             new SearchCriterion<>(Appointment::getDoctorId, doctorId)
         ));
 
         for(Appointment appointment : appointments){
             if(appointment.getTimeslot().isOverlapping(timeslot)){
+                return false;
+            }
+        }
+
+        // Check if the doctor is free based on the busy timeslots
+        List<Timeslot> busyTimeslots = ctx.getManager(UserManager.class)
+            .getRepository(DoctorRepository.class)
+            .get(doctorId)
+            .getBusyTimeslots();
+        
+        for(Timeslot busyTimeslot : busyTimeslots){
+            if(busyTimeslot.isOverlapping(timeslot)){
                 return false;
             }
         }
@@ -104,17 +118,47 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @return An array of Timeslot objects representing the free timeslots. It is guaranteed that the timeslots intersect with the given timeslot.
      */
     public Timeslot[] getAllFreeTimeslots(String patientId, String doctorId, Timeslot timeslot) {
-        List<Appointment> appointments = new ArrayList<>();
-        if(doctorId != null)
-            appointments.addAll(getAppointments(List.of(
-                new SearchCriterion<>(Appointment::getDoctorId, doctorId))));
+        List<Timeslot> unavailableTimeslots = new ArrayList<>();
+        if(doctorId != null){
+            // Doctor is busy during the working hours
+            List<Appointment> appointments = getAppointments(List.of(
+                new SearchCriterion<>(Appointment::getDoctorId, doctorId)
+            ));
 
-        if(patientId != null)
-            appointments.addAll(getAppointments(List.of(
-                new SearchCriterion<>(Appointment::getPatientId, patientId))));
+            // Remove appointments that are not accepted or pending
+            appointments.removeIf(a -> a.getStatus() != AppointmentStatus.ACCEPTED &&
+                a.getStatus() != AppointmentStatus.PENDING);
+
+            unavailableTimeslots.addAll(appointments.stream()
+                .map(Appointment::getTimeslot)
+                .toList());
+
+            // Doctor is also busy during the busy timeslots
+            List<Timeslot> busyTimeslots = ctx.getManager(UserManager.class)
+                .getRepository(DoctorRepository.class)
+                .get(doctorId)
+                .getBusyTimeslots();
+
+            unavailableTimeslots.addAll(busyTimeslots);
+        }
+
+        if(patientId != null){
+            // Patient is busy during their appointments
+            List<Appointment> appointments = getAppointments(List.of(
+                new SearchCriterion<>(Appointment::getPatientId, patientId)
+            ));
+
+            // Remove appointments that are not accepted or pending
+            appointments.removeIf(a -> a.getStatus() != AppointmentStatus.ACCEPTED &&
+                a.getStatus() != AppointmentStatus.PENDING);
+
+            unavailableTimeslots.addAll(appointments.stream()
+                .map(Appointment::getTimeslot)
+                .toList());
+        }
 
         // Get only relevant timeslots
-        appointments.removeIf(a -> !a.getTimeslot().isOverlapping(timeslot));
+        unavailableTimeslots.removeIf(t -> !t.isOverlapping(timeslot));
 
         // Initial free timeslot is the given timeslot
         List<Timeslot> freeTimeslots = new ArrayList<>();
@@ -123,14 +167,10 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         // Note: This is a stupidly inefficient way to calculate free timeslots
         // but it is the simplest for now. It can be optimized later.
         // Every appointment will subtract its timeslot from the free timeslots
-        for(Appointment appointment : appointments){
-            // Skip appointments that are not accepted or pending
-            if(appointment.getStatus() != AppointmentStatus.ACCEPTED &&
-                appointment.getStatus() != AppointmentStatus.PENDING) continue;
-                
+        for(Timeslot unavailableTimeslot : unavailableTimeslots){
             List<Timeslot> newFreeTimeslots = new ArrayList<>();
             for(Timeslot freeTimeslot : freeTimeslots){
-                Timeslot[] subtractedTimeslots = Timeslot.subtract(freeTimeslot, appointment.getTimeslot());
+                Timeslot[] subtractedTimeslots = Timeslot.subtract(freeTimeslot, unavailableTimeslot);
                 
                 newFreeTimeslots.addAll(Arrays.asList(subtractedTimeslots));
             }
