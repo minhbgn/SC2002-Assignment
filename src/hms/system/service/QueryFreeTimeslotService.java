@@ -155,12 +155,20 @@ public class QueryFreeTimeslotService implements IService {
         }
     }
 
-    /** Utility method for finding the timeslot that contains the selected time */
+    /**
+     * Utility method for finding the timeslot that contains the selected time </p>
+     * It is assumed the timeslot is defined as [startTime, endTime)
+     * @param time The selected time
+     * @return The timeslot that contains the selected time
+     */
     private Timeslot findTimeslotContainingDate(Date time) {
         // Find the timeslot that contains the selected start time
         Timeslot selectedTimeslot = null;
         for(Timeslot timeslot : freeTimeslots) {
-            if(time.after(timeslot.getStartTime()) && time.before(timeslot.getEndTime())) {
+            // Both if checks result in the condition
+            // timeslot.getStartTime() <= time < timeslot.getEndTime()
+            if(time.before(timeslot.getStartTime())) continue;
+            if(time.before(timeslot.getEndTime())) {
                 selectedTimeslot = timeslot;
                 break;
             }
@@ -229,7 +237,7 @@ public class QueryFreeTimeslotService implements IService {
             calendar.add(Calendar.DATE, 1);
             calendar.set(Calendar.HOUR_OF_DAY, WORKING_HOURS_START);
         }
-        
+
         return calendar.getTime();
     }
 
