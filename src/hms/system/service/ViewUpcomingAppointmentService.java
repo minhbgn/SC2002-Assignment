@@ -40,8 +40,8 @@ public class ViewUpcomingAppointmentService implements IService{
     }
 
     private void handleAddBusyTimeslot(){
-        Date startTime = Prompt.getDateInput("When are you not available? (Start Time): ");
-        Date endTime = Prompt.getDateInput("When will you be available again? (End Time): ");
+        Date startTime = Prompt.getDetailedDateInput("When are you not available? (Start Time): ");
+        Date endTime = Prompt.getDetailedDateInput("When will you be available again? (End Time): ");
 
         Timeslot busyTimeslot = new Timeslot(startTime, endTime);
 
