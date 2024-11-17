@@ -277,9 +277,7 @@ public class QueryFreeTimeslotService implements IService {
         // endTime <= selectedFreeTimeslot.getEndTime()
         // This is because the appointment the appointment can end
         // right before the next appointment starts
-        while (endTime.before(selectedFreeTimeslot.getEndTime()) ||
-            endTime.equals(selectedFreeTimeslot.getEndTime())) {
-            
+        while (!endTime.after(selectedFreeTimeslot.getEndTime())) {
             availableEndTimes.add(endTime);
             endTime = new Date(endTime.getTime()
                 + MINIMUM_APPOINTMENT_DURATION_IN_MINUTES * 60 * 1000);
