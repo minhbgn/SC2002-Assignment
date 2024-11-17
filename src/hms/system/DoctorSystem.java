@@ -6,6 +6,7 @@ import hms.manager.ManagerContext;
 import hms.system.service.IService;
 import hms.system.service.ViewAppointmentsService;
 import hms.system.service.ViewProfileService;
+import hms.system.service.ViewUpcomingAppointmentService;
 import hms.ui.AbstractMenu;
 import hms.ui.MenuNavigator;
 import hms.ui.Prompt;
@@ -19,6 +20,7 @@ public class DoctorSystem implements ISystem {
      * The services available in this system. Contents:
      * 1. View Profile
      * 2. View Appointments
+     * 3. View Upcoming Appointment
      */
     private final IService[] services;
     private final ManagerContext ctx;
@@ -46,7 +48,8 @@ public class DoctorSystem implements ISystem {
         // Initialize services supported by this system
         this.services = new IService[] {
             new ViewProfileService(doctor),
-            viewAppointmentsService
+            viewAppointmentsService,
+            new ViewUpcomingAppointmentService(ctx, doctor)
         };
 
         // Set the next system to this system by default
@@ -60,6 +63,7 @@ public class DoctorSystem implements ISystem {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
             new UserOption("View Appointments", () -> services[1].execute(menuNav)),
+            new UserOption("View Upcoming Appointment", () -> services[2].execute(menuNav)),
             new UserOption("Log Out", () -> nextSystem = new LoginSystem(ctx)),
             new UserOption("Exit", () -> nextSystem = null)
         ));
