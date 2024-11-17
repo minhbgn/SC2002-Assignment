@@ -14,6 +14,7 @@ public class Prompt {
         List.of("no", "n", "false", "f", "0")
     );
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat detailedDateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     
     public Prompt(String message){
         throw new UnsupportedOperationException("Prompt should not be instantiated");
@@ -62,6 +63,20 @@ public class Prompt {
         } catch (ParseException e) {
             System.out.println("Invalid date. Please enter a valid date in the format DD/MM/YYYY");
             return getDateInput(message);
+        }
+    }
+
+    public static Date getDetailedDateInput(String message){
+        System.out.println("Please enter the date in the format DD/MM/YYYY HH:MM:SS");
+        System.out.print(message);
+
+        String input = InputHandler.getInstance().getInput();
+
+        try {
+            return detailedDateFormatter.parse(input);
+        } catch (ParseException e) {
+            System.out.println("Invalid date. Please enter a valid date in the format DD/MM/YYYY HH:MM:SS");
+            return getDetailedDateInput(message);
         }
     }
 }
