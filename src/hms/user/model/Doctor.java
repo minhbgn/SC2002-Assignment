@@ -4,12 +4,13 @@ import hms.common.id.IdManager;
 import hms.manager.ManagerContext;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class Doctor extends User {
-    private static char DELIMITER = '/';
+    private static String DELIMITER = ";";
 
     private final List<Timeslot> busyTimeslots = new ArrayList<>();
 
@@ -55,8 +56,13 @@ public class Doctor extends User {
         // Hydrate busyTimeslots
         if (data.get("busyTimeslots").equals("")) return; // No busy timeslots
 
-        String[] busyTimeslotsSerialized = data.get("busyTimeslots").split(Character.toString(DELIMITER));
+        System.out.println("busyTimeslots: " + data.get("busyTimeslots"));
+
+        String[] busyTimeslotsSerialized = data.get("busyTimeslots").split(DELIMITER);
+        System.out.println("busyTimeslotsSerialized: " + Arrays.toString(busyTimeslotsSerialized));
+
         for (String timeslot : busyTimeslotsSerialized){
+            System.out.println("Adding timeslot: " + timeslot);
             this.busyTimeslots.add(new Timeslot(timeslot));
         }
     }
