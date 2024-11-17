@@ -168,7 +168,7 @@ public class ViewAppointmentsService implements IService {
 
         // Update the entire menu
         menuNav.popMenu();
-        onAppointmentSelect(selected);
+        handleViewPatientMedicalRecords(); // Return to the patient medical records menu
     }
 
     private void handleViewPatientInfo() {
@@ -199,7 +199,7 @@ public class ViewAppointmentsService implements IService {
             "Medications: " + p.medicalHistory + "\n" +
             "Conditions: " + p.currentMedication;
 
-        SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+        SimpleMenu recordMenu = new SimpleMenu(recordInfo, List.of(updatePatientMedicalRecordOption));
 
         menuNav.addMenu(recordMenu);
     }
