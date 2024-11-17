@@ -53,6 +53,8 @@ public class Doctor extends User {
         super.hydrate(data);
 
         // Hydrate busyTimeslots
+        if (data.get("busyTimeslots").equals("")) return; // No busy timeslots
+
         String[] busyTimeslotsSerialized = data.get("busyTimeslots").split(Character.toString(DELIMITER));
         for (String timeslot : busyTimeslotsSerialized){
             this.busyTimeslots.add(new Timeslot(timeslot));
