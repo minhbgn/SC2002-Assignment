@@ -1,0 +1,15 @@
+unnamed package
+hms
+hms.appointment
+hms.appointment.enums
+hms.common
+hms.common.id
+hms.inventory
+hms.manager
+hms.prescription
+hms.system
+hms.system.service
+hms.ui
+hms.user.model
+hms.user.repository
+hms.utils

@@ -2,9 +2,22 @@ package hms.ui;
 
 import java.util.function.Consumer;
 
+/**
+ * A paginated list viewer that allows the user to select an item from the list.
+ * <p>
+ * It inherits from {@link PaginatedListViewer} and adds the ability to select an item from the list.
+ * @param <T> The type of items in the list
+ */
 public class PaginatedListSelector<T> extends PaginatedListViewer<T>{
+    /** The action to perform when an item is selected */
     private final Consumer<T> onSelect;
 
+    /**
+     * Creates a new paginated list selector.
+     * @param title The title of the list
+     * @param items The items in the list
+     * @param onSelect The action to perform when an item is selected
+     */
     public PaginatedListSelector(String title, T[] items, Consumer<T> onSelect){
         super(title, items);
 
@@ -12,9 +25,10 @@ public class PaginatedListSelector<T> extends PaginatedListViewer<T>{
     }
 
     /**
-     * Checks if the given key is a valid option.
-     * @param key the key to check
-     * @return true if the key is a valid option, false otherwise
+     * Checks if the given key is a valid option key.
+     * <p>
+     * Overrides the default implementation to allow for selecting items by index.
+     * @param key The key to check
      */
     @Override
     public boolean hasOption(String key){
@@ -31,9 +45,10 @@ public class PaginatedListSelector<T> extends PaginatedListViewer<T>{
     }
 
     /**
-     * Executes the option corresponding to the given key.
-     * @param key the key of the option to execute
-     * @throws IllegalArgumentException if the key is not a valid option
+     * Executes the option with the given key.
+     * <p>
+     * Overrides the default implementation to allow for selecting items by index.
+     * @param key The key of the option to execute
      */
     @Override
     public void executeOption(String key){

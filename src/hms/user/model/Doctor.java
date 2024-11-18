@@ -8,41 +8,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * This class describes an account of a Doctor. 
- * The system will recognize accounts used by this class as doctors
- * DoctorService, the option of services for doctors, will be given to these users by the account
- */
+/** Doctor class to represent the Doctor user type */
 public class Doctor extends User {
+    /** Delimiter for serializing busy timeslots */
     private static String DELIMITER = ";";
-
+    /** List of busy timeslots for the Doctor */
     private final List<Timeslot> busyTimeslots = new ArrayList<>();
 
 	/**
 	 * Empty constructor to be used for hydration
 	 * @param ctx The manager context to let this User access other classes
 	 */
-    public Doctor(ManagerContext ctx) {
-        super(ctx);
-    }
-
-    /**
-     * Get the busy time slots of a Doctor. 
-     * A patient will not be able to make an appointment on these busy time slots
-     * @return the list of time slots in which Doctor is unavailable
-     */
-    public List<Timeslot> getBusyTimeslots() {
-        return busyTimeslots;
-    }
-
-    /**
-     * Add a new busy time slot to the list of busy time slot.
-     * A patient will not be able to make an appointment on these busy time slots
-     * @param timeslot The time slot in which the doctor is unavailable
-     */
-    public void addBusyTimeslot(Timeslot timeslot){
-        this.busyTimeslots.add(timeslot);
-    }
+    public Doctor(ManagerContext ctx) { super(ctx); }
 
     /**
      * Filled constructor for Doctor
@@ -56,16 +33,19 @@ public class Doctor extends User {
         super(ctx, name, isMale, contact, dob);
         this.account = new Account(IdManager.generateId(Doctor.class));
     }
+
+    public List<Timeslot> getBusyTimeslots() { return busyTimeslots; }
+
+    public void addBusyTimeslot(Timeslot timeslot){ this.busyTimeslots.add(timeslot); }
     
-    /** To aid in printing out a Doctor object */
     @Override
     public String toString() {
         return super.toString()+"\n User type: [Doctor]";
     }
 
     /**
-     * Hydrate the Doctor object with data from a HashMap.
-     * @param data The data to hydrate the Doctor object with.
+     * {@inheritDoc}
+     * Overrides the User.hydrate method to additionally hydrate the busyTimeslots attribute
      */
     @Override
     public void hydrate(HashMap<String, String> data){
@@ -82,8 +62,8 @@ public class Doctor extends User {
     }
 
     /**
-     * Serialize the Doctor object into a HashMap.
-     * @return The serialized data of the Doctor object.
+     * {@inheritDoc}
+     * Overrides the User.serialize method to additionally serialize the busyTimeslots attribute
      */
     @Override
     public HashMap<String, String> serialize(){

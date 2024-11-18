@@ -4,14 +4,18 @@ import hms.common.SearchCriterion;
 import java.util.HashMap;
 import java.util.function.Function;
 
+/**
+ * A menu that displays a paginated list of items.
+ * @param <T> The type of items in the list
+ */
 public class PaginatedListViewer<T> extends AbstractMenu {
+    /** The title of the menu */
     protected final PaginatedList<T> paginatedList;
 
     /**
-     * Constructs a PaginatedListViewer with the specified title and items.
-     *
-     * @param title the title of the viewer
-     * @param items the items to be displayed in the viewer
+     * Creates a new PaginatedListViewer with the specified title and items.
+     * @param title The title of the menu
+     * @param items The items to display
      */
     public PaginatedListViewer(String title, T[] items) {
         this.title = title;
@@ -22,40 +26,22 @@ public class PaginatedListViewer<T> extends AbstractMenu {
     }
 
     /**
-     * Adds a filter to the paginated list.
-     *
-     * @param filter the filter to be added
+     * Adds a filter to the list of filters.
+     * @param filter The filter to add
      */
-    public void addFilter(SearchCriterion<T, ?> filter) {
-        paginatedList.addCriteria(filter);
-    }
-
+    public void addFilter(SearchCriterion<T, ?> filter) { paginatedList.addCriteria(filter); }
     /**
-     * Clears all filters from the paginated list.
+     * Sorts the items based on the specified key extractor.
+     * @param keyExtractor The key extractor to use for sorting
      */
-    public void clearFilters() {
-        paginatedList.setCriteria(null);
-    }
+    public void sortBy(Function<T, Comparable<?>> keyExtractor) { paginatedList.setSorter(keyExtractor); }
+    
+    /** Clears all filters. */
+    public void clearFilters() { paginatedList.setCriteria(null); }
+    /** Clears the sorter. */
+    public void clearSorter() { paginatedList.setSorter(null); }
 
-    /**
-     * Sorts the paginated list by the specified key extractor.
-     *
-     * @param keyExtractor the function to extract the key for sorting
-     */
-    public void sortBy(Function<T, Comparable<?>> keyExtractor) {
-        paginatedList.setSorter(keyExtractor);
-    }
-
-    /**
-     * Clears the sorter from the paginated list.
-     */
-    public void clearSorter() {
-        paginatedList.setSorter(null);
-    }
-
-    /**
-     * Updates the options for pagination controls.
-     */
+    /** Updates the options based on the current state of the paginated list. */
     private void updateOptions() {
         // Remove existing options
         options.remove("n");

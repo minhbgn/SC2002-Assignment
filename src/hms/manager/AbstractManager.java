@@ -4,13 +4,18 @@ import hms.common.AbstractRepository;
 import hms.utils.CSVFileHandler;
 
 /**
- * Abstract class for all managers
+ * Abstract class for a simple manager which manages one type of repository
+ * This class provides a basic implementation of the IManager interface
  * @param <T> Repository type
  */
 public abstract class AbstractManager<T extends AbstractRepository<?>> implements IManager {
+    /** Whether the manager has been initialized */
     private boolean initialized = false;
+    /** File path */
     private final String filepath;
+    /** Manager context that the manager belongs to */
     protected final ManagerContext ctx;
+    /** Repository that the manager manages */
     protected T repository;
 
     /**
@@ -23,9 +28,6 @@ public abstract class AbstractManager<T extends AbstractRepository<?>> implement
         this.filepath = filepath;
     }
 
-    /**
-     * Initialize the manager
-     */
     @Override
     public void initialize() {
         if (!initialized) {
@@ -34,9 +36,6 @@ public abstract class AbstractManager<T extends AbstractRepository<?>> implement
         }
     }
 
-    /**
-     * Load data from file
-     */
     @Override
     public void load(){
         CSVFileHandler csvFileHandler = new CSVFileHandler();
@@ -44,9 +43,6 @@ public abstract class AbstractManager<T extends AbstractRepository<?>> implement
         repository.parse(csvFileHandler.read(filepath));
     }
 
-    /**
-     * Save data to file
-     */
     @Override
     public void save(){
         CSVFileHandler csvFileHandler = new CSVFileHandler();

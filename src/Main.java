@@ -1,8 +1,6 @@
 import hms.App;
 
-/**
- * Contains main method to run the app
- */
+/** The main class */
 public class Main {
     public static void main(String[] args) {
         App app = new App();

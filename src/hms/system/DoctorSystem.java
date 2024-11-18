@@ -15,10 +15,12 @@ import hms.ui.UserOption;
 import hms.user.model.Doctor;
 import java.util.List;
 
-/**
- * This class generates relevant service options for the doctors
- */
+/** The doctor system */
 public class DoctorSystem implements ISystem {
+    /** The manager context. */
+    private final ManagerContext ctx;
+    /** The menu navigator. */
+    private final MenuNavigator menuNav;
     /**
      * The services available in this system. Contents:
      * 1. View Profile
@@ -26,16 +28,14 @@ public class DoctorSystem implements ISystem {
      * 3. View Upcoming Appointment
      */
     private final IService[] services;
-    private final ManagerContext ctx;
-    private final MenuNavigator menuNav;
 
     /** The next system to run. */
     private ISystem nextSystem = null;
 
     /**
-     * Create a new doctor system
-     * @param ctx The manager context
-     * @param doctor The doctor
+     * Creates a new DoctorSystem.
+     * @param ctx The manager context.
+     * @param doctor The doctor using the system.
      */
     public DoctorSystem(ManagerContext ctx, Doctor doctor) {
         this.ctx = ctx;
@@ -68,8 +68,8 @@ public class DoctorSystem implements ISystem {
     }
 
     /**
-     * Get the menu for the doctor system.
-     * @return The menu for the doctor system.
+     * Returns a menu that displays the options available in this system.
+     * @return A menu that displays the options available in this system.
      */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(

@@ -14,23 +14,23 @@ import hms.user.repository.PharmacistRepository;
 import java.util.Date;
 
 /**
- * This class is used by the Administrators to add new users into the system.
+ * Service to for adding a new user to the system.
+ * <p>
+ * The user selects the type of user to add and is prompted for the user's details.
  */
 public class AddUserService implements IService {
+    /** The manager context. */
     private final ManagerContext ctx;
 
     /**
-     * Constructor for AddUserService class
-     * @param ctx The manager context to manage other classes. In this case, the User
+     * Creates a new AddUserService.
+     * @param ctx The manager context.
      */
     public AddUserService(ManagerContext ctx) {
         this.ctx = ctx;
     }
 
-    /**
-     * Adding a patient into the system. 
-     * Inputs required from a user are name, gender, contact and day of birth
-     */
+    /** Handles adding a new patient to the system. */
     private void handleAddPatient() {
         String name = Prompt.getStringInput("Enter the patient's name: ");
         boolean isMale = Prompt.getBooleanInput("Is the patient male? (Y/N) ");
@@ -42,10 +42,7 @@ public class AddUserService implements IService {
             .createPatient(name, isMale, contact, dob);
     }
 
-    /**
-     * Adding a doctor into the system. 
-     * Inputs required from a user are name, gender, contact and day of birth
-     */  
+    /** Handles adding a new doctor to the system. */
     private void handleAddDoctor() {
         String name = Prompt.getStringInput("Enter the doctor's name: ");
         boolean isMale = Prompt.getBooleanInput("Is the doctor male? (Y/N) ");
@@ -56,11 +53,8 @@ public class AddUserService implements IService {
             .getRepository(DoctorRepository.class)
             .createDoctor(name, isMale, contact, dob);
     }
-    
-    /**
-     * Adding a pharmacist into the system. 
-     * Inputs required from a user are name, gender, contact and day of birth
-     */
+
+    /** Handles adding a new pharmacist to the system. */
     private void handleAddPharmacist() {
         String name = Prompt.getStringInput("Enter the pharmacist's name: ");
         boolean isMale = Prompt.getBooleanInput("Is the pharmacist male? (Y/N) ");
@@ -72,10 +66,7 @@ public class AddUserService implements IService {
             .createPharmacist(name, isMale, contact, dob);
     }
 
-    /**
-     * Adding an admin into the system. 
-     * Inputs required from a user are name, gender, contact and day of birth
-     */
+    /** Handles adding a new admin to the system. */
     private void handleAddAdmin() {
         String name = Prompt.getStringInput("Enter the admin's name: ");
         boolean isMale = Prompt.getBooleanInput("Is the admin male? (Y/N) ");
@@ -87,10 +78,7 @@ public class AddUserService implements IService {
             .createAdmin(name, isMale, contact, dob);
     }
 
-    /**
-     * Get the menu consist of different kinds of user to be added in
-     * @return the menu
-     */
+    /** Gets the menu for selecting the type of user to add. */
     private AbstractMenu getMenu(){
         SimpleMenu menu = new SimpleMenu("Which type of user would you like to add?", null);
 

@@ -13,28 +13,40 @@ import hms.ui.UserOption;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Service to view appointments */
 public class ViewAppointmentsService implements IService {
+    /** Manager context */
     private final ManagerContext ctx;
+    /** Default search criteria */
     private final List<SearchCriterion<Appointment, ?>> defaultCriteria;
+    /** Active search criteria */
     private final List<SearchCriterion<Appointment, ?>> activeCriteria = new ArrayList<>();
 
+    // Options
+    /** Whether the service has the option to cancel an appointment */
     public boolean hasCancelAppointmentOption = false;
+    /** Whether the service has the option to complete an appointment */
     public boolean hasCompleteAppointmentOption = false;
+    /** Whether the service has the option to reschedule an appointment */
     public boolean hasRescheduleAppointmentOption = false;
+    /** Whether the service has the option to resolve an appointment */
     public boolean hasResolveAppointmentOption = false;
+    /** Whether the service has the option to update a patient's medical record */
     public boolean hasUpdatePatientMedicalRecordOption = false;
+    /** Whether the service has the option to view a patient's information */
     public boolean hasViewPatientInfoOption = false;
+    /** Whether the service has the option to view a patient's medical record */
     public boolean hasViewPatientMedicalRecordOption = false;
+    /** Whether the service has the option to view records */
     public boolean hasViewRecordsOption = false;
 
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
     /**
-     * Constructor for ViewAppointmentsService.
-     * 
-     * @param ctx the ManagerContext
-     * @param defaultCriteria the default search criteria
+     * Constructor
+     * @param ctx Manager context
+     * @param defaultCriteria Default search criteria to use when fetching appointments
      */
     public ViewAppointmentsService(ManagerContext ctx,
         List<SearchCriterion<Appointment, ?>> defaultCriteria) {
@@ -43,9 +55,7 @@ public class ViewAppointmentsService implements IService {
         this.defaultCriteria = defaultCriteria;
     }
 
-    /**
-     * Handles the filter menu for appointments.
-     */
+    /** Handler for the filter option. Only filters by apponitment status */
     private void handleFilter(){
         SimpleMenu filterChoicesMenu = new SimpleMenu("Filter by:", List.of(
             new UserOption("Pending", () -> setFilter(AppointmentStatus.PENDING)),
@@ -60,9 +70,8 @@ public class ViewAppointmentsService implements IService {
     }
 
     /**
-     * Sets the filter for appointments based on the given status.
-     * 
-     * @param status the AppointmentStatus to filter by
+     * Set the filter for the appointments based on the status
+     * @param status Status to filter by
      */
     private void setFilter(AppointmentStatus status){
         activeCriteria.clear();
@@ -78,9 +87,8 @@ public class ViewAppointmentsService implements IService {
     }
 
     /**
-     * Handles the selection of an appointment.
-     * 
-     * @param appointment the selected Appointment
+     * Handler for when an appointment is selected
+     * @param appointment Appointment that was selected
      */
     private void onAppointmentSelect(Appointment appointment){
         ViewAppointmentDetailsService service = new ViewAppointmentDetailsService(ctx, appointment);
@@ -99,9 +107,8 @@ public class ViewAppointmentsService implements IService {
     }
 
     /**
-     * Gets the menu for displaying appointments.
-     * 
-     * @return the AbstractMenu for appointments
+     * Get the menu for the service
+     * @return Menu for the service
      */
     private AbstractMenu getMenu() {
         List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>();

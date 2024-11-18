@@ -5,22 +5,22 @@ import hms.ui.MenuNavigator;
 import hms.ui.SimpleMenu;
 import hms.user.model.Patient;
 
+/** Service to view the medical records of a patient. */
 public class ViewRecordsService implements IService {
+    /** The patient whose records are to be viewed. */
     private final Patient patient;
 
     /**
-     * Constructs a ViewRecordsService with the specified patient.
-     *
-     * @param patient the patient whose records are to be viewed
+     * Creates a new ViewRecordsService.
+     * @param patient The patient whose records are to be viewed.
      */
     public ViewRecordsService(Patient patient) {
         this.patient = patient;
     }
 
     /**
-     * Retrieves the medical records display string for the patient.
-     *
-     * @return a string representation of the patient's medical records
+     * Returns a string representation of the patient's medical records.
+     * @return A string representation of the patient's medical records.
      */
     private String getMedicalRecordsDisplay(){
         return "Medical Records of " + patient.name + ":\n" +
@@ -31,18 +31,16 @@ public class ViewRecordsService implements IService {
     }
 
     /**
-     * Creates a menu displaying the patient's medical records.
-     *
-     * @return an AbstractMenu displaying the patient's medical records
+     * Returns a menu that displays the patient's medical records.
+     * @return A menu that displays the patient's medical records.
      */
     private AbstractMenu getMenu(){
         return new SimpleMenu(getMedicalRecordsDisplay(), null);
     }
 
     /**
-     * Executes the service by adding the medical records menu to the menu navigator.
-     *
-     * @param menuNav the menu navigator to which the menu is added
+     * Adds the menu that displays the patient's medical records to the menu navigator.
+     * @param menuNav The menu navigator to which the menu is to be added.
      */
     @Override
     public void execute(MenuNavigator menuNav) {
