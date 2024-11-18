@@ -13,6 +13,9 @@ import hms.ui.UserOption;
 import hms.user.model.Pharmacist;
 import java.util.List;
 
+/**
+ * This class generates relevant service options for the pharmacists
+ */
 public class PharmacistSystem implements ISystem {
     /**
      * The services available in this system. Contents:

@@ -43,6 +43,11 @@ public final class PaginatedList <T> {
         updateList();
     }
 
+    /**
+     * Create a new PaginatedList
+     * @param items The items to paginate
+     * @param itemsPerPage Number of items to display per page
+     */
     public PaginatedList(T[] items, int itemsPerPage){
         this.items = items;
         this.itemsPerPage = itemsPerPage;

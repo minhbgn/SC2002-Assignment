@@ -4,6 +4,11 @@ import hms.common.id.IdManager;
 import hms.manager.*;
 import java.util.*;
 
+/**
+ * This class describes an account of a Administrator. 
+ * The system will recognize accounts used by this class as administrators
+ * AdminService, the option of services for admins, will be given to these users by the account
+ */
 public class Admin extends User {
 	/**
 	 * Blank constructor for object to be hydrated later

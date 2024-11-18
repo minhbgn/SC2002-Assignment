@@ -16,6 +16,10 @@ import hms.user.repository.PatientRepository;
 import hms.user.repository.PharmacistRepository;
 import java.util.List;
 
+/**
+ * The login system to authorize users. User will be redirected
+ * to their respective services based on their role
+ */
 public class LoginSystem implements ISystem {
     /** Manager context */
     private final ManagerContext ctx;
@@ -40,11 +44,11 @@ public class LoginSystem implements ISystem {
     }
 
     /**
-     * Display the login menu and process user input. Users can login or exit the system. </p>
-     * @return The next system to run. </p>
-     * - If login is successful, the next system is determined based on the user type. </p>
-     * - If login fails, the next system is the current system. </p>
-     * - If the user chooses to exit, the next system is null. </p>
+     * Display the login menu and process user input. Users can login or exit the system.
+     * @return The next system to run. 
+     * - If login is successful, the next system is determined based on the user type.
+     * - If login fails, the next system is the current system.
+     * - If the user chooses to exit, the next system is null.
      */
     @Override
     public ISystem run() {
