@@ -31,10 +31,7 @@ public class Pharmacist extends User {
         this.account = new Account(IdManager.generateId(Pharmacist.class));
     }
 
-    /**
-     * Function to print out Pharmacist
-     * @return String representation of the Pharmacist
-     */
+    /** Function to print out Pharmacist */
     @Override
     public String toString() {
         return super.toString()+"\n User type: [Pharmacist]";

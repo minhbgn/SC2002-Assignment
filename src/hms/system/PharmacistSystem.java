@@ -29,12 +29,6 @@ public class PharmacistSystem implements ISystem {
 
     private ISystem nextSystem = null;
 
-    /**
-     * Constructs a PharmacistSystem with the given context and pharmacist.
-     * 
-     * @param ctx the manager context
-     * @param pharmacist the pharmacist user
-     */
     public PharmacistSystem(ManagerContext ctx, Pharmacist pharmacist) {
         this.ctx = ctx;
         this.menuNav = new MenuNavigator();
@@ -61,11 +55,6 @@ public class PharmacistSystem implements ISystem {
         menuNav.addMenu(getMenu());
     }
 
-    /**
-     * Generates the menu for the PharmacistSystem.
-     * 
-     * @return the generated menu
-     */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
@@ -76,11 +65,6 @@ public class PharmacistSystem implements ISystem {
         ));
     }
 
-    /**
-     * Runs the PharmacistSystem, displaying the menu and handling user input.
-     * 
-     * @return the next system to run
-     */
     @Override
     public ISystem run() {
         menuNav.display(true);

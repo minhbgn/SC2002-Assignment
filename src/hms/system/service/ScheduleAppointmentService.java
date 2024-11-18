@@ -18,32 +18,17 @@ public class ScheduleAppointmentService implements IService {
     private final User user;
     private final ManagerContext ctx;
 
-    /**
-     * Bound menu navigator
-     */
+    /** Bound menu navigator */
     private MenuNavigator menuNav;
 
-    /**
-     * The doctor selected for the appointment
-     */
+    /** The doctor selected for the appointment */
     private String selectedDoctorId;
 
-    /**
-     * Constructs a ScheduleAppointmentService with the given context and user.
-     *
-     * @param ctx the manager context
-     * @param user the user
-     */
     public ScheduleAppointmentService(ManagerContext ctx, User user) {
         this.ctx = ctx;
         this.user = user;
     }
 
-    /**
-     * Handles the event when a doctor is selected.
-     *
-     * @param doctor the selected doctor
-     */
     private void onDoctorSelected(Doctor doctor){
         menuNav.popMenu(); // Pop the doctor selector
 
@@ -77,25 +62,7 @@ public class ScheduleAppointmentService implements IService {
         System.out.println("Appointment scheduled: " + appointment);
     }
 
-    /**
-     * Schedules an appointment.
-     * 
-     * @param appointment the appointment to be scheduled
-     * @throws RuntimeException if the appointment is null
-     */
-    public void scheduleAppointment(Appointment appointment) {
-        if(appointment == null) // This should never happen
-            throw new RuntimeException("Failed to schedule appointment");
-
-        System.out.println("Appointment scheduled: " + appointment);
-    }
-
-    /**
-     * Retrieves the menu for selecting a doctor.
-     * 
-     * @return the menu for selecting a doctor
-     */
-    public AbstractMenu getMenu() {
+    public AbstractMenu getMenu(){
         Doctor[] doctors = ctx.getManager(UserManager.class)
             .getRepository(DoctorRepository.class)
             .findWithFilters(null)
@@ -107,12 +74,7 @@ public class ScheduleAppointmentService implements IService {
 
         return doctorSelector;
     }
-
-    /**
-     * Executes the menu navigation.
-     * 
-     * @param menuNav the menu navigator
-     */
+        
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;

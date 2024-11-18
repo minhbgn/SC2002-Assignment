@@ -4,11 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class SimpleMenu extends AbstractMenu {
-    /**
-     * Constructs a SimpleMenu with a title and a list of user options.
-     * @param title the title of the menu
-     * @param options the list of user options
-     */
     public SimpleMenu(String title, List<UserOption> options){
         this.title = title;
         this.options = new LinkedHashMap<>();
@@ -22,18 +17,10 @@ public class SimpleMenu extends AbstractMenu {
         }
     }
 
-    /**
-     * Adds a new option to the menu.
-     * @param option the user option to add
-     */
     public void addOption(UserOption option){
         options.put(Integer.toString(options.size() + 1), option);
     }
 
-    /**
-     * Displays the menu title and options if showOptions is true.
-     * @param showOptions whether to display the options
-     */
     @Override
     public void display(boolean showOptions) {
         System.out.println(title);

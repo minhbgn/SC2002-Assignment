@@ -63,10 +63,6 @@ public class Doctor extends User {
         return super.toString()+"\n User type: [Doctor]";
     }
 
-    /**
-     * Hydrate the Doctor object with data from a HashMap.
-     * @param data The data to hydrate the Doctor object with.
-     */
     @Override
     public void hydrate(HashMap<String, String> data){
         super.hydrate(data);
@@ -81,10 +77,6 @@ public class Doctor extends User {
         }
     }
 
-    /**
-     * Serialize the Doctor object into a HashMap.
-     * @return The serialized data of the Doctor object.
-     */
     @Override
     public HashMap<String, String> serialize(){
         HashMap<String, String> data = super.serialize();

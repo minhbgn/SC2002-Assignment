@@ -16,6 +16,9 @@ import hms.ui.UserOption;
 import hms.user.model.Admin;
 import java.util.List;
 
+/**
+ * This class generates relevant service options for the administrators
+ */
 public class AdminSystem implements ISystem {
     private final ManagerContext ctx;
     
@@ -35,10 +38,10 @@ public class AdminSystem implements ISystem {
     /**
      * Create a new admin system
      * @param ctx The manager context
-     * @param admin The admin
+     * @param admin The administrator
      */
     public AdminSystem(ManagerContext ctx, Admin admin) {
-        this.ctx = ctx; 
+        this.ctx = ctx;
         this.menuNav = new MenuNavigator();
     
         // Initialize services supported by this system
@@ -66,10 +69,6 @@ public class AdminSystem implements ISystem {
         menuNav.addMenu(getMenu());
     }
 
-    /**
-     * Get the menu for the admin system.
-     * @return The menu for the admin system.
-     */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
@@ -83,10 +82,6 @@ public class AdminSystem implements ISystem {
         ));
     }
 
-    /**
-     * Run the admin system.
-     * @return The next system to run.
-     */
     @Override
     public ISystem run() {
         menuNav.display(true);

@@ -4,21 +4,12 @@ import hms.common.IModel;
 import java.util.HashMap;
 
 /**
- * This class gets the prefix and suffix id for different classes.
- * This ensures no id of different class objects can be clashing with each other.
+ * This class gets the prefix and suffix id for different classes
+ * This ensures no id of different class objects can be clashing with each other
  */
 public class IdParser {
     private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
 
-    /**
-     * Adds a class and its corresponding prefix to the parser.
-     * 
-     * @param clazz the class to be added
-     * @param prefix the prefix to be associated with the class
-     * @throws IllegalArgumentException if the class is null, the prefix is not exactly 2 characters long,
-     *                                  the prefix is not uppercase letters only, the prefix is already in use,
-     *                                  or the class is already registered
-     */
     static void addClass(Class<? extends IModel> clazz, String prefix) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class cannot be null");
@@ -41,20 +32,6 @@ public class IdParser {
         }
 
         classToIdPrefix.put(clazz, prefix);
-    }
-
-    /**
-     * Gets the prefix associated with a class.
-     * 
-     * @param clazz the class whose prefix is to be retrieved
-     * @return the prefix associated with the class
-     * @throws IllegalArgumentException if the class is not registered
-     */
-    static String getPrefix(Class<? extends IModel> clazz) {
-        if (!classToIdPrefix.containsKey(clazz)) {
-            throw new IllegalArgumentException("Class not registered");
-        }
-        return classToIdPrefix.get(clazz);
     }
 
     /**

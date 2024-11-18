@@ -30,12 +30,6 @@ public class ViewAppointmentsService implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
-    /**
-     * Constructor for ViewAppointmentsService.
-     * 
-     * @param ctx the ManagerContext
-     * @param defaultCriteria the default search criteria
-     */
     public ViewAppointmentsService(ManagerContext ctx,
         List<SearchCriterion<Appointment, ?>> defaultCriteria) {
 
@@ -43,9 +37,6 @@ public class ViewAppointmentsService implements IService {
         this.defaultCriteria = defaultCriteria;
     }
 
-    /**
-     * Handles the filter menu for appointments.
-     */
     private void handleFilter(){
         SimpleMenu filterChoicesMenu = new SimpleMenu("Filter by:", List.of(
             new UserOption("Pending", () -> setFilter(AppointmentStatus.PENDING)),
@@ -59,11 +50,6 @@ public class ViewAppointmentsService implements IService {
         menuNav.addMenu(filterChoicesMenu);
     }
 
-    /**
-     * Sets the filter for appointments based on the given status.
-     * 
-     * @param status the AppointmentStatus to filter by
-     */
     private void setFilter(AppointmentStatus status){
         activeCriteria.clear();
 
@@ -77,11 +63,6 @@ public class ViewAppointmentsService implements IService {
         menuNav.addMenu(getMenu()); // Re-add the appointment list menu with the new filter
     }
 
-    /**
-     * Handles the selection of an appointment.
-     * 
-     * @param appointment the selected Appointment
-     */
     private void onAppointmentSelect(Appointment appointment){
         ViewAppointmentDetailsService service = new ViewAppointmentDetailsService(ctx, appointment);
 
@@ -98,11 +79,6 @@ public class ViewAppointmentsService implements IService {
         service.execute(menuNav);
     }
 
-    /**
-     * Gets the menu for displaying appointments.
-     * 
-     * @return the AbstractMenu for appointments
-     */
     private AbstractMenu getMenu() {
         List<SearchCriterion<Appointment, ?>> criteria = new ArrayList<>();
         if(defaultCriteria != null) criteria.addAll(defaultCriteria);
@@ -124,11 +100,6 @@ public class ViewAppointmentsService implements IService {
         return returnMenu;
     }
     
-    /**
-     * Executes the service and displays the menu.
-     * 
-     * @param menuNav the MenuNavigator to use
-     */
     @Override
     public void execute(MenuNavigator menuNav) {
         // This method is called when the service is executed

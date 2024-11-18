@@ -7,12 +7,6 @@ import java.util.function.Function;
 public class PaginatedListViewer<T> extends AbstractMenu {
     protected final PaginatedList<T> paginatedList;
 
-    /**
-     * Constructs a PaginatedListViewer with the specified title and items.
-     *
-     * @param title the title of the viewer
-     * @param items the items to be displayed in the viewer
-     */
     public PaginatedListViewer(String title, T[] items) {
         this.title = title;
         this.options = new HashMap<>();
@@ -21,41 +15,22 @@ public class PaginatedListViewer<T> extends AbstractMenu {
         updateOptions();
     }
 
-    /**
-     * Adds a filter to the paginated list.
-     *
-     * @param filter the filter to be added
-     */
     public void addFilter(SearchCriterion<T, ?> filter) {
         paginatedList.addCriteria(filter);
     }
 
-    /**
-     * Clears all filters from the paginated list.
-     */
     public void clearFilters() {
         paginatedList.setCriteria(null);
     }
 
-    /**
-     * Sorts the paginated list by the specified key extractor.
-     *
-     * @param keyExtractor the function to extract the key for sorting
-     */
     public void sortBy(Function<T, Comparable<?>> keyExtractor) {
         paginatedList.setSorter(keyExtractor);
     }
 
-    /**
-     * Clears the sorter from the paginated list.
-     */
     public void clearSorter() {
         paginatedList.setSorter(null);
     }
 
-    /**
-     * Updates the options for pagination controls.
-     */
     private void updateOptions() {
         // Remove existing options
         options.remove("n");
@@ -94,11 +69,6 @@ public class PaginatedListViewer<T> extends AbstractMenu {
         }
     }
 
-    /**
-     * Displays the paginated list and optionally shows the pagination options.
-     *
-     * @param showOptions whether to show the pagination options
-     */
     @Override
     public void display(boolean showOptions) {
         System.out.println(title + '\n');

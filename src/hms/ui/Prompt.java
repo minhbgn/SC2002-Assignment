@@ -20,11 +20,6 @@ public class Prompt {
         throw new UnsupportedOperationException("Prompt should not be instantiated");
     }
 
-    /**
-     * Prompts the user to enter an integer value.
-     * @param message The message to display to the user.
-     * @return The integer value entered by the user.
-     */
     public static int getIntInput(String message){
         System.out.print(message);
 
@@ -36,22 +31,12 @@ public class Prompt {
         }
     }
 
-    /**
-     * Prompts the user to enter a string value.
-     * @param message The message to display to the user.
-     * @return The string value entered by the user.
-     */
     public static String getStringInput(String message){
         System.out.print(message);
 
         return InputHandler.getInstance().getInput();
     }
 
-    /**
-     * Prompts the user to enter a boolean value.
-     * @param message The message to display to the user.
-     * @return The boolean value entered by the user.
-     */
     public static boolean getBooleanInput(String message){
         System.out.print(message);
 
@@ -67,11 +52,6 @@ public class Prompt {
         return getBooleanInput(message);
     }
 
-    /**
-     * Prompts the user to enter a date in the format DD/MM/YYYY.
-     * @param message The message to display to the user.
-     * @return The date entered by the user.
-     */
     public static Date getDateInput(String message){
         System.out.println("Please enter the date in the format DD/MM/YYYY");
         System.out.print(message);
@@ -86,11 +66,6 @@ public class Prompt {
         }
     }
 
-    /**
-     * Prompts the user to enter a detailed date in the format DD/MM/YYYY HH:MM:SS.
-     * @param message The message to display to the user.
-     * @return The detailed date entered by the user.
-     */
     public static Date getDetailedDateInput(String message){
         System.out.println("Please enter the date in the format DD/MM/YYYY HH:MM:SS");
         System.out.print(message);

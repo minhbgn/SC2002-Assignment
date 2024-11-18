@@ -168,18 +168,14 @@ public final class PaginatedList <T> {
         updateList();
     }
     
-    /**
-     * Go to the next page.
-     */
+    /** Go to the next page. */
     public void nextPage(){
         if (hasNextPage()){
             currentPage++;
         }
     }
 
-    /**
-     * Go to the previous page.
-     */
+    /** Go to the previous page. */
     public void previousPage(){
         if (hasPreviousPage()){
             currentPage--;
@@ -208,9 +204,7 @@ public final class PaginatedList <T> {
         return page >= 0 && page < pageCount;
     }
 
-    /**
-     * Display the current page.
-     */
+    /** Display the current page. */
     void display(){
         int start = currentPage * itemsPerPage;
         int end = Math.min(start + itemsPerPage, items.length);

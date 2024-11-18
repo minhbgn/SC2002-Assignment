@@ -26,9 +26,6 @@ public class ViewInventoryService implements IService {
         this.ctx = ctx;
     }
 
-    /**
-     * Handles the request item option.
-     */
     private void handleRequestItemOption() {
         boolean request = Prompt.getBooleanInput("Do you want to request for more for this item? (y/n)");
         int requested_amount = Prompt.getIntInput("Enter the amount you want to request for: ");
@@ -40,9 +37,6 @@ public class ViewInventoryService implements IService {
         menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
-    /**
-     * Handles the update stock option.
-     */
     private void handleUpdateStockOption() {
         int newStock = Prompt.getIntInput("Enter the change in stock amount: ");
         ctx.getManager(InventoryManager.class)
@@ -57,9 +51,6 @@ public class ViewInventoryService implements IService {
         menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
-    /**
-     * Handles the resolve request option.
-     */
     private void handleResolveRequestOption() {
         ctx.getManager(InventoryManager.class)
             .updateInventoryItemRequestStatus(selected.getMedicalName(), false, 0);
@@ -68,9 +59,6 @@ public class ViewInventoryService implements IService {
         menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
-    /**
-     * Handles the change low stock alert option.
-     */
     private void handleChangeLowStockAlertOption() {
         boolean alert = Prompt.getBooleanInput("Do you want to change the low stock alert for this item? (y/n)");
         if (!alert) return;
@@ -84,12 +72,6 @@ public class ViewInventoryService implements IService {
         menuNav.getCurrentMenu().title = getItemInfoDisplay(selected);
     }
 
-    /**
-     * Gets the item information display.
-     *
-     * @param item the inventory item
-     * @return the item information display string
-     */
     private String getItemInfoDisplay(InventoryItem item){
         String itemInfo = "Item details:\n\n";
         itemInfo += "Name: " + item.getMedicalName() + "\n";
@@ -103,11 +85,6 @@ public class ViewInventoryService implements IService {
         return itemInfo;
     }
 
-    /**
-     * Called when an inventory item is selected.
-     *
-     * @param item the selected inventory item
-     */
     private void onItemSelect(InventoryItem item){
         selected = item;
 
@@ -128,11 +105,6 @@ public class ViewInventoryService implements IService {
         menuNav.addMenu(menu);
     }
 
-    /**
-     * Gets the menu for viewing inventory items.
-     *
-     * @return the inventory menu
-     */
     private AbstractMenu getMenu(){
         InventoryItem[] items = ctx.getManager(InventoryManager.class)
             .getInventoryItem(null)
@@ -144,11 +116,6 @@ public class ViewInventoryService implements IService {
         return viewer;
     }
 
-    /**
-     * Executes the view inventory service.
-     *
-     * @param menuNav the menu navigator
-     */
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;

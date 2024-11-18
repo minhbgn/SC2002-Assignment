@@ -11,11 +11,6 @@ public class PaginatedListSelector<T> extends PaginatedListViewer<T>{
         this.onSelect = onSelect;
     }
 
-    /**
-     * Checks if the given key is a valid option.
-     * @param key the key to check
-     * @return true if the key is a valid option, false otherwise
-     */
     @Override
     public boolean hasOption(String key){
         if (super.hasOption(key)){
@@ -30,11 +25,6 @@ public class PaginatedListSelector<T> extends PaginatedListViewer<T>{
         }
     }
 
-    /**
-     * Executes the option corresponding to the given key.
-     * @param key the key of the option to execute
-     * @throws IllegalArgumentException if the key is not a valid option
-     */
     @Override
     public void executeOption(String key){
         if (!hasOption(key))

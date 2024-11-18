@@ -12,9 +12,6 @@ public class InputHandler {
      */
     public static InputHandler Instance = null;
 
-    /**
-     * Private constructor to prevent instantiation
-     */
     private InputHandler() {
     }
 
