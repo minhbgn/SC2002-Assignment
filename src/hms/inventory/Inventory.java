@@ -67,11 +67,6 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
     
     @Override
-    /**
-     * Find the item inside inventory
-     * @param id The id (name) of the item
-     * @return the object instance of the item inside the inventory
-     */
     public InventoryItem get(String id) {
         for (InventoryItem result : super.models) {
         	if (result.getMedicalName().equals(id)) {
@@ -83,9 +78,6 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
 
     @Override
-    /**
-     * @return an empty item to be hydrated with data later
-     */
     public InventoryItem createEmptyModel() {
     	return new InventoryItem();
     }
