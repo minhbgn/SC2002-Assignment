@@ -32,7 +32,7 @@ public class ViewInventoryService implements IService {
 
     /**
      * Creates a new ViewInventoryService.
-     * @param ctx
+     * @param ctx The manager context.
      */
     public ViewInventoryService(ManagerContext ctx){
         this.ctx = ctx;
