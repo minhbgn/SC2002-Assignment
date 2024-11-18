@@ -72,9 +72,15 @@ public class QueryFreeTimeslotService implements IService {
         this.onTimeslotSelect = onTimeslotSelect;
     }
 
-    /** Bind the doctor id to the service */
+    /**
+     * Bind the doctor id to the service
+     * @param doctorId The doctor id to bind
+     */
     public void bindDoctor(String doctorId) { this.doctorId = doctorId; }
-    /** Bind the user id to the service */
+    /**
+     * Bind the user id to the service
+     * @param userId The user id to bind
+     */
     public void bindUser(String userId) { this.userId = userId; }
 
     /**
@@ -184,7 +190,7 @@ public class QueryFreeTimeslotService implements IService {
     /**
      * Utility method for calculating the working hours for a given day which is a number of days from now
      * @param daysFromNow The number of days from now,
-     * this will be used to calculate the working hours for that day
+     *   this will be used to calculate the working hours for that day
      * @return The working hours for the given day
      */
     private Timeslot calculateWorkingHourTimeslot(int daysFromNow){
@@ -210,7 +216,6 @@ public class QueryFreeTimeslotService implements IService {
      * <p>
      * A timeslot boundary is a time that the user can select
      * for the start time or end time of an appointment. 
-     * <p>
      * @param current The time to calculate the next valid timeslot boundary from
      * @return The next valid timeslot boundary.
      * If the next valid timeslot boundary is after the working hours end,
@@ -245,7 +250,10 @@ public class QueryFreeTimeslotService implements IService {
         return calendar.getTime();
     }
 
-    /** Utility method for calculating the available start times for the user to select from */
+    /**
+     * Utility method for calculating the available start times for the user to select from
+     * @return The list of available start times for the user to select from
+     */
     private List<Date> calculateAvailableStartTimes() {
         List<Date> availableStartTimes = new ArrayList<>();
 
@@ -268,7 +276,10 @@ public class QueryFreeTimeslotService implements IService {
         return availableStartTimes;
     }
 
-    /** Utility method for calculating the available end times for the user to select from */
+    /**
+     * Utility method for calculating the available end times for the user to select from
+     * @return The list of available end times for the user to select from
+     */
     private List<Date> calculateAvailableEndTimes() {
         List<Date> availableEndTimes = new ArrayList<>();
 
