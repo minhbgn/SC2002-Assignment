@@ -7,7 +7,7 @@ import java.util.*;
  * Utility class for handling CSV file operations.
  */
 public class CSVFileHandler {
-
+	
     /**
      * Reads a CSV file and returns the data as a list of hash maps.
      * Each hash map represents a row, with the keys being the column headers.

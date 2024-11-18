@@ -73,5 +73,9 @@ public abstract class AbstractRepository<T extends IModel> {
      */
     public abstract T get(String id);
     
+    /**
+     * Create an empty model to be hydrated later
+     * @return the empty object
+     */
     public abstract T createEmptyModel();
 }

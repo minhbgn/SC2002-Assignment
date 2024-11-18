@@ -4,6 +4,11 @@ import hms.common.id.IdManager;
 import hms.manager.ManagerContext;
 import java.util.*;
 
+/**
+ * This class describes an account of a Pharmacist. 
+ * The system will recognize accounts used by this class as pharmacists
+ * PharmacistService, the option of services for doctors, will be given to these users by the account
+ */
 public class Pharmacist extends User {
 	/**
 	 * Default constructor for Pharmacist.

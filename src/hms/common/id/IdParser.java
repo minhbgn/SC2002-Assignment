@@ -3,6 +3,10 @@ package hms.common.id;
 import hms.common.IModel;
 import java.util.HashMap;
 
+/**
+ * This class gets the prefix and suffix id for different classes
+ * This ensures no id of different class objects can be clashing with each other
+ */
 public class IdParser {
     private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
 

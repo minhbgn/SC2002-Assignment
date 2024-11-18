@@ -12,6 +12,10 @@ import hms.system.ISystem;
 import hms.system.LoginSystem;
 import hms.ui.Prompt;
 
+/**
+ * The initializer and exiting point for the whole system.
+ * This class will redirect the user to the LoginSystem when it is done initializing the system.
+ */
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
     private static final String DOCTOR_REPO_FILEPATH = "data/doctors.csv";
@@ -24,6 +28,11 @@ public class App {
     private boolean isInitialized = false;
     private ISystem currentSystem = null;
 
+    /**
+     * Initialize the system by loading all data from the external csv file.
+     * Fill all objects with relevant data.
+     * Initialize the manager context to grant access of all objects to other relevant objects.
+     */
     public void initialize() {
         if (isInitialized) return;
 
@@ -53,6 +62,10 @@ public class App {
         isInitialized = true;
     }
 
+    /**
+     * Start running the system after initializing it. 
+     * Raise error if the system is not initialized correctly.
+     */
     public void run() {
         if (!isInitialized){
             throw new IllegalStateException("HMS not initialized");
