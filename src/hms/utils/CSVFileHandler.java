@@ -57,8 +57,9 @@ public class CSVFileHandler {
                 // End of field
                 values.add(current.toString());
                 current.setLength(0);
+                // Skip next space
+            	if (line.charAt(i+1) == ' ') i++;
             } else {
-            	if (!inQuotes && c == ' ') continue;
                 // Regular character
                 current.append(c);
             }
