@@ -26,6 +26,9 @@ public class IdManager {
         return prefix + suffix;
     }
 
+    /** Private constructor to prevent instantiation. */
+    private IdManager() { }
+
     /**
      * Registers a class with the ID manager.
      * This method should be called first for each class that requires a unique ID.

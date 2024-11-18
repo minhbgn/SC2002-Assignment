@@ -15,6 +15,9 @@ public class IdParser {
     /** The map of classes to their ID prefixes. */
     private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
 
+    /** Private constructor to prevent instantiation. */
+    private IdParser() { }
+
     /**
      * Adds a class to the registry with the specified prefix.
      * This method is package-private and should only be called by the IdManager.

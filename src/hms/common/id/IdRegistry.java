@@ -15,6 +15,9 @@ public class IdRegistry {
     /** The map of classes to their next available ID suffix. */
     private static final HashMap<Class<? extends IModel>, Integer> classIdCounter = new HashMap<>();
 
+    /** Private constructor to prevent instantiation. */
+    private IdRegistry() { }
+
     /**
      * Adds a class to the registry. This method is package-private
      * and should only be called by the IdManager.
