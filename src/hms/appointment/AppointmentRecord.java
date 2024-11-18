@@ -5,23 +5,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-/**
- * Represents a record of an appointment in the hospital management system.
- */
+/** Represents a record of an appointment in the hospital management system. */
 public class AppointmentRecord implements IModel {
+    /** The service provided during the appointment. */
     private String service;
+    /** The list of Ids for prescriptions given to the patient during the appointment. */
     private ArrayList<String> prescriptionIds;
+    /** Additional notes about the appointment from the doctor. */
     private String notes;
 
-    /**
-     * Default constructor for AppointmentRecord.
-     */
-    AppointmentRecord() {
-    }
+    /** Default constructor for AppointmentRecord. Used for hydration*/
+    AppointmentRecord() {}
 
     /**
      * Constructs a new AppointmentRecord with the specified service, prescription IDs, and notes.
-     *
      * @param service the service provided during the appointment
      * @param prescriptionIds the list of prescription IDs given during the appointment
      * @param notes additional notes about the appointment
@@ -32,11 +29,10 @@ public class AppointmentRecord implements IModel {
         this.notes = notes;
     }
 
-    /**
-     * Returns a string representation of the AppointmentRecord.
-     *
-     * @return a string representation of the AppointmentRecord
-     */
+    public String getService() { return service; }
+    public ArrayList<String> getPrescriptions() { return prescriptionIds; }
+    public String getNotes() { return notes; }
+
     @Override
     public String toString() {
         return "AppointmentRecord{" +
@@ -46,38 +42,6 @@ public class AppointmentRecord implements IModel {
             '}';
     }
 
-    /**
-     * Gets the service provided during the appointment.
-     *
-     * @return the service provided during the appointment
-     */
-    public String getService() {
-        return service;
-    }
-
-    /**
-     * Gets the list of prescription IDs given during the appointment.
-     *
-     * @return the list of prescription IDs
-     */
-    public ArrayList<String> getPrescriptions() {
-        return prescriptionIds;
-    }
-
-    /**
-     * Gets additional notes about the appointment.
-     *
-     * @return additional notes about the appointment
-     */
-    public String getNotes() {
-        return notes;
-    }
-
-    /**
-     * Populates the AppointmentRecord's fields with data from the provided HashMap.
-     *
-     * @param data a HashMap containing the data to populate the AppointmentRecord's fields
-     */
     @Override
     public void hydrate(HashMap<String, String> data) {
         if (data.containsKey("service")) {
@@ -99,11 +63,6 @@ public class AppointmentRecord implements IModel {
         }
     }
 
-    /**
-     * Serializes the AppointmentRecord's fields into a HashMap.
-     *
-     * @return a HashMap containing the serialized data of the AppointmentRecord
-     */
     @Override
     public HashMap<String, String> serialize() {
         HashMap<String, String> data = new HashMap<>();
