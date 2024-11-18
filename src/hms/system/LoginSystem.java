@@ -16,6 +16,12 @@ import hms.user.repository.PatientRepository;
 import hms.user.repository.PharmacistRepository;
 import java.util.List;
 
+/**
+ * The login system for the Hospital Management System.
+ * This system allows users to login to the system and access their respective systems.
+ * Users can login as an Admin, Doctor, Patient, or Pharmacist.
+ * The next system to run is determined based on the user type.
+ */
 public class LoginSystem implements ISystem {
     /** Manager context */
     private final ManagerContext ctx;
