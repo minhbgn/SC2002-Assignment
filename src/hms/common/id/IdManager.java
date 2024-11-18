@@ -7,10 +7,10 @@ import hms.common.IModel;
  * <p>
  * The generated IDs are prefixed with a two-letter code that identifies the model type.
  * This is handled by the IdParser class.
- * @see IdParser
  * <p>
  * The suffix is a number that is unique to the model type (minimum 4 digits).
  * This is handled by the IdRegistry class.
+ * @see IdParser
  * @see IdRegistry
  */
 public class IdManager {
