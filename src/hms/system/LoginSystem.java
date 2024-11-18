@@ -19,11 +19,8 @@ import java.util.List;
 public class LoginSystem implements ISystem {
     /** Manager context */
     private final ManagerContext ctx;
-    /**
-     * The next system to run. This is set by the run method and returned to the caller.</p>
-     */
+    /** The next system to run. This is set by the run method and returned to the caller. */
     private ISystem nextSystem = null;
-
     /** The login menu */
     private final SimpleMenu menu;
 
@@ -40,11 +37,11 @@ public class LoginSystem implements ISystem {
     }
 
     /**
-     * Display the login menu and process user input. Users can login or exit the system. </p>
-     * @return The next system to run. </p>
-     * - If login is successful, the next system is determined based on the user type. </p>
-     * - If login fails, the next system is the current system. </p>
-     * - If the user chooses to exit, the next system is null. </p>
+     * Display the login menu and process user input. Users can login or exit the system.
+     * @return The next system to run.
+     * - If login is successful, the next system is determined based on the user type.
+     * - If login fails, the next system is the current system.
+     * - If the user chooses to exit, the next system is null.
      */
     @Override
     public ISystem run() {
@@ -63,9 +60,7 @@ public class LoginSystem implements ISystem {
         return nextSystem;
     }
 
-    /**
-     * Display the login prompt and authenticate the user, updating the next system accordingly. </p>
-     */
+    /** Display the login prompt and authenticate the user, updating the next system accordingly. */
     private void login() {
         String userId = Prompt.getStringInput("Enter your user ID: ");
         String password = Prompt.getStringInput("Enter your password: ");
