@@ -12,9 +12,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Manages the appointments in the system.
+ * The AppointmentManager class is responsible for managing appointments
+ * and related details.
+ * <p>
+ * It provides methods to get details, create appointments and update appointment details.
+ * The get methods can have different filters to get specific details, such as:
+ * - Appointments matching a SearchCriterion(s), which uses the appointment fields to filter
+ * - Whether a patient or doctor is free on a given timeslot, based on their appointments and busy timeslots
+ * - Which timeslots are free for a patient and doctor within a given timeslot, based on their appointments and busy timeslots
  */
 public class AppointmentManager extends AbstractManager<AppointmentRepository> {
+    /** Whether the manager has been initialized */
     private static boolean initialized = false;
     
     /**
@@ -27,6 +35,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
         repository = new AppointmentRepository(ctx);
     }
 
+    /** Initialize the repository through the parent class and register the class with the IdManager. */
     @Override
     public void initialize() {        
         if (!initialized) {
@@ -115,7 +124,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * @param patientId The ID of the patient.
      * @param doctorId The ID of the doctor.
      * @param timeslot The timeslot to check. It is assumed that the timeslot is within the working hours of the doctor.
-     * @return An array of Timeslot objects representing the free timeslots. It is guaranteed that the timeslots intersect with the given timeslot.
+     * @return An array of Timeslot objects representing the free timeslots within the given timeslot.
      */
     public Timeslot[] getAllFreeTimeslots(String patientId, String doctorId, Timeslot timeslot) {
         List<Timeslot> unavailableTimeslots = new ArrayList<>();
@@ -185,8 +194,8 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * Create a new appointment. The appointment is created with the status PENDING.
      * @param patientId The ID of the patient.
      * @param doctorId The ID of the doctor.
-     * @param date The date of the appointment.
-     * @return The created appointment, or null if the patient or doctor does not exist.
+     * @param timeslot The timeslot of the appointment.
+     * @return The created appointment, or null if the appointment could not be created.
      */
     public Appointment makeAppointment(String patientId, String doctorId, Timeslot timeslot){
         UserManager userManager = ctx.getManager(UserManager.class);
@@ -202,8 +211,6 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
 
     /**
      * Finish an appointment. The appointment status is set to FINISHED.
-     * If the prescription IDs are not valid (should not happen because of user input),
-     * this method will return false.
      * @param id The ID of the appointment.
      * @param service The service provided during the appointment.
      * @param prescriptionIds The IDs of the prescriptions given during the appointment.
@@ -225,9 +232,9 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
     }
 
     /**
-     * Update the date of an appointment. The status of the appointment will be set to PENDING.
+     * Update the timeslot of an appointment. The status of the appointment will be set to PENDING.
      * @param id The ID of the appointment.
-     * @param date The new date of the appointment.
+     * @param timeslot The new timeslot of the appointment.
      * @return True if the appointment was successfully updated, false otherwise.
      */
     public boolean updateTimeslot(String id, Timeslot timeslot){
@@ -254,7 +261,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * Update the status of an appointment. The current appointment status must be PENDING.
      * @param id The ID of the appointment.
      * @param status The new status of the appointment. Must be one of: ACCEPTED, REJECTED, CANCELLED
-     * @return True if the appointment was successfully cancelled, false otherwise.
+     * @return True if the operation was successful, false otherwise.
      */
     public boolean updateStatus(String id, AppointmentStatus status){
         if(!hasAppointment(id)) return false;
