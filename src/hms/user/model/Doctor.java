@@ -8,11 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * This class describes an account of a Doctor. 
- * The system will recognize accounts used by this class as doctors
- * DoctorService, the option of services for doctors, will be given to these users by the account
- */
 public class Doctor extends User {
     private static String DELIMITER = ";";
 
@@ -26,20 +21,10 @@ public class Doctor extends User {
         super(ctx);
     }
 
-    /**
-     * Get the busy time slots of a Doctor. 
-     * A patient will not be able to make an appointment on these busy time slots
-     * @return the list of time slots in which Doctor is unavailable
-     */
     public List<Timeslot> getBusyTimeslots() {
         return busyTimeslots;
     }
 
-    /**
-     * Add a new busy time slot to the list of busy time slot.
-     * A patient will not be able to make an appointment on these busy time slots
-     * @param timeslot The time slot in which the doctor is unavailable
-     */
     public void addBusyTimeslot(Timeslot timeslot){
         this.busyTimeslots.add(timeslot);
     }

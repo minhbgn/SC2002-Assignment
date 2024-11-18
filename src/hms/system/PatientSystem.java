@@ -16,9 +16,6 @@ import hms.ui.UserOption;
 import hms.user.model.Patient;
 import java.util.List;
 
-/**
- * This class generates relevant service options for the patients
- */
 public class PatientSystem implements ISystem {
     /**
      * The services available in this system. Contents:

@@ -3,9 +3,6 @@ package hms.user.model;
 import hms.common.IModel;
 import java.util.HashMap;
 
-/**
- * The account of an user. This account's id and password is used to log into the system
- */
 public class Account implements IModel {
     String id = "";
     String password = "password";
@@ -26,34 +23,18 @@ public class Account implements IModel {
         this.id = id;
     }
 
-    /**
-     * Getter for id attribute
-     * @return The id of the account
-     */
     public String getId() {
         return id;
     }
 
-    /**
-     * Getter for isActive attribute
-     * @return true if the account is active, false otherwise
-     */
     public boolean isActive() {
         return isActive;
     }
 
-    /**
-     * Set password for the account
-     * @param password The new password of the account
-     */
     public void setPassword(String password) {
         this.password = password;
     }
 
-    /**
-     * Set the state of the account to be active or not
-     * @param isActive true if the account is active, false otherwise
-     */
     public void setActive(boolean isActive) {
         this.isActive = isActive;
     }   

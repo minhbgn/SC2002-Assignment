@@ -3,9 +3,6 @@ package hms.inventory;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
 
-/**
- * Repository to hold InventoryItem
- */
 public class Inventory extends AbstractRepository<InventoryItem> {
 	/**
 	 * Constructor for Inventory

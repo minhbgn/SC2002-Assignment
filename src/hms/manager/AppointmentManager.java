@@ -57,8 +57,8 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
     }
 
     /**
-     * Check if a doctor is free on the given timeslot.
-     * @param doctorId The ID of the doctor.
+     * Check if a patient is free on the given timeslot.
+     * @param patientId The ID of the patient.
      * @param timeslot The timeslot to check.
      * @return True if the patient is free, false otherwise.
      */
@@ -185,7 +185,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
      * Create a new appointment. The appointment is created with the status PENDING.
      * @param patientId The ID of the patient.
      * @param doctorId The ID of the doctor.
-     * @param timeslot The date and time of the appointment.
+     * @param date The date of the appointment.
      * @return The created appointment, or null if the patient or doctor does not exist.
      */
     public Appointment makeAppointment(String patientId, String doctorId, Timeslot timeslot){
@@ -227,7 +227,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
     /**
      * Update the date of an appointment. The status of the appointment will be set to PENDING.
      * @param id The ID of the appointment.
-     * @param timeslot The new date and time of the appointment.
+     * @param date The new date of the appointment.
      * @return True if the appointment was successfully updated, false otherwise.
      */
     public boolean updateTimeslot(String id, Timeslot timeslot){

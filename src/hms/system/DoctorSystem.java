@@ -15,9 +15,6 @@ import hms.ui.UserOption;
 import hms.user.model.Doctor;
 import java.util.List;
 
-/**
- * This class generates relevant service options for the doctors
- */
 public class DoctorSystem implements ISystem {
     /**
      * The services available in this system. Contents:
@@ -32,11 +29,6 @@ public class DoctorSystem implements ISystem {
     /** The next system to run. */
     private ISystem nextSystem = null;
 
-    /**
-     * Create a new doctor system
-     * @param ctx The manager context
-     * @param doctor The doctor
-     */
     public DoctorSystem(ManagerContext ctx, Doctor doctor) {
         this.ctx = ctx;
         this.menuNav = new MenuNavigator();

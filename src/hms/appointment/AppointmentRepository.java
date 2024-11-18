@@ -24,7 +24,7 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
      *
      * @param patientId the ID of the patient
      * @param doctorId the ID of the doctor
-     * @param timeslot the time slot of the appointment
+     * @param timeslot the timeslot of the appointment
      * @return the created Appointment
      */
     public Appointment create(String patientId, String doctorId, Timeslot timeslot) {
@@ -33,18 +33,8 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
         return appointment;
     }
 
-    /**
-     * Update the time slot of an appointment to a new date and time
-     * @param id The id of the appointment whose time slot will be changed
-     * @param timeslot The new time slot which the appointment will be set to
-     */
     public void updateTimeslot(String id, Timeslot timeslot) { get(id).setTimeslot(timeslot); }
 
-    /**
-     * Update the status of an appointment
-     * @param id The id of the appointment whose status will be updated
-     * @param status The new status of the appointment
-     */
     public void updateStatus(String id, AppointmentStatus status) { get(id).setStatus(status); }
 
     /**

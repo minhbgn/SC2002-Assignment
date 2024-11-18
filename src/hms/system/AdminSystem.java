@@ -16,9 +16,6 @@ import hms.ui.UserOption;
 import hms.user.model.Admin;
 import java.util.List;
 
-/**
- * This class generates relevant service options for the administrators
- */
 public class AdminSystem implements ISystem {
     private final ManagerContext ctx;
     
@@ -36,9 +33,9 @@ public class AdminSystem implements ISystem {
     private final IService[] services;
 
     /**
-     * Create a new admin system
+     * Create a new patient system
      * @param ctx The manager context
-     * @param admin The administrator
+     * @param patient The patient
      */
     public AdminSystem(ManagerContext ctx, Admin admin) {
         this.ctx = ctx;
