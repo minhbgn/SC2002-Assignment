@@ -21,6 +21,7 @@ import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Service to view appointment records */
 public class ViewAppointmentRecordsServices implements IService {
     /** The user using this service */
     private final ManagerContext ctx;
@@ -28,14 +29,21 @@ public class ViewAppointmentRecordsServices implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
+    /** Whether to show the prescription update option */
     public boolean hasPrescriptionUpdateOption = false;
 
+    /** The selected appointment */
     private Appointment selected;
 
+    /**
+     * Create a new instance of the service
+     * @param ctx The user using this service
+     */
     public ViewAppointmentRecordsServices(ManagerContext ctx){
         this.ctx = ctx;
     }
 
+    /** Handle the prescription update */
     private void handleRecordPrescriptionUpdate() {
         ArrayList<String> prescriptionIds = selected.getRecord().getPrescriptions();
 
@@ -65,6 +73,11 @@ public class ViewAppointmentRecordsServices implements IService {
         menuNav.getCurrentMenu().title = getRecordInfoDisplay(selected);
     }
 
+    /**
+     * Get the display information for the appointment record
+     * @param appointment The appointment
+     * @return The display information
+     */
     private String getRecordInfoDisplay(Appointment appointment){
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -107,6 +120,12 @@ public class ViewAppointmentRecordsServices implements IService {
         return recordInfo;
     }
 
+    /**
+     * Handle the selection of an appointment record.
+     * Note: The selector still displays the appointment list,
+     * so the selection actually returns the appointment.
+     * @param appointment The selected appointment
+     */
     private void onAppointmentRecordSelect(Appointment appointment){
         selected = appointment;
 
@@ -120,6 +139,10 @@ public class ViewAppointmentRecordsServices implements IService {
         }
     }
 
+    /**
+     * Get the menu for the service
+     * @return The menu
+     */
     private AbstractMenu getMenu() {
         Appointment[] appointments = ctx.getManager(AppointmentManager.class)
             .getAppointments(List.of(new SearchCriterion<>(Appointment::getStatus, AppointmentStatus.FINISHED)))
