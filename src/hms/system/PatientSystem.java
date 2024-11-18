@@ -68,6 +68,10 @@ public class PatientSystem implements ISystem {
         menuNav.addMenu(getMenu());
     }
 
+    /**
+     * Get the menu for the patient system
+     * @return The menu
+     */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(
             new UserOption("View Profile", () -> services[0].execute(menuNav)),
@@ -79,6 +83,10 @@ public class PatientSystem implements ISystem {
         ));
     }
 
+    /**
+     * Run the patient system
+     * @return The next system to run
+     */
     @Override
     public ISystem run() {
         menuNav.display(true);

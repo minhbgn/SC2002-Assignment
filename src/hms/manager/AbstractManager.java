@@ -50,7 +50,6 @@ public abstract class AbstractManager<T extends AbstractRepository<?>> implement
     @Override
     public void save(){
         CSVFileHandler csvFileHandler = new CSVFileHandler();
-
         csvFileHandler.write(filepath, repository.serialize());
     }
 }

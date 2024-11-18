@@ -40,6 +40,11 @@ public class Patient extends User {
       
     @Override
     public String toString() {
+        /**
+         * Returns a string representation of the Patient.
+         *
+         * @return a string representation of the Patient
+         */
         return "Patient{" +
                 "name='" + this.name + '\'' +
                 ", isMale=" + this.isMale +
@@ -50,6 +55,11 @@ public class Patient extends User {
 
     @Override
     public void hydrate(HashMap<String, String> data) {
+        /**
+         * Populates the Patient's fields with data from a HashMap.
+         *
+         * @param data a HashMap containing the data to populate the Patient's fields
+         */
         super.hydrate(data);
         this.bloodType = data.get("bloodType");
         this.allergies = data.get("allergies");
@@ -59,6 +69,11 @@ public class Patient extends User {
 
     @Override
     public HashMap<String, String> serialize() {
+        /**
+         * Serializes the Patient's fields into a HashMap.
+         *
+         * @return a HashMap containing the serialized data of the Patient
+         */
         HashMap<String, String> data = super.serialize();
         data.put("bloodType", this.bloodType);
         data.put("allergies", this.allergies);

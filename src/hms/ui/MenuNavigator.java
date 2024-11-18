@@ -68,11 +68,20 @@ public class MenuNavigator extends AbstractMenu {
         }
     }
 
+    /**
+     * Check if the menu has a specific option
+     * @param key the key of the option
+     * @return true if the option exists, false otherwise
+     */
     @Override
     public boolean hasOption(String key) {
         return options.containsKey(key) || history.peek().hasOption(key);
     }
 
+    /**
+     * Execute a specific option
+     * @param key the key of the option to execute
+     */
     @Override
     public void executeOption(String key) {
         if (options.containsKey(key)) {
@@ -82,6 +91,10 @@ public class MenuNavigator extends AbstractMenu {
         }
     }
 
+    /**
+     * Display the current menu
+     * @param showOptions whether to show the options or not
+     */
     @Override
     public void display(boolean showOptions) {
         history.peek().display(false);

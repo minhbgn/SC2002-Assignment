@@ -20,6 +20,9 @@ import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service class to view appointment details.
+ */
 public class ViewAppointmentDetailsService implements IService{
     private final UserOption cancelAppointmentOption = new UserOption("Cancel Appointment", this::handleCancelAppointment);
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
@@ -44,11 +47,20 @@ public class ViewAppointmentDetailsService implements IService{
 
     private MenuNavigator menuNav;
 
+    /**
+     * Constructor for ViewAppointmentDetailsService.
+     * 
+     * @param ctx the context for accessing managers and repositories
+     * @param appointment the appointment whose details are to be viewed
+     */
     public ViewAppointmentDetailsService(ManagerContext ctx, Appointment appointment){
         this.ctx = ctx;
         this.appointment = appointment;
     }
 
+    /**
+     * Handles the process of canceling an appointment.
+     */
     private void handleCancelAppointment() {
         ctx.getManager(AppointmentManager.class)
             .updateStatus(appointment.getId(), AppointmentStatus.CANCELLED);
@@ -58,6 +70,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
 
+    /**
+     * Handles the process of completing an appointment.
+     */
     private void handleCompleteAppointment() {
         String notes = Prompt.getStringInput("Enter notes for the appointment: ");
         notes = notes.replace("\n", " ");
@@ -94,6 +109,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
     
+    /**
+     * Handles the process of rescheduling an appointment.
+     */
     private void handleRescheduleAppointment() {
         QueryFreeTimeslotService freeTimeslotService = new QueryFreeTimeslotService(ctx, (timeslot) -> {
             // Update the timeslot of the appointment
@@ -109,10 +127,11 @@ public class ViewAppointmentDetailsService implements IService{
 
         freeTimeslotService.bindDoctor(appointment.getDoctorId());
         freeTimeslotService.bindUser(appointment.getPatientId());
-
-        freeTimeslotService.execute(menuNav);
     }
 
+    /**
+     * Handles the process of resolving an appointment.
+     */
     private void handleResolveAppointment() {
         boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
 
@@ -126,6 +145,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
 
+    /**
+     * Handles the process of updating a patient's medical record.
+     */
     private void handleUpdatePatientMedicalRecord() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -157,6 +179,9 @@ public class ViewAppointmentDetailsService implements IService{
         handleViewPatientMedicalRecords(); // Return to the patient medical records menu
     }
 
+    /**
+     * Handles the process of viewing the patient's information.
+     */
     private void handleViewPatientInfo() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -174,6 +199,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(patientInfoMenu);
     }
 
+    /**
+     * Handles the process of viewing and potentially updating the patient's medical records.
+     */
     private void handleViewPatientMedicalRecords() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -181,15 +209,21 @@ public class ViewAppointmentDetailsService implements IService{
 
         String recordInfo = "Medical Records of " + p.name + ":\n\n" +
             "Blood Type: " + p.bloodType + "\n" +
-            "Allergies: " + p.allergies + "\n" +
-            "Medications: " + p.medicalHistory + "\n" +
-            "Conditions: " + p.currentMedication;
+            "Allergies: " + p.allergies + "\n";
 
-        SimpleMenu recordMenu = new SimpleMenu(recordInfo, List.of(updatePatientMedicalRecordOption));
+        if(Prompt.getBooleanInput("Update current medication? (y/n): ")){
+            System.out.println("Current data: " + p.currentMedication);
+            p.currentMedication = Prompt.getStringInput("Enter the updated current medication: ");
+        }
 
-        menuNav.addMenu(recordMenu);
+        // Update the entire menu
+        menuNav.popMenu();
+        handleViewPatientMedicalRecords(); // Return to the patient medical records menu
     }
 
+    /**
+     * Handles the process of viewing the records of an appointment.
+     */
     private void handleViewRecords() {
         String recordInfo = String.format(
             "Notes: %s\nServices: %s",
@@ -219,33 +253,58 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(recordMenu);
     }
 
-    private AbstractMenu getMenu(){
+    /**
+     * Adds the appointment record information to the menu.
+     * 
+     * @param appointment the appointment whose record information is to be displayed
+     * @param ctx the context for accessing managers and repositories
+     * @param menuNav the menu navigator for adding menus
+     */
+    private void addRecordInfoToMenu(Appointment appointment, Context ctx, MenuNavigator menuNav) {
+        ArrayList<String> prescriptions = appointment.getRecord().getPrescriptions();
+
+        if(!prescriptions.isEmpty()) {
+            String recordInfo = "\nPrescriptions: ";
+            PrescriptionManager prescriptionManager = ctx.getManager(PrescriptionManager.class);
+
+            for(String prescription : prescriptions) {
+                Prescription p = prescriptionManager.getPrescriptions(List.of(
+                    new SearchCriterion<>(Prescription::getId, prescription)
+                )).get(0);
+
+                if(p != null) {
+                    recordInfo += "\n\t" + p;
+                }
+            }
+
+            SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+            menuNav.addMenu(recordMenu);
+        }
+    }
+
+    /**
+     * Retrieves the menu for viewing appointment details.
+     * 
+     * @return the menu for viewing appointment details
+     */
+    private AbstractMenu getMenu() {
         SimpleMenu appointmentMenu = new SimpleMenu(getAppointmentInfoDisplay(), null);
-        
+
         if(appointment.getStatus() == AppointmentStatus.ACCEPTED) {
             if (hasCancelAppointmentOption) appointmentMenu.addOption(cancelAppointmentOption);
             if (hasCompleteAppointmentOption) appointmentMenu.addOption(completeAppointmentOption);
             if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
             if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
-            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
-        }
-
-        if(appointment.getStatus() == AppointmentStatus.PENDING) {
-            if (hasCancelAppointmentOption) appointmentMenu.addOption(cancelAppointmentOption);
-            if (hasRescheduleAppointmentOption) appointmentMenu.addOption(rescheduleAppointmentOption);
-            if (hasResolveAppointmentOption) appointmentMenu.addOption(resolveAppointmentOption);
-            if (hasViewPatientInfoOption) appointmentMenu.addOption(viewPatientInfoOption);
-            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
-        }
-        
-        if(appointment.getStatus() == AppointmentStatus.FINISHED) {
-            if (hasViewRecordsOption) appointmentMenu.addOption(viewRecordsOption);
-            if (hasViewPatientMedicalRecordOption) appointmentMenu.addOption(viewPatientMedicalRecordsOption);
         }
 
         return appointmentMenu;
     }
 
+    /**
+     * Executes the service by adding the appointment details menu to the navigator.
+     * 
+     * @param menuNav the menu navigator for adding menus
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;
@@ -254,7 +313,8 @@ public class ViewAppointmentDetailsService implements IService{
     }
 
     /**
-     * Utility method to get the display string for an appointment
+     * Utility method to get the display string for an appointment.
+     * 
      * @return The display string for the appointment
      */
     private String getAppointmentInfoDisplay(){
@@ -272,5 +332,32 @@ public class ViewAppointmentDetailsService implements IService{
             appointment.getTimeslot().getEndTimeString(),
             appointment.getStatus().toString()
         );
+    }
+
+    /**
+     * Handles the process of viewing appointment details.
+     */
+    public void viewAppointmentDetails() {
+        // Existing code...
+
+        while (true) {
+            // Existing code...
+
+            Prescription p = prescriptionManager.createPrescription(medicalName, quantity);
+
+            if (p == null) {
+                System.out.println("Prescription not found");
+                continue;
+            }
+
+            prescriptionIds.add(p.getId());
+        }
+
+        ctx.getManager(AppointmentManager.class)
+            .resolveAppoinment(appointment.getId(), service, prescriptionIds, notes);
+
+        // Update the entire menu
+        menuNav.popMenu();
+        menuNav.addMenu(getMenu());
     }
 }

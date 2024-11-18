@@ -26,10 +26,17 @@ public class ViewProfileService implements IService {
     /** Profile menu, saved to allow for easy updating */
     private SimpleMenu profileMenu;
 
+    /**
+     * Constructor to initialize the ViewProfileService with a user.
+     * @param user The user whose profile is to be viewed.
+     */
     public ViewProfileService(User user) {
         this.user = user;
     }
 
+    /**
+     * Handles updating the date of birth of the user.
+     */
     private void handleUpdateDob() {
         Date newDob = Prompt.getDateInput("Enter your new date of birth: ");
         user.dob = newDob;
@@ -38,6 +45,9 @@ public class ViewProfileService implements IService {
         profileMenu.title = getProfileInfo();
     }
 
+    /**
+     * Handles updating the contact information of the user.
+     */
     private void handleUpdateContact() {
         String newContact = Prompt.getStringInput("Enter your new contact info: ");
         user.contact = newContact;
@@ -46,6 +56,9 @@ public class ViewProfileService implements IService {
         profileMenu.title = getProfileInfo();
     }
 
+    /**
+     * Handles changing the password of the user.
+     */
     private void handleChangePassword() {
         String oldPassword = Prompt.getStringInput("Enter your old password: ");
         if(!user.getAccount().authenticate(oldPassword)){
@@ -79,8 +92,8 @@ public class ViewProfileService implements IService {
     }
 
     /**
-     * Utility method to get the profile information
-     * @return The profile information
+     * Utility method to get the profile information.
+     * @return The profile information.
      */
     private String getProfileInfo() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -98,6 +111,10 @@ public class ViewProfileService implements IService {
         );
     }
 
+    /**
+     * Creates and returns the profile menu.
+     * @return The profile menu.
+     */
     private AbstractMenu getMenu() {
         profileMenu = new SimpleMenu(getProfileInfo(), List.of(
             updateContactOption, updateDobOption, changePasswordOption
@@ -106,6 +123,10 @@ public class ViewProfileService implements IService {
         return profileMenu;
     }
 
+    /**
+     * Executes the service by adding the profile menu to the menu navigator.
+     * @param menuNav The menu navigator to add the profile menu to.
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         menuNav.addMenu(getMenu());

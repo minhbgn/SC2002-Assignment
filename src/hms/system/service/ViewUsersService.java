@@ -32,14 +32,24 @@ public class ViewUsersService implements IService {
         this.admin = admin;
     }
 
+    /**
+     * Disables the selected user's account.
+     */
     private void handleDisableAccount() {
         selected.getAccount().setActive(false);
     }
 
+    /**
+     * Enables the selected user's account.
+     */
     private void handleEnableAccount() {
         selected.getAccount().setActive(true);
     }
 
+    /**
+     * Handles the selection of a user.
+     * @param user The user to be selected.
+     */
     private void handleUserSelect(User user) {
         selected = user;
 
@@ -48,9 +58,24 @@ public class ViewUsersService implements IService {
         menuNav.addMenu(menu);
     }
 
+    /**
+     * Handles the viewing of patients.
+     */
     private void handleViewPatients() { handleUserSelect(Patient.class, size -> new Patient[size]); }
+
+    /**
+     * Handles the viewing of doctors.
+     */
     private void handleViewDoctors() { handleUserSelect(Doctor.class, size -> new Doctor[size]); }
+
+    /**
+     * Handles the viewing of pharmacists.
+     */
     private void handleViewPharmacists() { handleUserSelect(Pharmacist.class, size -> new Pharmacist[size]); }
+
+    /**
+     * Handles the viewing of admins.
+     */
     private void handleViewAdmins() { handleUserSelect(Admin.class, size -> new Admin[size]); }
 
     // arraySupplier is necessary to create an array of the correct type
@@ -77,6 +102,10 @@ public class ViewUsersService implements IService {
         menuNav.addMenu(selector);
     }
 
+    /**
+     * Creates and returns the main menu for selecting user types.
+     * @return The main menu.
+     */
     private AbstractMenu getMenu() {
         SimpleMenu menu = new SimpleMenu("Which user type would you like to view?", null);
 
@@ -88,6 +117,10 @@ public class ViewUsersService implements IService {
         return menu;
     }
 
+    /**
+     * Executes the service by adding the main menu to the menu navigator.
+     * @param menuNav The menu navigator.
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;

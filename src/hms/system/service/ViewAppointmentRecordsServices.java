@@ -32,10 +32,17 @@ public class ViewAppointmentRecordsServices implements IService {
 
     private Appointment selected;
 
+    /**
+     * Constructor to initialize the service with the given context.
+     * @param ctx The manager context.
+     */
     public ViewAppointmentRecordsServices(ManagerContext ctx){
         this.ctx = ctx;
     }
 
+    /**
+     * Handles the update of a prescription record.
+     */
     private void handleRecordPrescriptionUpdate() {
         ArrayList<String> prescriptionIds = selected.getRecord().getPrescriptions();
 
@@ -65,6 +72,11 @@ public class ViewAppointmentRecordsServices implements IService {
         menuNav.getCurrentMenu().title = getRecordInfoDisplay(selected);
     }
 
+    /**
+     * Generates a display string for the given appointment record.
+     * @param appointment The appointment to display.
+     * @return The formatted string containing appointment details.
+     */
     private String getRecordInfoDisplay(Appointment appointment){
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -107,6 +119,10 @@ public class ViewAppointmentRecordsServices implements IService {
         return recordInfo;
     }
 
+    /**
+     * Handles the selection of an appointment record.
+     * @param appointment The selected appointment.
+     */
     private void onAppointmentRecordSelect(Appointment appointment){
         selected = appointment;
 
@@ -120,6 +136,10 @@ public class ViewAppointmentRecordsServices implements IService {
         }
     }
 
+    /**
+     * Generates the menu for viewing appointment records.
+     * @return The generated menu.
+     */
     private AbstractMenu getMenu() {
         Appointment[] appointments = ctx.getManager(AppointmentManager.class)
             .getAppointments(List.of(new SearchCriterion<>(Appointment::getStatus, AppointmentStatus.FINISHED)))
@@ -139,6 +159,10 @@ public class ViewAppointmentRecordsServices implements IService {
         return viewer;
     }
     
+    /**
+     * Executes the service and adds the menu to the navigator.
+     * @param menuNav The menu navigator.
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;

@@ -64,18 +64,4 @@ public abstract class AbstractRepository<T extends IModel> {
             .filter(model -> criteria == null || criteria.stream().allMatch(criterion -> criterion.match(model)))
             .collect(Collectors.toList());
     }
-
-    /**
-     * Retrieves the model with the specified ID.
-     *
-     * @param id the ID of the model
-     * @return the model with the specified ID, or null if not found
-     */
-    public abstract T get(String id);
-    
-    /**
-     * Create an empty model to be hydrated later
-     * @return the empty object
-     */
-    public abstract T createEmptyModel();
 }

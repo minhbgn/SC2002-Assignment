@@ -16,16 +16,32 @@ public abstract class UserRepository<T extends User> extends AbstractRepository<
         super(managerContext);
     }
 
+    /**
+     * Activates the user with the specified ID.
+     *
+     * @param id The ID of the user to activate.
+     */
     public void activateUser(String id) {
         models.stream().filter(user -> user.getAccount().getId().equals(id))
                        .forEach(user -> user.getAccount().setActive(true));
     }
 
+    /**
+     * Deactivates the user with the specified ID.
+     *
+     * @param id The ID of the user to deactivate.
+     */
     public void deactivateUser(String id) {
         models.stream().filter(user -> user.getAccount().getId().equals(id))
                        .forEach(user -> user.getAccount().setActive(false));
     }
 
+    /**
+     * Retrieves the user with the specified ID.
+     *
+     * @param id The ID of the user to retrieve.
+     * @return The user with the specified ID, or null if no such user exists.
+     */
     @Override
     public T get(String id) {
         return findWithFilters(List.of(

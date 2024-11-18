@@ -38,6 +38,13 @@ public class CSVFileHandler {
         return data;
     }
 
+    /**
+     * Parses a line of CSV and returns the values as an array of strings.
+     * Handles quoted fields and escaped quotes within quoted fields.
+     *
+     * @param line the CSV line to parse
+     * @return an array of strings representing the values in the CSV line
+     */
     private String[] parseCSVLine(String line) {
         List<String> values = new ArrayList<>();
         StringBuilder current = new StringBuilder();

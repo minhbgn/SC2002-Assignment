@@ -31,6 +31,11 @@ public class ViewUpcomingAppointmentService implements IService{
     private int upcomingDays;
     private MenuNavigator menuNav;
 
+    /**
+     * Constructor for ViewUpcomingAppointmentService.
+     * @param ctx The manager context.
+     * @param doctor The doctor for whom the service is being created.
+     */
     public ViewUpcomingAppointmentService(ManagerContext ctx, Doctor doctor){
         this.ctx = ctx;
         this.doctor = doctor;
@@ -40,6 +45,9 @@ public class ViewUpcomingAppointmentService implements IService{
         );
     }
 
+    /**
+     * Handles the addition of a busy timeslot for the doctor.
+     */
     private void handleAddBusyTimeslot(){
         Date startTime = Prompt.getDetailedDateInput("When are you not available? (Start Time): ");
         Date endTime = Prompt.getDetailedDateInput("When will you be available again? (End Time): ");
@@ -49,6 +57,9 @@ public class ViewUpcomingAppointmentService implements IService{
         doctor.addBusyTimeslot(busyTimeslot);
     }
 
+    /**
+     * Handles the removal of a busy timeslot for the doctor.
+     */
     private void handleRemoveBusyTimeslot(){
         List<Timeslot> busyTimeslots = doctor.getBusyTimeslots();
 
@@ -65,6 +76,9 @@ public class ViewUpcomingAppointmentService implements IService{
         menuNav.addMenu(selector);
     }
 
+    /**
+     * Handles the viewing of available timeslots for the doctor.
+     */
     private void handleViewAvailableTimeslots(){
         List<Timeslot> availableTimeslots = new ArrayList<>();
 
@@ -86,6 +100,10 @@ public class ViewUpcomingAppointmentService implements IService{
         menuNav.addMenu(viewer);
     }
 
+    /**
+     * Handles the selection of an appointment.
+     * @param appointment The selected appointment.
+     */
     private void onAppointmentSelected(Appointment appointment){
         ViewAppointmentDetailsService service = new ViewAppointmentDetailsService(ctx, appointment);
 
@@ -97,6 +115,10 @@ public class ViewUpcomingAppointmentService implements IService{
         service.execute(menuNav);
     }
 
+    /**
+     * Creates and returns the menu for viewing upcoming appointments.
+     * @return The menu for viewing upcoming appointments.
+     */
     private AbstractMenu getMenu(){
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class).getAppointments(defaultCriteria);
 
@@ -116,6 +138,10 @@ public class ViewUpcomingAppointmentService implements IService{
         return selector;
     }
 
+    /**
+     * Executes the service by displaying the menu for viewing upcoming appointments.
+     * @param menuNav The menu navigator.
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         this.menuNav = menuNav;
