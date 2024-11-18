@@ -1,7 +1,5 @@
 /**
- * Service layer classes.
- * <p>
- * This package contains the boundary-manager classes for the system.
+ * This package contains the boundary-manager classes called services.
  * @see IService
  */
 package hms.system.service;
