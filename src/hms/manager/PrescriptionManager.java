@@ -7,12 +7,9 @@ import hms.prescription.PrescriptionRepository;
 import java.util.List;
 
 /**
- * The PrescriptionManager class manages the prescriptions in the system.
- * It provides methods to create, update, and retrieve prescriptions.
- * The get methods can be used to retrieve prescriptions based on certain criteria.
+ * Manager class for the Prescription.
  */
 public class PrescriptionManager extends AbstractManager<PrescriptionRepository> {
-    /** Whether the PrescriptionManager has been initialized. */
     private static boolean initialized = false;
     
     /**

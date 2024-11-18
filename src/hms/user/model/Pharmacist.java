@@ -4,7 +4,11 @@ import hms.common.id.IdManager;
 import hms.manager.ManagerContext;
 import java.util.*;
 
-/** Represents a pharmacist in the hospital management system. */
+/**
+ * This class describes an account of a Pharmacist. 
+ * The system will recognize accounts used by this class as pharmacists
+ * PharmacistService, the option of services for doctors, will be given to these users by the account
+ */
 public class Pharmacist extends User {
 	/**
 	 * Default constructor for Pharmacist.
@@ -27,6 +31,10 @@ public class Pharmacist extends User {
         this.account = new Account(IdManager.generateId(Pharmacist.class));
     }
 
+    /**
+     * Function to print out Pharmacist
+     * @return String representation of the Pharmacist
+     */
     @Override
     public String toString() {
         return super.toString()+"\n User type: [Pharmacist]";

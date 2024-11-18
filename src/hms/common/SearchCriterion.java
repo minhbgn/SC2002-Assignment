@@ -9,9 +9,7 @@ import java.util.function.Function;
  * @param <T> the type of the value to be matched
  */
 public class SearchCriterion <S, T> {
-    /** The function to retrieve the value from the object. */
     private final Function<S, T> getter;
-    /** The value to be matched. */
     private final T value;
 
     /**

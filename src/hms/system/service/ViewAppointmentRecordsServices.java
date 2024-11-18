@@ -21,7 +21,6 @@ import hms.user.repository.PatientRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Service to view appointment records */
 public class ViewAppointmentRecordsServices implements IService {
     /** The user using this service */
     private final ManagerContext ctx;
@@ -29,21 +28,21 @@ public class ViewAppointmentRecordsServices implements IService {
     /** Bound menu navigator */
     private MenuNavigator menuNav;
 
-    /** Whether to show the prescription update option */
     public boolean hasPrescriptionUpdateOption = false;
 
-    /** The selected appointment */
     private Appointment selected;
 
     /**
-     * Create a new instance of the service
-     * @param ctx The user using this service
+     * Constructor to initialize the service with the given context.
+     * @param ctx The manager context.
      */
     public ViewAppointmentRecordsServices(ManagerContext ctx){
         this.ctx = ctx;
     }
 
-    /** Handle the prescription update */
+    /**
+     * Handles the update of a prescription record.
+     */
     private void handleRecordPrescriptionUpdate() {
         ArrayList<String> prescriptionIds = selected.getRecord().getPrescriptions();
 
@@ -74,9 +73,9 @@ public class ViewAppointmentRecordsServices implements IService {
     }
 
     /**
-     * Get the display information for the appointment record
-     * @param appointment The appointment
-     * @return The display information
+     * Generates a display string for the given appointment record.
+     * @param appointment The appointment to display.
+     * @return The formatted string containing appointment details.
      */
     private String getRecordInfoDisplay(Appointment appointment){
         Patient p = ctx.getManager(UserManager.class)
@@ -121,10 +120,8 @@ public class ViewAppointmentRecordsServices implements IService {
     }
 
     /**
-     * Handle the selection of an appointment record.
-     * Note: The selector still displays the appointment list,
-     * so the selection actually returns the appointment.
-     * @param appointment The selected appointment
+     * Handles the selection of an appointment record.
+     * @param appointment The selected appointment.
      */
     private void onAppointmentRecordSelect(Appointment appointment){
         selected = appointment;
@@ -140,8 +137,8 @@ public class ViewAppointmentRecordsServices implements IService {
     }
 
     /**
-     * Get the menu for the service
-     * @return The menu
+     * Generates the menu for viewing appointment records.
+     * @return The generated menu.
      */
     private AbstractMenu getMenu() {
         Appointment[] appointments = ctx.getManager(AppointmentManager.class)

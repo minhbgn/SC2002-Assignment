@@ -3,10 +3,14 @@ package hms.prescription;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
 
-/** Repository class for managing prescriptions in the hospital management system. */
-public class PrescriptionRepository extends AbstractRepository<Prescription> {    
+/**
+ * Repository class for managing prescriptions in the hospital management system.
+ */
+public class PrescriptionRepository extends AbstractRepository<Prescription> {
+    
     /**
      * Constructs a new PrescriptionRepository with the specified ManagerContext.
+     *
      * @param ctx the ManagerContext to be used by the PrescriptionRepository
      */
     public PrescriptionRepository(ManagerContext ctx) {
@@ -15,9 +19,10 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
 
     /**
      * Creates a new Prescription with the specified medical name and quantity.
+     *
      * @param medicalName the name of the medication
      * @param quantity the quantity of the medication
-     * @return The created Prescription
+     * @return the created Prescription
      */
     public Prescription create(String medicalName, int quantity){
         Prescription prescription = new Prescription(medicalName, quantity);
@@ -27,6 +32,7 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
 
     /**
      * Updates the dispensed status of the Prescription with the specified ID.
+     *
      * @param id the ID of the Prescription
      * @param isDispensed the new dispensed status of the Prescription
      */
@@ -37,6 +43,7 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
     
     /**
      * Retrieves the Prescription with the specified ID.
+     *
      * @param id the ID of the Prescription
      * @return the Prescription with the specified ID, or null if not found
      */
@@ -50,6 +57,11 @@ public class PrescriptionRepository extends AbstractRepository<Prescription> {
         return null;
     }
 
+    /**
+     * Creates an empty Prescription model.
+     *
+     * @return a new empty Prescription
+     */
     @Override
     public Prescription createEmptyModel() {
         return new Prescription();

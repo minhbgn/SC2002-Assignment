@@ -3,13 +3,18 @@ package hms.inventory;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
 
-/** Repository class for managing inventory items in the hospital management system. */
+/**
+ * Repository to hold InventoryItem
+ */
 public class Inventory extends AbstractRepository<InventoryItem> {
 	/**
-     * Constructs a new Inventory with the specified ManagerContext.
-     * @param ctx the ManagerContext to be used by the Inventory
+	 * Constructor for Inventory
+	 * Generate a repository (ArrayList) of type InventoryItem
+	 * @param ctx The Manager Context: is used to let other subjects access this
 	 */
-    public Inventory(ManagerContext ctx) { super(ctx); }
+    public Inventory(ManagerContext ctx) {
+        super(ctx);
+    }
 
     /**
      * Create an InventoryItem inside the Inventory
@@ -67,6 +72,11 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
     
     @Override
+    /**
+     * Find the item inside inventory
+     * @param id The id (name) of the item
+     * @return the object instance of the item inside the inventory
+     */
     public InventoryItem get(String id) {
         for (InventoryItem result : super.models) {
         	if (result.getMedicalName().equals(id)) {
@@ -78,6 +88,9 @@ public class Inventory extends AbstractRepository<InventoryItem> {
     }
 
     @Override
+    /**
+     * @return an empty item to be hydrated with data later
+     */
     public InventoryItem createEmptyModel() {
     	return new InventoryItem();
     }

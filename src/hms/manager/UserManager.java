@@ -19,18 +19,15 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * The UserManager class manages the all users in the system.
- * It provides methods to authenticate users, check if a user exists,
- * and get the repository of a user type
+ * Manager class for all user types.
  */
 public class UserManager implements IManager {
-    /** Whether the UserManager has been initialized. */
     private boolean initialized = false;
-    /** Maps the repository class to the file path */
+    // Maps the repository class to the file path
     private final HashMap<Class<?>, String> repoFilepaths = new HashMap<>();
-    /** Maps the repository class to the repository instance */
+    // Maps the repository class to the repository instance
     private final HashMap<Class<?>, UserRepository<?>> repositories = new HashMap<>();
-    /** Maps the user class to the repository instance */
+    // Maps the user class to the repository instance
     private final HashMap<Class<?>, UserRepository<?>> userToRepositories = new HashMap<>();
 
     /**

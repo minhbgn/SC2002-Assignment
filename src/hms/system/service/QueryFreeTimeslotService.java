@@ -24,23 +24,23 @@ public class QueryFreeTimeslotService implements IService {
     /** The minimum duration of an appointment in minutes */
     private static final int MINIMUM_APPOINTMENT_DURATION_IN_MINUTES = 30;
     /**
-     * The start of the schedule period in days from now.
-     * <p>
+     * The start of the schedule period in days from now. </p>
+     * 
      * The schedule period is the number of days from now
-     * that the user can schedule an appointment.
-     * <p>
+     * that the user can schedule an appointment. </p>
+     * 
      * For example, if the schedule period start is 7,
-     * the user can schedule an appointment starting from 7 days from now.
+     * the user can schedule an appointment starting from 7 days from now. </p>
      */
     private static final int SCHEDULE_PERIOD_START = 7;
     /**
-     * The end of the schedule period in days from now.
-     * <p>
+     * The end of the schedule period in days from now. </p>
+     * 
      * The schedule period is the number of days from now
-     * that the user can schedule an appointment.
-     * <p>
+     * that the user can schedule an appointment. </p>
+     * 
      * For example, if the schedule period end is 30,
-     * the user can schedule an appointment up to 30 days from now.
+     * the user can schedule an appointment up to 30 days from now. </p>
      */
     private static final int SCHEDULE_PERIOD_END = 30;
 
@@ -72,15 +72,9 @@ public class QueryFreeTimeslotService implements IService {
         this.onTimeslotSelect = onTimeslotSelect;
     }
 
-    /**
-     * Bind the doctor id to the service
-     * @param doctorId The doctor id to bind
-     */
+    /** Bind the doctor id to the service */
     public void bindDoctor(String doctorId) { this.doctorId = doctorId; }
-    /**
-     * Bind the user id to the service
-     * @param userId The user id to bind
-     */
+    /** Bind the user id to the service */
     public void bindUser(String userId) { this.userId = userId; }
 
     /**
@@ -106,8 +100,7 @@ public class QueryFreeTimeslotService implements IService {
 
     /**
      * Callback for when the user selects an end time for the appointment.
-     * This will finalize the process of finding a free timeslot for the appointment
-     * and call the callback.
+     * This will finalize the process of finding a free timeslot for the appointment.
      * @param endTime The selected end time for the appointment
      */
     private void onSelectAppointmentEndTime(Date endTime) {
@@ -139,7 +132,7 @@ public class QueryFreeTimeslotService implements IService {
         menuNav.addMenu(appointmentStartDateSelector);
     }
     
-    /** Utility method for updating the freeTimeslots list with the available free timeslots */
+    /** Utility method for updating the free timeslots for the user to select from */
     private void updateFreeTimeslots(){
         freeTimeslots = new ArrayList<>();
 
@@ -163,8 +156,8 @@ public class QueryFreeTimeslotService implements IService {
     }
 
     /**
-     * Utility method for finding the timeslot that contains the selected Date
-     * The timeslot is understood as [startTime, endTime)
+     * Utility method for finding the timeslot that contains the selected time </p>
+     * It is assumed the timeslot is defined as [startTime, endTime)
      * @param time The selected time
      * @return The timeslot that contains the selected time
      */
@@ -189,8 +182,7 @@ public class QueryFreeTimeslotService implements IService {
 
     /**
      * Utility method for calculating the working hours for a given day which is a number of days from now
-     * @param daysFromNow The number of days from now,
-     *   this will be used to calculate the working hours for that day
+     * @param daysFromNow The number of days from now, this will be used to calculate the working hours for that day
      * @return The working hours for the given day
      */
     private Timeslot calculateWorkingHourTimeslot(int daysFromNow){
@@ -212,10 +204,11 @@ public class QueryFreeTimeslotService implements IService {
     }
 
     /**
-     * Utility method for calculating the next valid timeslot boundary for the user to select from.
-     * <p>
+     * Utility method for calculating the next valid timeslot boundary for the user to select from. </p>
+     * 
      * A timeslot boundary is a time that the user can select
      * for the start time or end time of an appointment. 
+     * 
      * @param current The time to calculate the next valid timeslot boundary from
      * @return The next valid timeslot boundary.
      * If the next valid timeslot boundary is after the working hours end,
@@ -250,10 +243,7 @@ public class QueryFreeTimeslotService implements IService {
         return calendar.getTime();
     }
 
-    /**
-     * Utility method for calculating the available start times for the user to select from
-     * @return The list of available start times for the user to select from
-     */
+    /** Utility method for calculating the available start times for the user to select from */
     private List<Date> calculateAvailableStartTimes() {
         List<Date> availableStartTimes = new ArrayList<>();
 
@@ -276,10 +266,7 @@ public class QueryFreeTimeslotService implements IService {
         return availableStartTimes;
     }
 
-    /**
-     * Utility method for calculating the available end times for the user to select from
-     * @return The list of available end times for the user to select from
-     */
+    /** Utility method for calculating the available end times for the user to select from */
     private List<Date> calculateAvailableEndTimes() {
         List<Date> availableEndTimes = new ArrayList<>();
 

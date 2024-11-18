@@ -8,19 +8,17 @@ import java.util.List;
 
 /**
  * Abstract base class for a repository that manages a collection of users.
- * Concrete user repositories should extend this class and provide the specific
- * implementation for the user type that they manage.
+ * 
  * @param <T> The type of user that this repository manages, which must extend the User class.
  */
 public abstract class UserRepository<T extends User> extends AbstractRepository<T> {
-    /**
-     * Constructs a new user repository with the specified manager context.
-     * @param managerContext The manager context that this repository will use to access data.
-     */
-    public UserRepository(ManagerContext managerContext) { super(managerContext); }
+    public UserRepository(ManagerContext managerContext) {
+        super(managerContext);
+    }
 
     /**
      * Activates the user with the specified ID.
+     *
      * @param id The ID of the user to activate.
      */
     public void activateUser(String id) {
@@ -30,6 +28,7 @@ public abstract class UserRepository<T extends User> extends AbstractRepository<
 
     /**
      * Deactivates the user with the specified ID.
+     *
      * @param id The ID of the user to deactivate.
      */
     public void deactivateUser(String id) {
@@ -38,8 +37,9 @@ public abstract class UserRepository<T extends User> extends AbstractRepository<
     }
 
     /**
-     * Gets the user with the specified ID.
-     * @param id The ID of the user to get.
+     * Retrieves the user with the specified ID.
+     *
+     * @param id The ID of the user to retrieve.
      * @return The user with the specified ID, or null if no such user exists.
      */
     @Override

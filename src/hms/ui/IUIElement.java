@@ -1,16 +1,14 @@
 package hms.ui;
 
 /**
- * Base interface for all UI elements. It provides a method to display the UI element.
+ * Interface to implement the UI elements.
+ * Used for polymorphism purposes
  */
 public interface IUIElement {
     /**
      * Displays the UI element.
-     * <p>
-     * Since this is a CLI application, all UI elements
-     * should have an option to display the options, 
-     * as the user can only interact with the application using the options.
-     * @param showOptions Whether to display the options or not.
+     * 
+     * @param showOptions whether to show options or not
      */
     public void display(boolean showOptions);
 }

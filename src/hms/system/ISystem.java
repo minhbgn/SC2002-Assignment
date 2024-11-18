@@ -1,14 +1,13 @@
 package hms.system;
 
 /**
- * Interface for a system, which handles retrieving user input
- * to execute the available options. All systems must implement this interface.
- * <p>
- * Note: Systems can be run in a chain, with each system returning the next system to run.
- * In case of a null return, the system chain is terminated.
- * A system can be run repeatedly by returning itself.
- * <p>
- * Acts as a boundary class, called the system layer.
+ * Interface for a system that can be run.
+ * 
+ * All systems must implement this interface.
+ * 
+ * A system handles displaying the UI, processing user input, and updating the state of the system.
+ * 
+ * Systems can be run in a chain, with each system returning the next system to run. In case of a null return, the system chain is terminated. A system can be run multiple times, but it must return the same next system to run each time.
  */
 public interface ISystem {
     /**

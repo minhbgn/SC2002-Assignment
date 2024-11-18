@@ -4,25 +4,20 @@ import hms.common.IModel;
 import java.util.HashMap;
 
 /**
- * Parser for Ids of registered classes.
- * This class is used to manage registered classes and their ID prefixes.
- * <p>
- * This is to ensure that each class has a unique Id prefix when generating Ids, 
- * therefore making an id unique across all classes in combination with the Id suffix.
- * @see IdRegistry IdRegistry for managing the Id suffix. 
+ * This class gets the prefix and suffix id for different classes.
+ * This ensures no id of different class objects can be clashing with each other.
  */
 public class IdParser {
-    /** The map of classes to their ID prefixes. */
     private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
 
-    /** Private constructor to prevent instantiation. */
-    private IdParser() { }
-
     /**
-     * Adds a class to the registry with the specified prefix.
-     * This method is package-private and should only be called by the IdManager.
-     * @param clazz The class to add to the registry.
-     * @param prefix The prefix to use for the class.
+     * Adds a class and its corresponding prefix to the parser.
+     * 
+     * @param clazz the class to be added
+     * @param prefix the prefix to be associated with the class
+     * @throws IllegalArgumentException if the class is null, the prefix is not exactly 2 characters long,
+     *                                  the prefix is not uppercase letters only, the prefix is already in use,
+     *                                  or the class is already registered
      */
     static void addClass(Class<? extends IModel> clazz, String prefix) {
         if (clazz == null) {

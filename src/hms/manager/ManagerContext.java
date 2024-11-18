@@ -4,11 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The manager context is a class that stores all the managers in the application. It provides a way to add and retrieve managers.
- * The context is used to ensure that there is only one instance of each manager in the application.
+ * Context class for storing and managing the managers.
  */
 public class ManagerContext {
-    /** The map of managers. */
+    // Map to store the managers
     private final Map<Class<?>, IManager> managers = new HashMap<>();
 
     /**
@@ -32,7 +31,9 @@ public class ManagerContext {
         return (T) managers.get(managerClass);
     }
 
-    /** Saves all the managers. This method should be called when the application is closing. */
+    /**
+     * Saves all the managers. This method should be called before exiting the application.
+     */
     public void save() {
         managers.values().forEach(IManager::save);
     }

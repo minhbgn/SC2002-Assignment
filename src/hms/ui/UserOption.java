@@ -1,24 +1,32 @@
 package hms.ui;
 
-/** Represents a user option in the UI. */
 public class UserOption {
-    /** The text to display for this option. */
     private final String text;
-    /** The action to perform when this option is selected. */
     private final Runnable action;
 
     /**
-     * Creates a new UserOption.
-     * @param text The text to display for this option.
-     * @param action The action to perform when this option is selected.
+     * Constructs a UserOption with the specified text and action.
+     *
+     * @param text   the text description of the user option
+     * @param action the action to be performed when the user option is selected
      */
     public UserOption(String text, Runnable action){
         this.text = text;
         this.action = action;
     }
 
-    public String getText(){ return text; }
+    /**
+     * Returns the text description of the user option.
+     * @return the text description
+     */
+    public String getText(){
+        return text;
+    }
 
-    /** Perform the action */
-    public void execute(){ action.run(); }
+    /**
+     * Executes the action associated with this user option.
+     */
+    public void execute(){
+        action.run();
+    }
 }

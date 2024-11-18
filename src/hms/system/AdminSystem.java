@@ -16,30 +16,26 @@ import hms.ui.UserOption;
 import hms.user.model.Admin;
 import java.util.List;
 
-/** The system for an admin user. */
 public class AdminSystem implements ISystem {
-    /** The manager context. */
     private final ManagerContext ctx;
-    /** The menu navigator. */
+    
     private final MenuNavigator menuNav;
-    /**
-     * The services available in this system. Contents:
-     * 1. View Profile
-     * 2. View Appointments
-     * 3. View Appointment Records
-     * 4. View Inventory
-     * 5. View Users
-     * 6. Add User
-     */
-    private final IService[] services;
 
     /** The next system to run. */
     private ISystem nextSystem = null;
 
     /**
-     * Creates a new AdminSystem.
-     * @param ctx The manager context.
-     * @param admin The admin user.
+     * The services available in this system. Contents:
+     * 1. View Profile
+     * 2. View Appointments
+     * 3. Schedule Appointment
+     */
+    private final IService[] services;
+
+    /**
+     * Create a new admin system
+     * @param ctx The manager context
+     * @param admin The admin
      */
     public AdminSystem(ManagerContext ctx, Admin admin) {
         this.ctx = ctx; 
@@ -71,8 +67,8 @@ public class AdminSystem implements ISystem {
     }
 
     /**
-     * Returns a menu that displays the options available to the admin.
-     * @return A menu that displays the options available to the admin.
+     * Get the menu for the admin system.
+     * @return The menu for the admin system.
      */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(

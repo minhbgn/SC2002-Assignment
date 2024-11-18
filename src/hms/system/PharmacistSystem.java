@@ -13,12 +13,10 @@ import hms.ui.UserOption;
 import hms.user.model.Pharmacist;
 import java.util.List;
 
-/** The pharmacist system */
+/**
+ * This class generates relevant service options for the pharmacists
+ */
 public class PharmacistSystem implements ISystem {
-    /** The manager context. */
-    private final ManagerContext ctx;
-    /** The menu navigator. */
-    private final MenuNavigator menuNav;
     /**
      * The services available in this system. Contents:
      * 1. View Profile
@@ -26,14 +24,16 @@ public class PharmacistSystem implements ISystem {
      * 3. View Inventory
      */
     private final IService[] services;
+    private final MenuNavigator menuNav;
+    private final ManagerContext ctx;
 
-    /** The next system to run. */
     private ISystem nextSystem = null;
 
     /**
-     * Create a new pharmacist system
-     * @param ctx The manager context
-     * @param pharmacist The pharmacist
+     * Constructs a PharmacistSystem with the given context and pharmacist.
+     * 
+     * @param ctx the manager context
+     * @param pharmacist the pharmacist user
      */
     public PharmacistSystem(ManagerContext ctx, Pharmacist pharmacist) {
         this.ctx = ctx;
@@ -62,8 +62,9 @@ public class PharmacistSystem implements ISystem {
     }
 
     /**
-     * Get the menu for the pharmacist system
-     * @return The menu
+     * Generates the menu for the PharmacistSystem.
+     * 
+     * @return the generated menu
      */
     private AbstractMenu getMenu() {
         return new SimpleMenu("Welcome to the Hospital Management System!", List.of(

@@ -21,71 +21,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Service to view the details of an appointment
+ * Service class to view appointment details.
  */
 public class ViewAppointmentDetailsService implements IService{
-    // Options for the menu
-    /** Option to cancel the appointment */
     private final UserOption cancelAppointmentOption = new UserOption("Cancel Appointment", this::handleCancelAppointment);
-
-    /** Option to complete the appointment */
     private final UserOption completeAppointmentOption = new UserOption("Complete Appointment", this::handleCompleteAppointment);
-
-    /** Option to reschedule the appointment */
     private final UserOption rescheduleAppointmentOption = new UserOption("Reschedule Appointment", this::handleRescheduleAppointment);
-
-    /** Option to resolve the appointment */
     private final UserOption resolveAppointmentOption = new UserOption("Accept Appointment", this::handleResolveAppointment);
-
-    /** Option to update the patient's medical record */
     private final UserOption updatePatientMedicalRecordOption = new UserOption("Update Patient Medical Record", this::handleUpdatePatientMedicalRecord);
-
-    /** Option to view the patient's personal information */
     private final UserOption viewPatientInfoOption = new UserOption("View Patient Info", this::handleViewPatientInfo);
-
-    /** Option to view the patient's medical records */
     private final UserOption viewPatientMedicalRecordsOption = new UserOption("View Patient Medical Records", this::handleViewPatientMedicalRecords);
-
-    /** Option to view the appointment records */
     private final UserOption viewRecordsOption = new UserOption("View Records", this::handleViewRecords);
 
-    // Flags to determine which options to show
-    /** Flag to determine if the cancel appointment option should be shown */
     public boolean hasCancelAppointmentOption = false;
-    /** Flag to determine if the complete appointment option should be shown */
     public boolean hasCompleteAppointmentOption = false;
-    /** Flag to determine if the reschedule appointment option should be shown */
     public boolean hasRescheduleAppointmentOption = false;
-    /** Flag to determine if the resolve appointment option should be shown */
     public boolean hasResolveAppointmentOption = false;
-    /** Flag to determine if the update patient medical record option should be shown */
     public boolean hasUpdatePatientMedicalRecordOption = false;
-    /** Flag to determine if the view patient info option should be shown */
     public boolean hasViewPatientInfoOption = false;
-    /** Flag to determine if the view patient medical records option should be shown */
     public boolean hasViewPatientMedicalRecordOption = false;
-    /** Flag to determine if the view records option should be shown */
     public boolean hasViewRecordsOption = false;
 
-    /** The manager context */
     private final ManagerContext ctx;
-    /** The appointment to view */
     private final Appointment appointment;
 
-    /** The menu navigator */
     private MenuNavigator menuNav;
 
     /**
-     * Constructor for the service
-     * @param ctx The manager context
-     * @param appointment The appointment to view
+     * Constructor for ViewAppointmentDetailsService.
+     * 
+     * @param ctx the context for accessing managers and repositories
+     * @param appointment the appointment whose details are to be viewed
      */
     public ViewAppointmentDetailsService(ManagerContext ctx, Appointment appointment){
         this.ctx = ctx;
         this.appointment = appointment;
     }
 
-    /** Handler for the cancel appointment option */
+    /**
+     * Handles the process of canceling an appointment.
+     */
     private void handleCancelAppointment() {
         ctx.getManager(AppointmentManager.class)
             .updateStatus(appointment.getId(), AppointmentStatus.CANCELLED);
@@ -95,7 +70,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
 
-    /** Handler for the complete appointment option */
+    /**
+     * Handles the process of completing an appointment.
+     */
     private void handleCompleteAppointment() {
         String notes = Prompt.getStringInput("Enter notes for the appointment: ");
         notes = notes.replace("\n", " ");
@@ -132,7 +109,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
     
-    /** Handler for the reschedule appointment option */
+    /**
+     * Handles the process of rescheduling an appointment.
+     */
     private void handleRescheduleAppointment() {
         QueryFreeTimeslotService freeTimeslotService = new QueryFreeTimeslotService(ctx, (timeslot) -> {
             // Update the timeslot of the appointment
@@ -150,7 +129,9 @@ public class ViewAppointmentDetailsService implements IService{
         freeTimeslotService.bindUser(appointment.getPatientId());
     }
 
-    /** Handler for the resolve appointment option */
+    /**
+     * Handles the process of resolving an appointment.
+     */
     private void handleResolveAppointment() {
         boolean accepted = Prompt.getBooleanInput("Accept appointment? (y/n): ");
 
@@ -164,7 +145,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(getMenu());
     }
 
-    /** Handler for the update patient medical record option */
+    /**
+     * Handles the process of updating a patient's medical record.
+     */
     private void handleUpdatePatientMedicalRecord() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -196,7 +179,9 @@ public class ViewAppointmentDetailsService implements IService{
         handleViewPatientMedicalRecords(); // Return to the patient medical records menu
     }
 
-    /** Handler for the view patient info option */
+    /**
+     * Handles the process of viewing the patient's information.
+     */
     private void handleViewPatientInfo() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -214,7 +199,9 @@ public class ViewAppointmentDetailsService implements IService{
         menuNav.addMenu(patientInfoMenu);
     }
 
-    /** Handler for the view patient medical records option */
+    /**
+     * Handles the process of viewing and potentially updating the patient's medical records.
+     */
     private void handleViewPatientMedicalRecords() {
         Patient p = ctx.getManager(UserManager.class)
             .getRepository(PatientRepository.class)
@@ -234,7 +221,9 @@ public class ViewAppointmentDetailsService implements IService{
         handleViewPatientMedicalRecords(); // Return to the patient medical records menu
     }
 
-    /** Handler for the view records option */
+    /**
+     * Handles the process of viewing the records of an appointment.
+     */
     private void handleViewRecords() {
         String recordInfo = String.format(
             "Notes: %s\nServices: %s",
@@ -265,10 +254,40 @@ public class ViewAppointmentDetailsService implements IService{
     }
 
     /**
-     * Utility method to get the menu for the appointment
-     * @return The menu for the appointment
+     * Adds the appointment record information to the menu.
+     * 
+     * @param appointment the appointment whose record information is to be displayed
+     * @param ctx the context for accessing managers and repositories
+     * @param menuNav the menu navigator for adding menus
      */
-    private AbstractMenu getMenu(){
+    private void addRecordInfoToMenu(Appointment appointment, Context ctx, MenuNavigator menuNav) {
+        ArrayList<String> prescriptions = appointment.getRecord().getPrescriptions();
+
+        if(!prescriptions.isEmpty()) {
+            String recordInfo = "\nPrescriptions: ";
+            PrescriptionManager prescriptionManager = ctx.getManager(PrescriptionManager.class);
+
+            for(String prescription : prescriptions) {
+                Prescription p = prescriptionManager.getPrescriptions(List.of(
+                    new SearchCriterion<>(Prescription::getId, prescription)
+                )).get(0);
+
+                if(p != null) {
+                    recordInfo += "\n\t" + p;
+                }
+            }
+
+            SimpleMenu recordMenu = new SimpleMenu(recordInfo, null);
+            menuNav.addMenu(recordMenu);
+        }
+    }
+
+    /**
+     * Retrieves the menu for viewing appointment details.
+     * 
+     * @return the menu for viewing appointment details
+     */
+    private AbstractMenu getMenu() {
         SimpleMenu appointmentMenu = new SimpleMenu(getAppointmentInfoDisplay(), null);
 
         if(appointment.getStatus() == AppointmentStatus.ACCEPTED) {

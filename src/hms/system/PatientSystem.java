@@ -16,12 +16,10 @@ import hms.ui.UserOption;
 import hms.user.model.Patient;
 import java.util.List;
 
-/** The patient system */
+/**
+ * This class generates relevant service options for the patients
+ */
 public class PatientSystem implements ISystem {
-    /** The manager context. */
-    private final ManagerContext ctx;
-    /** The menu navigator. */
-    private final MenuNavigator menuNav;
     /**
      * The services available in this system. Contents:
      * 1. View Profile
@@ -30,6 +28,8 @@ public class PatientSystem implements ISystem {
      * 4. Schedule Appointment
      */
     private final IService[] services;
+    private final ManagerContext ctx;
+    private final MenuNavigator menuNav;
 
     /** The next system to run. */
     private ISystem nextSystem = null;
