@@ -15,8 +15,8 @@ public class CSVFileHandler {
      * @param filePath the path to the CSV file
      * @return a list of hash maps containing the CSV data
      */
-    public List<HashMap<String, String>> read(String filePath) {
-        List<HashMap<String, String>> data = new ArrayList<>();
+    public ArrayList<HashMap<String, String>> read(String filePath) {
+        ArrayList<HashMap<String, String>> data = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             String[] headers = null;
@@ -58,6 +58,7 @@ public class CSVFileHandler {
                 values.add(current.toString());
                 current.setLength(0);
             } else {
+            	if (!inQuotes && c == ' ') continue;
                 // Regular character
                 current.append(c);
             }
