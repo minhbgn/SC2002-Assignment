@@ -3,15 +3,11 @@ package hms.utils;
 import java.io.*;
 import java.util.*;
 
-/**
- * Utility class for handling CSV file operations.
- */
+/** Utility class for handling reading from/writing to CSV file.*/
 public class CSVFileHandler {
-
     /**
      * Reads a CSV file and returns the data as a list of hash maps.
      * Each hash map represents a row, with the keys being the column headers.
-     *
      * @param filePath the path to the CSV file
      * @return a list of hash maps containing the CSV data
      */
@@ -38,6 +34,11 @@ public class CSVFileHandler {
         return data;
     }
 
+    /**
+     * Parses a line of CSV data.
+     * @param line A line of CSV data
+     * @return An array of entries for that line
+     */
     private String[] parseCSVLine(String line) {
         List<String> values = new ArrayList<>();
         StringBuilder current = new StringBuilder();
@@ -70,7 +71,6 @@ public class CSVFileHandler {
 
     /**
      * Writes data to a CSV file.
-     *
      * @param filePath the path to the CSV file
      * @param data the data to be written to the CSV file
      */

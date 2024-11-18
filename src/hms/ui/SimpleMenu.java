@@ -3,7 +3,13 @@ package hms.ui;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/** A simple menu that displays a list of options. */
 public class SimpleMenu extends AbstractMenu {
+    /**
+     * Creates a new SimpleMenu with the specified title and options.
+     * @param title The title of the menu
+     * @param options The options to display
+     */
     public SimpleMenu(String title, List<UserOption> options){
         this.title = title;
         this.options = new LinkedHashMap<>();
@@ -17,6 +23,10 @@ public class SimpleMenu extends AbstractMenu {
         }
     }
 
+    /**
+     * Adds an option to the menu.
+     * @param option The option to add
+     */
     public void addOption(UserOption option){
         options.put(Integer.toString(options.size() + 1), option);
     }

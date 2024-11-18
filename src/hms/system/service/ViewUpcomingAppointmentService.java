@@ -19,18 +19,33 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+/** Service to view the upcoming appointments of a doctor. */
 public class ViewUpcomingAppointmentService implements IService{
+    // The options for the menu
+    /** The option to add a busy timeslot. */
     private final UserOption addBusyTimeslotOption = new UserOption("Add Busy Timeslot", this::handleAddBusyTimeslot);
+    /** The option to remove a busy timeslot. */
     private final UserOption removeBusyTimeslotOption = new UserOption("Remove Busy Timeslot", this::handleRemoveBusyTimeslot);
+    /** The option to view all available timeslots within the next {@link #upcomingDays} days */
     private final UserOption viewAvailableTimeslotsOption = new UserOption("View Available Timeslots", this::handleViewAvailableTimeslots);
 
+    /** The manager context. */
     private final ManagerContext ctx;
+    /** The default search criteria for appointments. */
     private final List<SearchCriterion<Appointment,?>> defaultCriteria;
+    /** The doctor whose upcoming appointments are to be viewed. */
     private final Doctor doctor;
     
+    /** The number of upcoming days to view appointments for. */
     private int upcomingDays;
+    /** The menu navigator. */
     private MenuNavigator menuNav;
 
+    /**
+     * Creates a new ViewUpcomingAppointmentService.
+     * @param ctx The manager context.
+     * @param doctor The doctor whose upcoming appointments are to be viewed.
+     */
     public ViewUpcomingAppointmentService(ManagerContext ctx, Doctor doctor){
         this.ctx = ctx;
         this.doctor = doctor;
@@ -40,6 +55,7 @@ public class ViewUpcomingAppointmentService implements IService{
         );
     }
 
+    /** Handles the addition of a busy timeslot. */
     private void handleAddBusyTimeslot(){
         Date startTime = Prompt.getDetailedDateInput("When are you not available? (Start Time): ");
         Date endTime = Prompt.getDetailedDateInput("When will you be available again? (End Time): ");
@@ -49,6 +65,7 @@ public class ViewUpcomingAppointmentService implements IService{
         doctor.addBusyTimeslot(busyTimeslot);
     }
 
+    /** Handles the removal of a busy timeslot. */
     private void handleRemoveBusyTimeslot(){
         List<Timeslot> busyTimeslots = doctor.getBusyTimeslots();
 
@@ -65,6 +82,7 @@ public class ViewUpcomingAppointmentService implements IService{
         menuNav.addMenu(selector);
     }
 
+    /** Handles the viewing of all available timeslots within the next {@link #upcomingDays} days. */
     private void handleViewAvailableTimeslots(){
         List<Timeslot> availableTimeslots = new ArrayList<>();
 
@@ -86,6 +104,10 @@ public class ViewUpcomingAppointmentService implements IService{
         menuNav.addMenu(viewer);
     }
 
+    /**
+     * Handles the selection of an appointment.
+     * @param appointment The appointment that was selected.
+     */
     private void onAppointmentSelected(Appointment appointment){
         ViewAppointmentDetailsService service = new ViewAppointmentDetailsService(ctx, appointment);
 
@@ -97,6 +119,10 @@ public class ViewUpcomingAppointmentService implements IService{
         service.execute(menuNav);
     }
 
+    /**
+     * Returns a menu that displays the upcoming appointments of the doctor.
+     * @return A menu that displays the upcoming appointments of the doctor.
+     */
     private AbstractMenu getMenu(){
         List<Appointment> appointments = ctx.getManager(AppointmentManager.class).getAppointments(defaultCriteria);
 

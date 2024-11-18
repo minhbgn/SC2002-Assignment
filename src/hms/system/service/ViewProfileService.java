@@ -14,22 +14,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/** Service to view the profile of a user */
 public class ViewProfileService implements IService {
     /** The user to view the profile of */
     private final User user;
 
     // Options
+    /** Option to update the date of birth */
     private final UserOption updateDobOption = new UserOption("Update Date of Birth", this::handleUpdateDob);
+    /** Option to update the contact information */
     private final UserOption updateContactOption = new UserOption("Update Contact", this::handleUpdateContact);
+    /** Option to change the password */
     private final UserOption changePasswordOption = new UserOption("Change password", this::handleChangePassword);
 
-    /** Profile menu, saved to allow for easy updating */
+    /** Profile menu, saved to allow for easy updating of the text displayed */
     private SimpleMenu profileMenu;
 
+    /**
+     * Constructor for the ViewProfileService
+     * @param user The user to view the profile of
+     */
     public ViewProfileService(User user) {
         this.user = user;
     }
 
+    /** Handles updating the date of birth */
     private void handleUpdateDob() {
         Date newDob = Prompt.getDateInput("Enter your new date of birth: ");
         user.dob = newDob;
@@ -38,6 +47,7 @@ public class ViewProfileService implements IService {
         profileMenu.title = getProfileInfo();
     }
 
+    /** Handles updating the contact information */
     private void handleUpdateContact() {
         String newContact = Prompt.getStringInput("Enter your new contact info: ");
         user.contact = newContact;
@@ -46,6 +56,7 @@ public class ViewProfileService implements IService {
         profileMenu.title = getProfileInfo();
     }
 
+    /** Handles changing the password */
     private void handleChangePassword() {
         String oldPassword = Prompt.getStringInput("Enter your old password: ");
         if(!user.getAccount().authenticate(oldPassword)){
@@ -66,7 +77,7 @@ public class ViewProfileService implements IService {
     }
 
     /**
-     * Utility method to get the account type text
+     * Utility method to get the account type in text
      * @return The account type text
      */
     private String getAccountTypeText() {
@@ -98,6 +109,10 @@ public class ViewProfileService implements IService {
         );
     }
 
+    /**
+     * Utility method to get the menu
+     * @return The menu
+     */
     private AbstractMenu getMenu() {
         profileMenu = new SimpleMenu(getProfileInfo(), List.of(
             updateContactOption, updateDobOption, changePasswordOption
@@ -106,6 +121,10 @@ public class ViewProfileService implements IService {
         return profileMenu;
     }
 
+    /**
+     * Executes the service
+     * @param menuNav The menu navigator
+     */
     @Override
     public void execute(MenuNavigator menuNav) {
         menuNav.addMenu(getMenu());
