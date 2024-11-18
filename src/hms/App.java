@@ -3,7 +3,15 @@
  */
 package hms;
 
-@SuppressWarnings("unused")
+import hms.manager.AppointmentManager;
+import hms.manager.InventoryManager;
+import hms.manager.ManagerContext;
+import hms.manager.PrescriptionManager;
+import hms.manager.UserManager;
+import hms.system.ISystem;
+import hms.system.LoginSystem;
+import hms.ui.Prompt;
+
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
     private static final String DOCTOR_REPO_FILEPATH = "data/doctors.csv";
@@ -14,15 +22,33 @@ public class App {
     private static final String INVENTORY_REPO_FILEPATH = "data/inventory.csv";
 
     private boolean isInitialized = false;
-    private boolean isRunning = false;
+    private ISystem currentSystem = null;
 
     public void initialize() {
         if (isInitialized) return;
 
-        // TODO: Add initialization code here:
-        // 1. Initialize manager context
-        // 2. Add managers to context
-        // 3. ...
+        ManagerContext ctx = new ManagerContext();
+
+        ctx.addManager(UserManager.class,
+            new UserManager(ctx,
+                PATIENT_REPO_FILEPATH, 
+                DOCTOR_REPO_FILEPATH, 
+                PHARMACIST_REPO_FILEPATH, 
+                ADMIN_REPO_FILEPATH
+            )
+        );
+
+        ctx.addManager(AppointmentManager.class, new AppointmentManager(ctx, APPOINTMENT_REPO_FILEPATH));
+        ctx.addManager(PrescriptionManager.class, new PrescriptionManager(ctx, PRESCRIPTION_REPO_FILEPATH));
+        ctx.addManager(InventoryManager.class, new InventoryManager(ctx, INVENTORY_REPO_FILEPATH));
+
+        currentSystem = new LoginSystem(ctx);
+
+        // Add a shutdown hook to save data
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("Saving data...");
+            // ctx.save(); // Temporarily disabled for testing
+        }));
 
         isInitialized = true;
     }
@@ -32,17 +58,16 @@ public class App {
             throw new IllegalStateException("HMS not initialized");
         }
 
-        if (isRunning) return;
+        while (currentSystem != null) {
+            currentSystem = currentSystem.run();
+            
+            // Pause before continuing
+            Prompt.getStringInput("Press Enter to continue...");
 
-        isRunning = true;
-        while (isRunning) {
-            // TODO: Add main loop code here
-            // 1. Display login screen
-            // 2. Parse user input, validate and authenticate user
-            // 3. Redirect to appropriate user interface depending on user role
-            // 4. ...
-
-            break; // Temporary break to avoid infinite loop, remove this line after implementing the exit condition
+            // Clear the console
+            System.out.print("\033[H\033[2J");
         }
+
+        System.out.println("Exiting HMS Application");
     }
 }

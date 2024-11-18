@@ -3,10 +3,8 @@ package hms.appointment;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.IModel;
 import hms.common.id.IdManager;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import hms.utils.Timeslot;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -16,18 +14,18 @@ public class Appointment implements IModel {
     private String id;
     private String patientId;
     private String doctorId;
-    private Date date;
+    private Timeslot timeslot;
     private AppointmentStatus status;
     private AppointmentRecord record = null;
 
     public Appointment() {
     }
 
-    public Appointment(String patientId, String doctorId, Date date, AppointmentStatus status) {
+    public Appointment(String patientId, String doctorId, Timeslot timeslot, AppointmentStatus status) {
     	this.id = IdManager.generateId(Appointment.class);
         this.patientId = patientId;
         this.doctorId = doctorId;
-        this.date = date;
+        this.timeslot = timeslot;
         this.status = status;
     }
 
@@ -43,8 +41,8 @@ public class Appointment implements IModel {
         return doctorId;
     }
 
-    public Date getDate() {
-        return date;
+    public Timeslot getTimeslot() {
+        return timeslot;
     }
 
     public AppointmentStatus getStatus() {
@@ -64,13 +62,8 @@ public class Appointment implements IModel {
         this.status = status;
     }
 
-    /**
-     * Sets the date of the Appointment.
-     *
-     * @param date the new date of the Appointment
-     */
-    void setDate(Date date) {
-        this.date = date;
+    public void setTimeslot(Timeslot timeslot) {
+        this.timeslot = timeslot;
     }
 
     /**
@@ -91,16 +84,19 @@ public class Appointment implements IModel {
      * @param data a HashMap containing the data to populate the Appointment's fields
      */
     @Override
+    public String toString() {
+        return String.format(
+            "Appointment %s from %s to %s (Status: %s)",
+            id, timeslot.getStartTimeString(), timeslot.getEndTimeString(), status.name()
+        );
+    }
+
+    @Override
     public void hydrate(HashMap<String, String> data) {
         this.id = data.get("id");
         this.patientId = data.get("patientId");
-        this.doctorId = data.get("doctorId");
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            this.date = sdf.parse(data.get("date"));
-        } catch (ParseException e) {
-            throw new RuntimeException("Error parsing date in Appointment.hydrate");
-        }
+        this.doctorId = data.get("doctorId");        
+        this.timeslot = new Timeslot(data.get("timeslot"));
 
         this.status = AppointmentStatus.valueOf(data.get("status"));
         if (data.get("status").equals("empty")) {
@@ -122,9 +118,7 @@ public class Appointment implements IModel {
         data.put("id", this.id);
         data.put("patientId", this.patientId);
         data.put("doctorId", this.doctorId);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        data.put("date", sdf.format(this.date));
+        data.put("timeslot", this.timeslot.toString());
         
         data.put("status", this.status.name());
         if(this.record == null) {

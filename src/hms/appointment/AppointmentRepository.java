@@ -2,59 +2,40 @@ package hms.appointment;
 
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.AbstractRepository;
+import hms.common.SearchCriterion;
 import hms.manager.ManagerContext;
+import hms.utils.Timeslot;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Repository class for managing appointments in the hospital management system.
  */
 public class AppointmentRepository extends AbstractRepository<Appointment> {
-
     /**
      * Constructs a new AppointmentRepository with the specified ManagerContext.
      *
      * @param ctx the ManagerContext to be used by the AppointmentRepository
      */
-    public AppointmentRepository(ManagerContext ctx) {
-        super(ctx);
-    }
+    public AppointmentRepository(ManagerContext ctx) { super(ctx); }
 
     /**
      * Creates a new Appointment with the specified patient ID, doctor ID, and date.
      *
      * @param patientId the ID of the patient
      * @param doctorId the ID of the doctor
-     * @param date the date of the appointment
+     * @param timeslot the timeslot of the appointment
      * @return the created Appointment
      */
-    public Appointment create(String patientId, String doctorId, Date date) {
-        Appointment appointment = new Appointment(patientId, doctorId, date, AppointmentStatus.PENDING);
+    public Appointment create(String patientId, String doctorId, Timeslot timeslot) {
+        Appointment appointment = new Appointment(patientId, doctorId, timeslot, AppointmentStatus.PENDING);
         models.add(appointment);
         return appointment;
     }
 
-    /**
-     * Updates the date of the Appointment with the specified ID.
-     *
-     * @param id the ID of the Appointment
-     * @param date the new date of the Appointment
-     */
-    public void updateDate(String id, Date date) {
-        Appointment appointment = get(id);
-            appointment.setDate(date);
-    }
+    public void updateTimeslot(String id, Timeslot timeslot) { get(id).setTimeslot(timeslot); }
 
-    /**
-     * Updates the status of the Appointment with the specified ID.
-     *
-     * @param id the ID of the Appointment
-     * @param status the new status of the Appointment
-     */
-    public void updateStatus(String id, AppointmentStatus status) {
-        Appointment appointment = get(id);
-            appointment.setStatus(status);
-    }
+    public void updateStatus(String id, AppointmentStatus status) { get(id).setStatus(status); }
 
     /**
      * Updates the medical record of the Appointment with the specified ID.
@@ -76,10 +57,7 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
      */
     @Override
     public Appointment get(String id) {
-        return models.stream()
-        .filter(appointment -> appointment.getId().equals(id))
-        .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException("Appointment not found with ID: " + id));
+        return findWithFilters(List.of(new SearchCriterion<>(Appointment::getId, id))).get(0);
     }
 
     /**

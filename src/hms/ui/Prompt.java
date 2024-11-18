@@ -6,67 +6,77 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Prompt implements IUIElement {
+public class Prompt {
     private static final ArrayList<String> BOOLEAN_TRUE_VALUES = new ArrayList<>(
         List.of("yes", "y", "true", "t", "1")
     );
     private static final ArrayList<String> BOOLEAN_FALSE_VALUES = new ArrayList<>(
         List.of("no", "n", "false", "f", "0")
     );
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+    private static final SimpleDateFormat detailedDateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     
-    private final String message;
-
     public Prompt(String message){
-        this.message = message;
+        throw new UnsupportedOperationException("Prompt should not be instantiated");
     }
 
-    public int getIntInput(){
+    public static int getIntInput(String message){
+        System.out.print(message);
+
         try {
             return Integer.parseInt(InputHandler.getInstance().getInput());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid integer value.");
-            display(); // Display the prompt again
-            return getIntInput();
+            return getIntInput(message);
         }
     }
 
-    public String getStringInput(){
+    public static String getStringInput(String message){
+        System.out.print(message);
+
         return InputHandler.getInstance().getInput();
     }
 
-    public boolean getBooleanInput(){
+    public static boolean getBooleanInput(String message){
+        System.out.print(message);
+
         String input = InputHandler.getInstance().getInput();
         
-        if (BOOLEAN_TRUE_VALUES.contains(input.toLowerCase())){
+        if (BOOLEAN_TRUE_VALUES.contains(input.toLowerCase()))
             return true;
-        }
-        else if (BOOLEAN_FALSE_VALUES.contains(input.toLowerCase())){
+
+        if (BOOLEAN_FALSE_VALUES.contains(input.toLowerCase()))
             return false;
-        }
-        else {
-            System.out.println("Invalid input. Please enter a valid boolean value (y/n)");
-            display(); // Display the prompt again
-            return getBooleanInput();
-        }
+        
+        System.out.println("Invalid input. Please enter a valid value (y/n)");
+        return getBooleanInput(message);
     }
 
-    public Date getDateInput(){
-        System.out.println("Please enter the date in the format YYYY-MM-DD");
+    public static Date getDateInput(String message){
+        System.out.println("Please enter the date in the format DD/MM/YYYY");
+        System.out.print(message);
 
         String input = InputHandler.getInstance().getInput();
 
         try {
             return dateFormatter.parse(input);
         } catch (ParseException e) {
-            System.out.println("Invalid date. Please enter a valid date in the format YYYY-MM-DD");
-            display(); // Display the prompt again
-            return getDateInput();
+            System.out.println("Invalid date. Please enter a valid date in the format DD/MM/YYYY");
+            return getDateInput(message);
         }
     }
 
-    @Override
-    public void display(){
-        System.out.println(message);
+    public static Date getDetailedDateInput(String message){
+        System.out.println("Please enter the date in the format DD/MM/YYYY HH:MM:SS");
+        System.out.print(message);
+
+        String input = InputHandler.getInstance().getInput();
+
+        try {
+            return detailedDateFormatter.parse(input);
+        } catch (ParseException e) {
+            System.out.println("Invalid date. Please enter a valid date in the format DD/MM/YYYY HH:MM:SS");
+            return getDetailedDateInput(message);
+        }
     }
 }

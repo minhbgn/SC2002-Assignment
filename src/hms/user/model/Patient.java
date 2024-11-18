@@ -1,26 +1,19 @@
 package hms.user.model;
 
-import hms.appointment.Appointment;
-import hms.appointment.enums.AppointmentStatus;
-import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
-import hms.manager.AppointmentManager;
 import hms.manager.ManagerContext;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Represents a patient in the hospital management system.
  */
 public class Patient extends User {
     // Extra info about patient's medical records
-    public String bloodType = "None Specified";
-    public String allergies = "None Specified";
-    public String medicalHistory = "None Specified";
-    public String currentMedication = "None Specified";
-
-    private final List<Appointment> appointments;
+    public String bloodType = "No info";
+    public String allergies = "No info";
+    public String medicalHistory = "No info";
+    public String currentMedication = "No info";
 
     /**
      * Constructs a new Patient with the specified ManagerContext.
@@ -31,7 +24,6 @@ public class Patient extends User {
         super(ctx);
         
         this.account = new Account(IdManager.generateId(Patient.class));
-        this.appointments = new ArrayList<>();
     }
 
     /**
@@ -45,61 +37,7 @@ public class Patient extends User {
      */
     public Patient(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
-        this.appointments = new ArrayList<>();
-    }
-
-    /**
-     * Schedules a new appointment for the Patient.
-     *
-     * @param PatientId the ID of the Patient
-     * @param doctorId the ID of the doctor
-     * @param date the date of the appointment
-     * @param status the status of the appointment
-     */
-    public void scheduleAppointment(String PatientId, String doctorId, Date date, AppointmentStatus status) {
-        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
-        manager.makeAppointment(PatientId, doctorId, null);
-        Appointment appointment = new Appointment(PatientId, doctorId, date, status);
-        appointments.add(appointment);
-    }
-
-    /**
-     * Reschedules an existing appointment for the Patient.
-     *
-     * @param appId the ID of the appointment
-     * @param newDate the new date for the appointment
-     */
-    public void rescheduleAppointment(String appId, Date newDate) {
-        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
-        manager.updateDate(appId, newDate);
-    }
-
-    /**
-     * Cancels an existing appointment for the Patient.
-     *
-     * @param appId the ID of the appointment
-     */
-    public void cancelAppointment(String appId) {
-        AppointmentManager manager = ctx.getManager(AppointmentManager.class);
-        manager.updateStatus(appId, AppointmentStatus.CANCELLED);
-        appointments.removeIf(appointment -> appointment.getId().equals(appId));
-    }
-
-    /**
-     * Views the appointments of the Patient based on the specified criteria.
-     *
-     * @param criteria the search criteria to filter appointments
-     * @return an array of appointments that match the criteria
-     */
-    public Appointment[] viewAppointments(SearchCriterion<Appointment, ?>[] criteria) {
-        return appointments.toArray(Appointment[]::new);
-    }
-
-    /**
-     * Returns a string representation of the Patient.
-     *
-     * @return a string representation of the Patient
-     */
+      
     @Override
     public String toString() {
         return "Patient{" +
@@ -107,7 +45,25 @@ public class Patient extends User {
                 ", isMale=" + this.isMale +
                 ", contact='" + this.contact + '\'' +
                 ", dob=" + this.dob +
-                ", appointments=" + appointments +
                 '}';
+    }
+
+    @Override
+    public void hydrate(HashMap<String, String> data) {
+        super.hydrate(data);
+        this.bloodType = data.get("bloodType");
+        this.allergies = data.get("allergies");
+        this.medicalHistory = data.get("medicalHistory");
+        this.currentMedication = data.get("currentMedication");
+    }
+
+    @Override
+    public HashMap<String, String> serialize() {
+        HashMap<String, String> data = super.serialize();
+        data.put("bloodType", this.bloodType);
+        data.put("allergies", this.allergies);
+        data.put("medicalHistory", this.medicalHistory);
+        data.put("currentMedication", this.currentMedication);
+        return data;
     }
 }
