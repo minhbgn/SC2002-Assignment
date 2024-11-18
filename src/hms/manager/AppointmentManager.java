@@ -67,7 +67,7 @@ public class AppointmentManager extends AbstractManager<AppointmentRepository> {
 
     /**
      * Check if a patient is free on the given timeslot.
-     * @param patientId The ID of the patient.
+     * @param doctorId The ID of the doctor.
      * @param timeslot The timeslot to check.
      * @return True if the patient is free, false otherwise.
      */
