@@ -36,7 +36,7 @@ public class Patient extends User {
      * @param dob the date of birth of the Patient
      */
     public Patient(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
-        super(ctx, name, isMale, contact, dob);
+        super(ctx, name, isMale, contact, dob);}
       
     @Override
     public String toString() {
