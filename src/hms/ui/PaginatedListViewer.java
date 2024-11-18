@@ -4,9 +4,19 @@ import hms.common.SearchCriterion;
 import java.util.HashMap;
 import java.util.function.Function;
 
+/**
+ * A menu that displays a paginated list of items.
+ * @param <T> The type of items in the list
+ */
 public class PaginatedListViewer<T> extends AbstractMenu {
+    /** The title of the menu */
     protected final PaginatedList<T> paginatedList;
 
+    /**
+     * Creates a new PaginatedListViewer with the specified title and items.
+     * @param title The title of the menu
+     * @param items The items to display
+     */
     public PaginatedListViewer(String title, T[] items) {
         this.title = title;
         this.options = new HashMap<>();
@@ -15,22 +25,23 @@ public class PaginatedListViewer<T> extends AbstractMenu {
         updateOptions();
     }
 
-    public void addFilter(SearchCriterion<T, ?> filter) {
-        paginatedList.addCriteria(filter);
-    }
+    /**
+     * Adds a filter to the list of filters.
+     * @param filter The filter to add
+     */
+    public void addFilter(SearchCriterion<T, ?> filter) { paginatedList.addCriteria(filter); }
+    /**
+     * Sorts the items based on the specified key extractor.
+     * @param keyExtractor The key extractor to use for sorting
+     */
+    public void sortBy(Function<T, Comparable<?>> keyExtractor) { paginatedList.setSorter(keyExtractor); }
+    
+    /** Clears all filters. */
+    public void clearFilters() { paginatedList.setCriteria(null); }
+    /** Clears the sorter. */
+    public void clearSorter() { paginatedList.setSorter(null); }
 
-    public void clearFilters() {
-        paginatedList.setCriteria(null);
-    }
-
-    public void sortBy(Function<T, Comparable<?>> keyExtractor) {
-        paginatedList.setSorter(keyExtractor);
-    }
-
-    public void clearSorter() {
-        paginatedList.setSorter(null);
-    }
-
+    /** Updates the options based on the current state of the paginated list. */
     private void updateOptions() {
         // Remove existing options
         options.remove("n");
