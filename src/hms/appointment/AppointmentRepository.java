@@ -17,7 +17,7 @@ public class AppointmentRepository extends AbstractRepository<Appointment> {
     public AppointmentRepository(ManagerContext ctx) { super(ctx); }
 
     /**
-     * Creates a new Appointment with the specified patient ID, doctor ID, and date.
+     * Creates a new Appointment with the specified patient ID, doctor ID, and timeslot.
      * @param patientId the ID of the patient
      * @param doctorId the ID of the doctor
      * @param timeslot the timeslot of the appointment
