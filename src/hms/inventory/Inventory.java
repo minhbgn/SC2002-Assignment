@@ -3,15 +3,13 @@ package hms.inventory;
 import hms.common.AbstractRepository;
 import hms.manager.ManagerContext;
 
+/** Repository class for managing inventory items in the hospital management system. */
 public class Inventory extends AbstractRepository<InventoryItem> {
 	/**
-	 * Constructor for Inventory
-	 * Generate a repository (ArrayList) of type InventoryItem
-	 * @param ctx The Manager Context: is used to let other subjects access this
+     * Constructs a new Inventory with the specified ManagerContext.
+     * @param ctx the ManagerContext to be used by the Inventory
 	 */
-    public Inventory(ManagerContext ctx) {
-        super(ctx);
-    }
+    public Inventory(ManagerContext ctx) { super(ctx); }
 
     /**
      * Create an InventoryItem inside the Inventory
