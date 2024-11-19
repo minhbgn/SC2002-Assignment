@@ -40,7 +40,7 @@ public class Doctor extends User {
     
     @Override
     public String toString() {
-        return super.toString()+"\n User type: [Doctor]";
+        return "Doctor " + super.toString();
     }
 
     /**

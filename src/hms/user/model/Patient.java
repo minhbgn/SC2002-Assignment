@@ -42,12 +42,7 @@ public class Patient extends User {
       
     @Override
     public String toString() {
-        return "Patient{" +
-                "name='" + this.name + '\'' +
-                ", isMale=" + this.isMale +
-                ", contact='" + this.contact + '\'' +
-                ", dob=" + this.dob +
-                '}';
+        return "Patient " + super.toString();
     }
 
     /**

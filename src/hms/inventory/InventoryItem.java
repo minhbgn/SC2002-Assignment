@@ -52,11 +52,7 @@ public class InventoryItem implements IModel {
     
     @Override
     public String toString(){
-        return "[InventoryItem]\n"
-        		+ "medicine name: \t" + medicalName 
-        		+ "\nstock: \t" + stock
-        		+ "\nlow stock warning: " + lowStock
-        		+ "\nrequested: " + (requested ? "yes":"no");
+        return medicalName + " (" + stock + ")";
     }
 
     @Override

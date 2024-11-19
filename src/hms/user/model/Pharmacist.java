@@ -29,6 +29,6 @@ public class Pharmacist extends User {
 
     @Override
     public String toString() {
-        return super.toString()+"\n User type: [Pharmacist]";
+        return "Pharmacist " + super.toString();
     }
 }

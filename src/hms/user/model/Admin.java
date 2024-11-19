@@ -29,6 +29,6 @@ public class Admin extends User {
     
     @Override
     public String toString() {
-        return super.toString()+"\n User type: [Admin]";
+        return "Admin " + super.toString();
     }
 }

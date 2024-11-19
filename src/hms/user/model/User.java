@@ -56,13 +56,8 @@ public class User implements IModel {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return "User{" +
-               "Name='" + name + '\'' +
-               ", Gender=" + (isMale ? "Male" : "Female") +
-               ", Contact='" + contact + '\'' +
-               ", DOB=" + (dob != null ? dateFormat.format(dob) : "N/A") +
-               '}';
+        return String.format("%s: %s (%s) - %s",
+            account.id, name, isMale ? "M" : "F", contact);
     }
 
     @Override
