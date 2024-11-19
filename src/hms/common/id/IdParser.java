@@ -1,6 +1,5 @@
 package hms.common.id;
 
-import hms.common.IModel;
 import java.util.HashMap;
 
 /**
@@ -13,7 +12,7 @@ import java.util.HashMap;
  */
 public class IdParser {
     /** The map of classes to their ID prefixes. */
-    private static final HashMap<Class<? extends IModel>, String> classToIdPrefix = new HashMap<>();
+    private static final HashMap<Class<?>, String> classToIdPrefix = new HashMap<>();
 
     /** Private constructor to prevent instantiation. */
     private IdParser() { }
@@ -24,7 +23,7 @@ public class IdParser {
      * @param clazz The class to add to the registry.
      * @param prefix The prefix to use for the class.
      */
-    static void addClass(Class<? extends IModel> clazz, String prefix) {
+    static void addClass(Class<?> clazz, String prefix) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class cannot be null");
         }
@@ -54,7 +53,7 @@ public class IdParser {
      * @param clazz The class to get the prefix for.
      * @return The prefix for the given class.
      */
-    public static String getIdPrefix(Class<? extends IModel> clazz) {
+    public static String getIdPrefix(Class<?> clazz) {
         String prefix = classToIdPrefix.get(clazz);
         if (prefix == null) {
             throw new IllegalArgumentException("Class not supported");
@@ -96,7 +95,7 @@ public class IdParser {
      * @param id The ID to get the class for.
      * @return The class for the given ID.
      */
-    public static Class<? extends IModel> getClass(String id) throws IllegalArgumentException {
+    public static Class<?> getClass(String id) throws IllegalArgumentException {
         String prefix = getIdPrefix(id);
         return classToIdPrefix.entrySet().stream()
             .filter(entry -> entry.getValue().equals(prefix))

@@ -1,6 +1,5 @@
 package hms.manager;
 
-import hms.common.IModel;
 import hms.common.SearchCriterion;
 import hms.common.id.IdManager;
 import hms.common.id.IdParser;
@@ -76,7 +75,7 @@ public class UserManager implements IManager {
     @SuppressWarnings("unchecked")
     public Class<? extends User> authenticate(String id, String password) {
         try {
-            Class<? extends IModel> userClass = IdParser.getClass(id);
+            Class<?> userClass = IdParser.getClass(id);
 
             if (!User.class.isAssignableFrom(userClass)) {
                 return null;
@@ -101,7 +100,7 @@ public class UserManager implements IManager {
     @SuppressWarnings("unchecked")
     public boolean hasUser(String id) {
         try {
-            Class<? extends IModel> userClass = IdParser.getClass(id);
+            Class<?> userClass = IdParser.getClass(id);
     
             if (!User.class.isAssignableFrom(userClass)) return false;
             

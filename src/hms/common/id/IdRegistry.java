@@ -1,6 +1,5 @@
 package hms.common.id;
 
-import hms.common.IModel;
 import java.util.HashMap;
 
 /**
@@ -13,7 +12,7 @@ import java.util.HashMap;
  */
 public class IdRegistry {
     /** The map of classes to their next available ID suffix. */
-    private static final HashMap<Class<? extends IModel>, Integer> classIdCounter = new HashMap<>();
+    private static final HashMap<Class<?>, Integer> classIdCounter = new HashMap<>();
 
     /** Private constructor to prevent instantiation. */
     private IdRegistry() { }
@@ -23,7 +22,7 @@ public class IdRegistry {
      * and should only be called by the IdManager.
      * @param clazz The class to add to the registry.
      */
-    static void addClass(Class<? extends IModel> clazz) {        
+    static void addClass(Class<?> clazz) {        
         if (clazz == null) {
             throw new IllegalArgumentException("Class cannot be null");
         }
@@ -40,7 +39,7 @@ public class IdRegistry {
      * @param clazz The class to get the next ID suffix for.
      * @return The next ID suffix in integer form.
      */
-    public static int getNextIdSuffix(Class<? extends IModel> clazz) {
+    public static int getNextIdSuffix(Class<?> clazz) {
         int id = classIdCounter.get(clazz);
         classIdCounter.put(clazz, id + 1);
         return id;
@@ -51,7 +50,7 @@ public class IdRegistry {
      * @param clazz The class to update the ID for.
      * @param id The ID to update to.
      */
-    public static void tryUpdateId(Class<? extends IModel> clazz, int id) {
+    public static void tryUpdateId(Class<?> clazz, int id) {
         if (id >= classIdCounter.get(clazz)) {
             updateId(clazz, id + 1);
         }
@@ -62,7 +61,7 @@ public class IdRegistry {
      * @param clazz The class to update the ID for.
      * @param id The ID to update to.
      */
-    public static void updateId(Class<? extends IModel> clazz, int id) {
+    public static void updateId(Class<?> clazz, int id) {
         classIdCounter.put(clazz, id);
     }
 }

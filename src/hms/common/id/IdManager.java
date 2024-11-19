@@ -1,7 +1,5 @@
 package hms.common.id;
 
-import hms.common.IModel;
-
 /**
  * Manager class for registering classes and generating unique IDs for them.
  * <p>
@@ -19,7 +17,7 @@ public class IdManager {
      * @param clazz The class to generate
      * @return A unique ID for the class
      */
-    public static String generateId(Class<? extends IModel> clazz) {
+    public static String generateId(Class<?> clazz) {
         String prefix = IdParser.getIdPrefix(clazz);
         String suffix = String.format("%04d", IdRegistry.getNextIdSuffix(clazz));
 
@@ -35,7 +33,7 @@ public class IdManager {
      * @param clazz The class to register
      * @param prefix The prefix to use for the class
      */
-    public static void registerClass(Class<? extends IModel> clazz, String prefix) {
+    public static void registerClass(Class<?> clazz, String prefix) {
         IdRegistry.addClass(clazz);
         IdParser.addClass(clazz, prefix);
     }
