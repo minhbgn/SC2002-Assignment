@@ -4,12 +4,12 @@ This is the GitHub repository for NTU SC2002 Assignment AY24/25 Semester 1. The 
 
 ## Table of Contents
 
-- [Files in this project](#files-in-this-project)
+- [Folders in this project](#folders-in-this-project)
 - [UML Diagram](#uml-diagram)
 - [Compiling](#compiling-this-project)
 - [Contributors](#contributors)
 
-## Files in this project
+## Folders in this project
 - src: The source code of the program
 - bin: The folder containing compiled class files
 - data: The data used in this program
