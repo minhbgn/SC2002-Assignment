@@ -13,7 +13,7 @@ This is the GitHub repository for NTU SC2002 Assignment AY24/25 Semester 1. The 
 - src: The source code of the program
 - bin: The folder containing compiled class files
 - data: The data used in this program
-- report: The assignment report, containing main report, uml diagram, and test outputs
+- report: The assignment report, containing main report, uml diagram, test outputs, and declaration of GAI use
 - html: Javadocs link
 
 ## UML Diagram
