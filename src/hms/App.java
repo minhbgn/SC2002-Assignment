@@ -47,7 +47,7 @@ public class App {
         // Add a shutdown hook to save data
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Saving data...");
-            // ctx.save(); // Temporarily disabled for testing
+            ctx.save();
         }));
 
         isInitialized = true;
