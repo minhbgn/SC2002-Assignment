@@ -86,27 +86,51 @@ public class LoginSystem implements ISystem {
                         .getManager(UserManager.class)
                         .getRepository(AdminRepository.class)
                         .get(userId);
-                    nextSystem = new AdminSystem(ctx, admin);
+                    
+                    if(admin.getAccount().isActive())
+                        nextSystem = new AdminSystem(ctx, admin);
+                    else{
+                        System.out.println("Your account is disabled. Please contact the system administrator.");
+                        nextSystem = this;
+                    }
                 }
                 case "Doctor" -> {
                     Doctor doctor = ctx
                         .getManager(UserManager.class)
                         .getRepository(DoctorRepository.class)
                         .get(userId);
-                    nextSystem = new DoctorSystem(ctx, doctor);
+                    
+                    if(doctor.getAccount().isActive())
+                        nextSystem = new DoctorSystem(ctx, doctor);
+                    else{
+                        System.out.println("Your account is disabled. Please contact the system administrator.");
+                        nextSystem = this;
+                    }
                 }
                 case "Patient" -> {
                     Patient patient = (Patient) ctx
                         .getManager(UserManager.class)
                         .getRepository(PatientRepository.class)
                         .get(userId);
-                    nextSystem = new PatientSystem(ctx, patient);
+
+                    if(patient.getAccount().isActive())
+                        nextSystem = new PatientSystem(ctx, patient);
+                    else{
+                        System.out.println("Your account is disabled. Please contact the system administrator.");
+                        nextSystem = this;
+                    }
                 }
                 case "Pharmacist" -> {
                     Pharmacist pharmacist = ctx.getManager(UserManager.class)
                         .getRepository(PharmacistRepository.class)
                         .get(userId);
-                    nextSystem = new PharmacistSystem(ctx, pharmacist);
+
+                    if(pharmacist.getAccount().isActive())
+                        nextSystem = new PharmacistSystem(ctx, pharmacist);
+                    else{
+                        System.out.println("Your account is disabled. Please contact the system administrator.");
+                        nextSystem = this;
+                    }
                 }
                 default -> throw new IllegalStateException("Unexpected value: " + userClass.getSimpleName());
             }
