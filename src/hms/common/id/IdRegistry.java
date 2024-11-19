@@ -32,7 +32,7 @@ public class IdRegistry {
             throw new IllegalArgumentException("Class already registered");
         }
 
-        classIdCounter.put(clazz, 0);
+        classIdCounter.put(clazz, 1);
     }
 
     /**
