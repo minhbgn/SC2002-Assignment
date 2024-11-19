@@ -1,0 +1,4 @@
+"id","name","password","isActive","dob","age","isMale","contact","bloodType","allergies","medicalHistory","currentMedication"
+"PA0001","Alice Brown","password",True,"14/05/1980",44,false,"alicebrown@example.com","A+","peanut","none","none"
+"PA0002","Bob Stone","password",True,"22/11/1975",48,true,"0314159265","B-","none","none","none"
+"PA0003","Charlie White","password",False,"08/07/1990",34,true,"charliewhite@example.com","O-","none","none","none"

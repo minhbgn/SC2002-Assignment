@@ -1,0 +1,3 @@
+"id","name","password","isActive","dob","age","isMale","contact","busyTimeslots"
+"DO0001","John Smith","password",true,"01/01/1999",40,true,"12345678",""
+"DO0002","Emily Clarke","password",true,"26/12/2011",35,false,"87654321",""

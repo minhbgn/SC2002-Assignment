@@ -1,0 +1,2 @@
+"id","name","password","isActive","dob","age","isMale","contact"
+"PH0001","Mark Lee","password",true,"1980/01/01",40,true,"12345678"

@@ -1,0 +1,2 @@
+"id","name","password","isActive","dob","age","isMale","contact"
+"AD0001","Sarah Lee","password",true,"01/01/1980",40,false,"12345678"

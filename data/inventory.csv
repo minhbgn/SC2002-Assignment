@@ -1,0 +1,5 @@
+"medicalName","stock","lowStock","requested"
+"Paracetamol",100,20,false
+"Ibuprofen",50,10,false
+"Amoxicillin",75,15,false
+"Aspirin",150,30,false
