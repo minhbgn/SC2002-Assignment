@@ -78,9 +78,7 @@ public class Appointment implements IModel {
         this.timeslot = new Timeslot(data.get("timeslot"));
 
         this.status = AppointmentStatus.valueOf(data.get("status"));
-        if (data.get("status").equals("empty")) {
-            this.record = null;
-        } else {
+        if (data.get("status").equals("FINISHED")) {
             this.record = new AppointmentRecord();
             this.record.hydrate(data);
         }
@@ -95,14 +93,8 @@ public class Appointment implements IModel {
         data.put("timeslot", this.timeslot.toString());
         
         data.put("status", this.status.name());
-        if(this.record == null) {
-            data.put("service", "n/a");
-            data.put("notes", "n/a");
-            data.put("prescriptions", "n/a");
-        }
-        else {
+        if(this.record != null)
             data.putAll(record.serialize());
-        }
         return data;
     }
 }
