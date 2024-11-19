@@ -3,6 +3,7 @@ package hms.prescription;
 import hms.common.IModel;
 import hms.common.id.IdManager;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /** Represents a prescription in the hospital management system. */
 public class Prescription implements IModel {
@@ -55,7 +56,7 @@ public class Prescription implements IModel {
 
     @Override
     public HashMap<String, String> serialize() {
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new LinkedHashMap<>();
         data.put("id", id); 
         data.put("isDispensed", String.valueOf(isDispensed));
         data.put("medicalName", medicalName);

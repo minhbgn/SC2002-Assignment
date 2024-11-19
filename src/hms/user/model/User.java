@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Abstract class that represents a user in the hospital management system.
@@ -82,7 +83,7 @@ public class User implements IModel {
 
     @Override
     public HashMap<String, String> serialize() {
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new LinkedHashMap<>();
         data.putAll(this.account.serialize());
 
         data.put("name", name != null ? name : "Unknown");

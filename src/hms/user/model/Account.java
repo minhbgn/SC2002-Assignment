@@ -2,6 +2,7 @@ package hms.user.model;
 
 import hms.common.IModel;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Represents an account in the system.
@@ -47,7 +48,7 @@ public class Account implements IModel {
 
     @Override
     public HashMap<String, String> serialize() {
-    	HashMap<String, String> data = new HashMap<>();
+    	HashMap<String, String> data = new LinkedHashMap<>();
     	data.put("id", this.id);
     	data.put("password", this.password);
     	data.put("isActive", String.valueOf(this.isActive));

@@ -4,6 +4,7 @@ import hms.common.IModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /** Represents a record of an appointment in the hospital management system. */
 public class AppointmentRecord implements IModel {
@@ -65,7 +66,7 @@ public class AppointmentRecord implements IModel {
 
     @Override
     public HashMap<String, String> serialize() {
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, String> data = new LinkedHashMap<>();
         data.put("service", service);
         data.put("notes", notes);
         if (prescriptionIds != null) {

@@ -2,6 +2,7 @@ package hms.inventory;
 
 import hms.common.IModel;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * InventoryItem class is a model class that represents an item in the inventory.
@@ -68,7 +69,7 @@ public class InventoryItem implements IModel {
 
     @Override
     public HashMap<String, String> serialize() {
-    	HashMap<String, String> data = new HashMap<>();
+    	HashMap<String, String> data = new LinkedHashMap<>();
     	data.put("medicalName", medicalName);
     	data.put("stock", String.valueOf(stock));
     	data.put("lowStock", String.valueOf(lowStock));
