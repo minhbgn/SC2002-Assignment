@@ -25,9 +25,8 @@ public class Patient extends User {
      */
     public Patient(ManagerContext ctx) {
         super(ctx);        
-        this.account = new Account(IdManager.generateId(Patient.class));
     }
-
+    
     /**
      * Constructs a new Patient with the specified details.
      * @param ctx the ManagerContext to be used by the Patient
@@ -38,6 +37,7 @@ public class Patient extends User {
      */
     public Patient(ManagerContext ctx, String name, boolean isMale, String contact, Date dob) {
         super(ctx, name, isMale, contact, dob);
+        this.account = new Account(IdManager.generateId(Patient.class));
     }
       
     @Override
