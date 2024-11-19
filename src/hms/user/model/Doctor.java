@@ -53,6 +53,8 @@ public class Doctor extends User {
     public void hydrate(HashMap<String, String> data){
         super.hydrate(data);
 
+        IdRegistry.tryUpdateId(Doctor.class, IdParser.getIdSuffix(this.account.id));
+        
         // Hydrate busyTimeslots
         if (data.get("busyTimeslots").equals("")) return; // No busy timeslots
 
@@ -61,8 +63,6 @@ public class Doctor extends User {
         for (String timeslot : busyTimeslotsSerialized){
             this.busyTimeslots.add(new Timeslot(timeslot));
         }
-
-        IdRegistry.tryUpdateId(Doctor.class, IdParser.getIdSuffix(this.account.id));
     }
 
     /**
