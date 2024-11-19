@@ -66,7 +66,7 @@ public class CSVFileHandler {
             }
         }
         values.add(current.toString());
-        return values.toArray(new String[0]);
+        return values.toArray(String[]::new);
     }
 
     /**
@@ -80,7 +80,7 @@ public class CSVFileHandler {
         }
         try (PrintWriter writer = new PrintWriter(new File(filePath))) {
             // Write headers
-            String[] headers = data.get(0).keySet().toArray(new String[0]);
+            String[] headers = data.get(0).keySet().toArray(String[]::new);
             writer.println(String.join(",", headers));
 
             // Write rows
@@ -90,9 +90,8 @@ public class CSVFileHandler {
                     String value = row.getOrDefault(header, "");
                     // Replace " with ""
                     value = value.replace("\"", "\"\"");
-                    if (value.contains(",") || value.contains("\"")) {
-                        value = "\"" + value + "\"";
-                    }
+                    // Wrap in quotes
+                    value = "\"" + value + "\"";
                     values.add(value);
                 }
                 writer.println(String.join(",", values));
