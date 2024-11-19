@@ -8,19 +8,14 @@ import java.util.Date;
  * Repository class for managing pharmacist users in the hospital management system.
  */
 public class PharmacistRepository extends UserRepository<Pharmacist> {
-
     /**
      * Constructs a new PharmacistRepository with the specified ManagerContext.
-     *
      * @param managerContext the ManagerContext to be used by the PharmacistRepository
      */
-    public PharmacistRepository(ManagerContext managerContext) {
-        super(managerContext);
-    }
+    public PharmacistRepository(ManagerContext managerContext) { super(managerContext); }
 
     /**
      * Creates a new Pharmacist with the specified details.
-     *
      * @param name the name of the Pharmacist
      * @param isMale the gender of the Pharmacist
      * @param contact the contact information of the Pharmacist
@@ -35,11 +30,6 @@ public class PharmacistRepository extends UserRepository<Pharmacist> {
         return p;
     }
 
-    /**
-     * Creates an empty Pharmacist model.
-     *
-     * @return a new empty Pharmacist
-     */
     @Override
     public Pharmacist createEmptyModel() {
         return new Pharmacist(super.ctx);

@@ -6,9 +6,12 @@ import hms.inventory.*;
 import java.util.List;
 
 /**
- * Manager class for the Inventory.
+ * The InventoryManager class is responsible for managing the inventory of the hospital.
+ * It provides methods to add, update, delete, and get inventory items.
+ * The get methods can have search criteria to filter the results.
  */
 public class InventoryManager extends AbstractManager<Inventory> {
+    /** Whether the InventoryManager has been initialized. */
     private static boolean initialized = false;
 
     /**
