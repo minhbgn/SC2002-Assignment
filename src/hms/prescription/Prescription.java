@@ -2,6 +2,8 @@ package hms.prescription;
 
 import hms.common.IModel;
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -52,6 +54,8 @@ public class Prescription implements IModel {
         this.isDispensed = Boolean.parseBoolean(data.get("isDispensed"));
         this.medicalName = data.get("medicalName");
         this.quantity = Integer.parseInt(data.get("quantity")); 
+        
+        IdRegistry.tryUpdateId(Prescription.class, IdParser.getIdSuffix(id));
     }
 
     @Override

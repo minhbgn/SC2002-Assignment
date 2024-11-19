@@ -1,6 +1,8 @@
 package hms.user.model;
 
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.manager.ManagerContext;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class Doctor extends User {
         for (String timeslot : busyTimeslotsSerialized){
             this.busyTimeslots.add(new Timeslot(timeslot));
         }
+
+        IdRegistry.tryUpdateId(Doctor.class, IdParser.getIdSuffix(this.account.id));
     }
 
     /**

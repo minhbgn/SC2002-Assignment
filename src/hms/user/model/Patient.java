@@ -1,6 +1,8 @@
 package hms.user.model;
 
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.manager.ManagerContext;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,6 +58,8 @@ public class Patient extends User {
         this.allergies = data.get("allergies");
         this.medicalHistory = data.get("medicalHistory");
         this.currentMedication = data.get("currentMedication");
+
+        IdRegistry.tryUpdateId(Patient.class, IdParser.getIdSuffix(this.account.id));
     }
 
     /**

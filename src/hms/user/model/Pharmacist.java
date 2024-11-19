@@ -1,6 +1,8 @@
 package hms.user.model;
 
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.manager.ManagerContext;
 import java.util.*;
 
@@ -30,5 +32,12 @@ public class Pharmacist extends User {
     @Override
     public String toString() {
         return "Pharmacist " + super.toString();
+    }
+
+    @Override
+    public void hydrate(HashMap<String, String> data) {
+        super.hydrate(data);
+
+        IdRegistry.tryUpdateId(Pharmacist.class, IdParser.getIdSuffix(this.account.id));
     }
 }

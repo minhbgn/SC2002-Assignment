@@ -3,6 +3,8 @@ package hms.appointment;
 import hms.appointment.enums.AppointmentStatus;
 import hms.common.IModel;
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +84,8 @@ public class Appointment implements IModel {
             this.record = new AppointmentRecord();
             this.record.hydrate(data);
         }
+
+        IdRegistry.tryUpdateId(Appointment.class, IdParser.getIdSuffix(id));
     }
 
     @Override
