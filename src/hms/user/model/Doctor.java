@@ -1,6 +1,8 @@
 package hms.user.model;
 
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.manager.ManagerContext;
 import hms.utils.Timeslot;
 import java.util.ArrayList;
@@ -8,26 +10,18 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/** Doctor class to represent the Doctor user type */
 public class Doctor extends User {
+    /** Delimiter for serializing busy timeslots */
     private static String DELIMITER = ";";
-
+    /** List of busy timeslots for the Doctor */
     private final List<Timeslot> busyTimeslots = new ArrayList<>();
 
 	/**
 	 * Empty constructor to be used for hydration
 	 * @param ctx The manager context to let this User access other classes
 	 */
-    public Doctor(ManagerContext ctx) {
-        super(ctx);
-    }
-
-    public List<Timeslot> getBusyTimeslots() {
-        return busyTimeslots;
-    }
-
-    public void addBusyTimeslot(Timeslot timeslot){
-        this.busyTimeslots.add(timeslot);
-    }
+    public Doctor(ManagerContext ctx) { super(ctx); }
 
     /**
      * Filled constructor for Doctor
@@ -41,17 +35,26 @@ public class Doctor extends User {
         super(ctx, name, isMale, contact, dob);
         this.account = new Account(IdManager.generateId(Doctor.class));
     }
+
+    public List<Timeslot> getBusyTimeslots() { return busyTimeslots; }
+
+    public void addBusyTimeslot(Timeslot timeslot){ this.busyTimeslots.add(timeslot); }
     
-    /** To aid in printing out a Doctor object */
     @Override
     public String toString() {
-        return super.toString()+"\n User type: [Doctor]";
+        return "Doctor " + super.toString();
     }
 
+    /**
+     * {@inheritDoc}
+     * Overrides the User.hydrate method to additionally hydrate the busyTimeslots attribute
+     */
     @Override
     public void hydrate(HashMap<String, String> data){
         super.hydrate(data);
 
+        IdRegistry.tryUpdateId(Doctor.class, IdParser.getIdSuffix(this.account.id));
+        
         // Hydrate busyTimeslots
         if (data.get("busyTimeslots").equals("")) return; // No busy timeslots
 
@@ -62,6 +65,10 @@ public class Doctor extends User {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * Overrides the User.serialize method to additionally serialize the busyTimeslots attribute
+     */
     @Override
     public HashMap<String, String> serialize(){
         HashMap<String, String> data = super.serialize();

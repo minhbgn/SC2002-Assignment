@@ -10,6 +10,7 @@ import java.util.function.Function;
  * @param <T> The type of items in the list.
  */
 public final class PaginatedList <T> {
+    /** The default number of items displayed per page. */
     private static final int DEFAULT_ITEMS_PER_PAGE = 15;
 
     /** The number of items displayed per page. */
@@ -43,6 +44,11 @@ public final class PaginatedList <T> {
         updateList();
     }
 
+    /**
+     * Create a new PaginatedList.
+     * @param items The items to paginate.
+     * @param itemsPerPage The number of items displayed per page.
+     */
     public PaginatedList(T[] items, int itemsPerPage){
         this.items = items;
         this.itemsPerPage = itemsPerPage;

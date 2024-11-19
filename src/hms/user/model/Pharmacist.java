@@ -1,9 +1,12 @@
 package hms.user.model;
 
 import hms.common.id.IdManager;
+import hms.common.id.IdParser;
+import hms.common.id.IdRegistry;
 import hms.manager.ManagerContext;
 import java.util.*;
 
+/** Represents a pharmacist in the hospital management system. */
 public class Pharmacist extends User {
 	/**
 	 * Default constructor for Pharmacist.
@@ -26,9 +29,15 @@ public class Pharmacist extends User {
         this.account = new Account(IdManager.generateId(Pharmacist.class));
     }
 
-    /** Function to print out Pharmacist */
     @Override
     public String toString() {
-        return super.toString()+"\n User type: [Pharmacist]";
+        return "Pharmacist " + super.toString();
+    }
+
+    @Override
+    public void hydrate(HashMap<String, String> data) {
+        super.hydrate(data);
+
+        IdRegistry.tryUpdateId(Pharmacist.class, IdParser.getIdSuffix(this.account.id));
     }
 }

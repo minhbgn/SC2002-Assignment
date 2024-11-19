@@ -12,6 +12,9 @@ import hms.system.ISystem;
 import hms.system.LoginSystem;
 import hms.ui.Prompt;
 
+/**
+ * The application entry point for the Hospital Management System.
+ */
 public class App {
     private static final String PATIENT_REPO_FILEPATH = "data/patients.csv";
     private static final String DOCTOR_REPO_FILEPATH = "data/doctors.csv";
@@ -21,9 +24,20 @@ public class App {
     private static final String PRESCRIPTION_REPO_FILEPATH = "data/prescriptions.csv";
     private static final String INVENTORY_REPO_FILEPATH = "data/inventory.csv";
 
+    /** Flag to check if the application has been initialized. */
     private boolean isInitialized = false;
+    /** The current system that is running. */
     private ISystem currentSystem = null;
 
+    /**
+     * Initializes the Hospital Management System.
+     * This method should be called before running the application.
+     * <p>
+     * It will:
+     * - Initialize the managers and load data from the repository files.
+     * - Create the login system and set it as the current system.
+     * - Add a shutdown hook to save data when the application exits.
+     */
     public void initialize() {
         if (isInitialized) return;
 
@@ -47,12 +61,23 @@ public class App {
         // Add a shutdown hook to save data
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Saving data...");
-            // ctx.save(); // Temporarily disabled for testing
+            ctx.save();
         }));
 
         isInitialized = true;
     }
 
+    /**
+     * Runs the Hospital Management System.
+     * This method should be called after initializing the application.
+     * <p>
+     * It will run the current system until it returns null.
+     * After that, it will print a message and exit the application.
+     * <p>
+     * It will also pause and clear the console before continuing to the next system.
+     * This is to allow the user to read the output before continuing.
+     * @throws IllegalStateException if the application has not been initialized.
+     */
     public void run() {
         if (!isInitialized){
             throw new IllegalStateException("HMS not initialized");
