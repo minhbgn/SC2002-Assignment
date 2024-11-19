@@ -39,6 +39,7 @@ public class DoctorSystem implements ISystem {
         );
 
         ViewAppointmentsService viewAppointmentsService = new ViewAppointmentsService(ctx, defaultCriteria);
+        viewAppointmentsService.hasCancelAppointmentOption = true;
         viewAppointmentsService.hasCompleteAppointmentOption = true;
         viewAppointmentsService.hasResolveAppointmentOption = true;
         viewAppointmentsService.hasViewPatientInfoOption = true;
