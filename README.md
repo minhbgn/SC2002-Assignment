@@ -4,12 +4,23 @@ This is the GitHub repository for NTU SC2002 Assignment AY24/25 Semester 1. The 
 
 ## Table of Contents
 
+- [Files in this project](#files-in-this-project)
 - [UML Diagram](#uml-diagram)
 - [Compiling](#compiling-this-project)
 - [Contributors](#contributors)
 
+## Files in this project
+- src: The source code of the program
+- bin: The folder containing compiled class files
+- data: The data used in this program
+- report: The assignment report, containing main report, uml diagram, and test outputs
+- html: Javadocs link
+
 ## UML Diagram
+To better view the UML Diagram, join this link:
 https://lucid.app/lucidchart/a9b310ad-e123-4814-b711-ad7c97cae8b4/edit?view_items=h4EfqSFwtJsd&invitationId=inv_930dd99b-ec31-469d-9fd6-29982c1b3ea5
+
+You can click on an arrow to see which 2 classes it connects
 
 ## Compiling this project
 
